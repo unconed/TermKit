@@ -1,0 +1,60 @@
+.termkitTokenField {
+  background: #fff;
+  line-height: 28px;
+  padding: 5px;
+  
+  font-family: "Lucida Grande";
+/*  letter-spacing: 1px;*/
+  
+  cursor: text;
+}
+
+.termkitTokenField.focused {
+  outline: auto 5px -webkit-focus-ring-color;
+  outline-offset: -2px;
+}
+
+.termkitTokenField > span.token {
+  padding: 5px 8px 3px;
+  -webkit-border-radius: 1em;
+  margin-left: 2px;
+  white-space: pre-wrap;
+  
+  -webkit-box-shadow: 0px 1px 3px rgba(0,0,0,.5);
+  background: #fff -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ddd));
+}
+.termkitTokenField > span.caretWrapper {
+  margin-left: 10px;
+}
+
+.termkitTokenField span.caretWrapper {
+  display: inline-block;
+  overflow: hidden;
+  height: 28px;
+  vertical-align: bottom;
+}
+
+.termkitTokenField input.caret {
+  position: absolute;
+  z-index: 10;
+  padding: 0;
+  border: 0;
+  margin: 0 0 0 -1px;
+  background: transparent;
+  font-size: inherit;
+  font-family: inherit;
+  letter-spacing: inherit;
+  line-height: inherit;
+  vertical-align: middle;
+  -webkit-appearance: none;
+  white-space: pre-wrap;
+}
+
+.termkitTokenField input.caret:focus {
+  outline: 0;
+}
+
+.termkitTokenField span.measure {
+  white-space: pre-wrap;
+  opacity: 0;
+}

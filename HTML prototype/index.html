@@ -33,16 +33,5 @@
 <div id="debug"></div>
 <div id="debug2"></div>
 
-<div id="faixl" contenteditable="true">Lorem <span id="fail">ipsum dolor</span> sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
-
-<script type="text/javascript" charset="utf-8">
-  $(function () {
-    $('#fail')[0].setSelectionRange(5,10);
-  });
-</script>
 </body>
 </html>
-
-javascript:var s = window.getSelection(); var r = document.createRange(); r.setStartBefore(document.getElementById('fail')); r.setEndAfter(document.getElementById('fail')); s.addRange(r);
-
-getSelection().setBaseAndExtent()

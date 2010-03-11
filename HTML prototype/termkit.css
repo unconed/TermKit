@@ -1,5 +1,5 @@
 .termkitTokenField {
-  background: #fff;
+  background: #eee;
   line-height: 28px;
   padding: 5px;
   
@@ -14,29 +14,16 @@
   outline-offset: -2px;
 }
 
-.termkitTokenField > span.token {
-  padding: 5px 8px 3px;
-  -webkit-border-radius: 1em;
-  margin-left: 2px;
-  white-space: pre-wrap;
-  
-  -webkit-box-shadow: 0px 1px 3px rgba(0,0,0,.5);
-  background: #fff -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ddd));
-}
-.termkitTokenField > span.caretWrapper {
-  margin-left: 10px;
-}
-
-.termkitTokenField span.caretWrapper {
+.termkitTokenField span#caret {
   display: inline-block;
   overflow: hidden;
   height: 28px;
   vertical-align: bottom;
 }
 
-.termkitTokenField input.caret {
+.termkitTokenField span#caret input {
   position: absolute;
-  z-index: 10;
+  z-index: 1;
   padding: 0;
   border: 0;
   margin: 0 0 0 -1px;
@@ -50,11 +37,31 @@
   white-space: pre-wrap;
 }
 
-.termkitTokenField input.caret:focus {
+.termkitTokenField span#caret input:focus {
   outline: 0;
 }
 
-.termkitTokenField span.measure {
-  white-space: pre-wrap;
+.termkitTokenField span#caret span.measure {
+  position: relative;
+  z-index: 2;
   opacity: 0;
+  white-space: pre-wrap;
+}
+
+/************/
+
+.termkitTokenField > span.token {
+  padding: 5px 8px 3px;
+  -webkit-border-radius: 1em;
+  margin-left: 2px;
+  white-space: pre-wrap;
+  
+  -webkit-box-shadow: 0px 1px 3px rgba(0,0,0,.5);
+  background: #fff -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ddd));
+}
+
+/************/
+
+.termkitTokenField > span.caretWrapper {
+  margin-left: 10px;
 }

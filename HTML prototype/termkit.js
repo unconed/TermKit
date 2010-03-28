@@ -17,6 +17,10 @@ function async(func) {
   setTimeout(function () { func.call(self); }, 0);
 }
 
+function escapeText(text) {
+  return String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 
 $.fn.termkitTokenField = function (options) {
@@ -37,6 +41,9 @@ $.fn.termkitTokenField = function (options) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
+/**
+ * Input manager for token-based field.
+ */
 termkit.inputManager = function (field) {
   var self = this;
   var $field = this.$field = $(this.field = field);
@@ -56,7 +63,7 @@ termkit.inputManager.prototype.fieldMouseDown = function (event) {
 
     this.caret.remove();;
     
-    var token = termkit.inputManager.tokenFactory();
+    var token = new termkit.inputManager.tokenEmpty();
 
     this.tokenList.add(token);
     this.tokenList.refreshField(this.$field);
@@ -70,12 +77,22 @@ termkit.inputManager.prototype.fieldMouseDown = function (event) {
 };
 
 termkit.inputManager.prototype.refreshToken = function (token) {
-  $('body').append('<div>refreshToken '+ token.type + ' '+token.contents);
-  var update = token.transmute();
+  var update = token.evolve(this.selection);
   if (update) {
+    // Allow both single replacement token as well as array of tokens.
+    if (update.length === undefined) update = [update];
+
+    // Try to transmute token in place if possible to retain native caret/editing state.
+    if (update.length == 1) {
+      if (token.transmute(update[0])) {
+        return;
+      }
+    }
+
+    // Replace with new token(s).
     var index = this.tokenList.indexOf(token);
 
-    this.caret.remove();;
+    this.caret.remove();
 
     this.tokenList.replace(token, update);
     this.tokenList.refreshField();
@@ -87,6 +104,9 @@ termkit.inputManager.prototype.refreshToken = function (token) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
+/**
+ * Manages the list of tokens.
+ */
 termkit.inputManager.tokenList = function ($field, onChange) {
   this.$field = $field;
   this.tokens = [];
@@ -95,36 +115,34 @@ termkit.inputManager.tokenList = function ($field, onChange) {
 
 termkit.inputManager.tokenList.prototype.debug = function () {
   $.each(this.tokens, function (index) {
-    $('body').append('<div>'+ index +': '+ this.type +' "' + this.contents +'"');
+    $('body').append('<div>'+ index +': '+ this.type +' "' + this.contents +'" (' + this.locked +')');
   });
 };
 
 termkit.inputManager.tokenList.prototype.add = function (token, index) {
-  $('body').append('<div>list add '+ token +' @ '+ index);
+  //$('body').append('<div>list add '+ token +' @ '+ index);
   token.parent = this;
 
-  if (arguments.length < 2) {
+  if (arguments.length < 2 || index == -1) {
     this.tokens.push(token);
   }
   else {
     this.tokens.splice(index, 0, token);
   }
-  this.debug();
 };
 
 termkit.inputManager.tokenList.prototype.remove = function (token) {
   var index = this.indexOf(token);
-  $('body').append('<div>list remove ' + token +' @ '+ index);
+  //$('body').append('<div>list remove ' + token +' @ '+ index);
   if (index < 0) return;
   this.tokens.splice(index, 1);
   
   token.parent = null;
-  this.debug();
 };
 
 termkit.inputManager.tokenList.prototype.replace = function (token, tokens) {
   var index = this.indexOf(token), self = this;
-  $('body').append('<div>list replace ' + token +' @ '+ index);
+  //$('body').append('<div>list replace ' + token +' @ '+ index);
   this.remove(index);
   $.each($.isArray(tokens) && tokens || [tokens], function () {
     self.add(this, index++);
@@ -133,6 +151,14 @@ termkit.inputManager.tokenList.prototype.replace = function (token, tokens) {
 
 termkit.inputManager.tokenList.prototype.indexOf = function (token) {
   return (typeof token == 'number') ? token : $.inArray(token, this.tokens);
+};
+
+termkit.inputManager.tokenList.prototype.next = function (token) {
+  return this.tokens[this.indexOf(token) + 1];
+};
+
+termkit.inputManager.tokenList.prototype.prev = function (token) {
+  return this.tokens[this.indexOf(token) - 1];
 };
 
 termkit.inputManager.tokenList.prototype.refreshField = function () {
@@ -144,6 +170,9 @@ termkit.inputManager.tokenList.prototype.refreshField = function () {
 
 ///////////////////////////////////////////////////////////////////////////////
 
+/**
+ * Represents a selection inside the token-field.
+ */
 termkit.inputManager.selection = function () {
   this.anchorToken = null;
   this.anchorOffset = 0;
@@ -163,6 +192,9 @@ termkit.inputManager.selection.prototype.focus = function (token, offset) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
+/**
+ * Emulates a caret inside a token using an invisible ad-hoc textfield.
+ */
 termkit.inputManager.caret = function (tokenList) {
   this.tokenList = tokenList;
   
@@ -188,36 +220,61 @@ termkit.inputManager.caret.prototype = {
   },
 
   moveTo: function (selection) {
+    $('body').append('<div>moving to token ' + selection.anchorToken + ' @ ' + selection.anchorOffset);
+    
     // Ensure caret is cleanly removed from its existing position.
     this.remove();
+
+    this.tokenList.debug();
   
     // Examine target token.
     this.selection = selection;
-    this.token = selection.anchorToken;
-    var $token = this.token.$element;
-    var textNode = $token[0].childNodes[0];
+    var token = selection.anchorToken;
+    var $token = token.$element;
+    var text = token.contents;
 
-    // Prevent token object from updating itself.
-    this.token.locked = true;
-
-    if ($token.is(':empty') || (textNode.length >= selection.anchorOffset)) {
+    if (text.length < selection.anchorOffset) {
+      // Out-of-bounds, move to next token.
+      var next = this.tokenList.next(token);
+      if (next) {
+        selection.anchor(next, selection.anchorOffset - text.length - 1);
+        return this.moveTo(selection);
+      }
+      else {
+        return;
+      }
+    }
+    else if (text == '' || (text.length == selection.anchorOffset)) {
+      // TODO: boudns checking should be done by selection obj validation
       // Append caret at the end of the token.
       $token.append(this.$element);
-      this.prefix = $token.text();
+      this.prefix = text;
     }
     else {
+      // Inside bounds, split text node and insert caret.
+      this.prefix = text.substring(0, selection.anchorOffset);
+      this.suffix = text.substring(selection.anchorOffset);
+      
+      // should call token.update() and split resulting textnode instead 
+      
       // Split the text node at the given offset.
-      var newNode = textNode.splitText(selection.anchorOffset);
-      $(textNode).after(this.$element);
-      this.prefix = $(textNode).text();
-      this.suffix = $(newNode).text();
+      this.token.$element
+        .empty()
+        .append(this.prefix)
+        .append(this.$element)
+        .append(this.suffix);
     }
-  
+
+    // Prevent token object from updating itself.
+    this.token = token;
+    this.token.locked = true;
+
+    // Focus caret.
     this.$input.focus();
   },
   
   remove: function () {
-    // Detach caret.
+    // Detach caret elements from document.
     this.$element.detach();
 
     if (!this.token) return;
@@ -227,7 +284,7 @@ termkit.inputManager.caret.prototype = {
 
     // Update token with new combined text value.
     var value = this.prefix + this.$measure.text() + this.suffix;
-    if (value != '') {
+    if ((value != '') || this.token.allowEmpty) {
       this.token.contents = value;
     }
     else {
@@ -254,10 +311,20 @@ termkit.inputManager.caret.prototype = {
   },
 
   updateContents: function () {
-    this.$measure.text(this.$input.val());
-    this.$input.css('width', this.$measure.width() + 20);
+    this.selection.anchorOffset = this.$input[0].selectionStart + this.prefix.length;
+    
+    var old = this.token;
     this.token.contents = this.prefix + this.$input.val() + this.suffix;
-    this.tokenList.onChange(this.token);
+
+    // Needs to be async, otherwise DOM weirdness occurs??
+    async.call(this, function () {
+      this.tokenList.onChange(this.token);
+    });
+
+    if (old == this.token) {
+      this.$measure.text(this.$input.val());
+      this.$input.css('width', this.$measure.width() + 20);
+    }
   },
   
   
@@ -296,30 +363,17 @@ $(document).ready(function () {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-termkit.inputManager.tokenFactory = function (contents) {
-  if ((contents || '').length == 0) {
-    return new termkit.inputManager.tokenEmpty();
-  }
-
-  var sigil = contents.substring(0, 1);
-  switch (sigil) {
-    case '"':
-    case "'":
-      return new termkit.inputManager.tokenQuoted(contents);
-    default:
-      return new termkit.inputManager.token(contents);
-  }
-};
-
-///////////////////////////////////////////////////////////////////////////////
-
+/**
+ * Represents a single token in the field.
+ */
 termkit.inputManager.token = function (type, contents) {
   this.$element = this.$markup;
 
   this.locked = false;
   this.type = type;
   this.contents = contents;
-  this.parent = null;
+
+  this.allowEmpty = false;
 };
 
 termkit.inputManager.token.prototype = {
@@ -345,60 +399,94 @@ termkit.inputManager.token.prototype = {
   },
   
   update: function () {
+    this.$element.attr('class', 'token token-' + this.type);
     if (!this.locked) {
-      this.$element.attr('class', 'token token-' + this.type);
-      this.$element.text(this.contents);
+      this.$element.html(escapeText(this.contents));
+    }
+  },
+
+  transmute: function (token) {
+    if (this.contents == token.contents) {
+      this.constructor = token.constructor;
+      this.evolve = token.evolve;
+      this.type = token.type;
+      this.allowEmpty = token.allowEmpty;
+      return true;
     }
   },
   
-  transmute: function () {
+  evolve: function () {
     return false;
   },
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 
-termkit.inputManager.tokenPlain = function (contents) {
-  termkit.inputManager.token.call(this, 'plain', contents);
-};
-
-termkit.inputManager.tokenPlain.prototype = new termkit.inputManager.token();
-
-termkit.inputManager.tokenPlain.prototype.transmute = function () {
-  if (this.contents.length == 0) {
-    return new termkit.inputManager.tokenEmpty();
-  }
-};
-
-///////////////////////////////////////////////////////////////////////////////
-
-termkit.inputManager.tokenQuoted = function (contents) {
-  termkit.inputManager.token.call(this, 'quoted', contents.substring(1));
-};
-
-termkit.inputManager.tokenQuoted.prototype = new termkit.inputManager.token();
-
-termkit.inputManager.tokenQuoted.prototype.transmute = function () {
-  return false;
-};
-
-///////////////////////////////////////////////////////////////////////////////
-
+/**
+ * Blank token.
+ */
 termkit.inputManager.tokenEmpty = function () {
   termkit.inputManager.token.call(this, 'empty', '');
 };
 
 termkit.inputManager.tokenEmpty.prototype = new termkit.inputManager.token();
 
-termkit.inputManager.tokenEmpty.prototype.transmute = function () {
+termkit.inputManager.tokenEmpty.prototype.evolve = function (selection) {
   if (this.contents.length == 0) return false;
-  if ((this.contents == '"') || (this.contents == "'")) {
+  if ((this.contents[0] == '"') || (this.contents[0] == "'")) {
+    selection.anchorOffset--;
     return new termkit.inputManager.tokenQuoted(this.contents);
   }
   else {
     return new termkit.inputManager.tokenPlain(this.contents);
   }
-  return this.prototype.transmute();
+  return this.prototype.evolve();
+};
+
+///////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Token containing plain text.
+ */
+termkit.inputManager.tokenPlain = function (contents) {
+  termkit.inputManager.token.call(this, 'plain', contents);
+};
+
+termkit.inputManager.tokenPlain.prototype = new termkit.inputManager.token();
+
+termkit.inputManager.tokenPlain.prototype.evolve = function () {
+  if (this.contents.length == 0) {
+    return new termkit.inputManager.tokenEmpty();
+  }
+  var split = this.contents.split(/\s/);
+  if (split.length > 1) {
+    var update = [];
+    $.each(split, function () {
+      update.push(new termkit.inputManager[this.length ? 'tokenPlain' : 'tokenEmpty'](this));
+    });
+    return update;
+  }
+  return false;
+};
+
+///////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Token containing quoted text.
+ */
+termkit.inputManager.tokenQuoted = function (contents) {
+  termkit.inputManager.token.call(this, 'quoted', contents.substring(1));
+  this.allowEmpty = true;
+};
+
+termkit.inputManager.tokenQuoted.prototype = new termkit.inputManager.token();
+
+termkit.inputManager.tokenQuoted.prototype.evolve = function () {
+  return false;
+};
+
+termkit.inputManager.tokenQuoted.prototype.allowEmpty = function () {
+  return true;
 };
 
 ///////////////////////////////////////////////////////////////////////////////

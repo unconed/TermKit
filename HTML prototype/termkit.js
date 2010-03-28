@@ -203,11 +203,14 @@ termkit.inputManager.caret.prototype = {
     if ($token.is(':empty') || (textNode.length >= selection.anchorOffset)) {
       // Append caret at the end of the token.
       $token.append(this.$element);
+      this.prefix = $token.text();
     }
     else {
       // Split the text node at the given offset.
       var newNode = textNode.splitText(selection.anchorOffset);
       $(textNode).after(this.$element);
+      this.prefix = $(textNode).text();
+      this.suffix = $(newNode).text();
     }
   
     this.$input.focus();
@@ -355,11 +358,17 @@ termkit.inputManager.token.prototype = {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-termkit.inputManager.tokenSimple = function (contents) {
-  termkit.inputManager.token.call(this, 'quoted', contents.substring(1));
+termkit.inputManager.tokenPlain = function (contents) {
+  termkit.inputManager.token.call(this, 'plain', contents);
 };
 
-termkit.inputManager.tokenQuoted.prototype = new termkit.inputManager.token();
+termkit.inputManager.tokenPlain.prototype = new termkit.inputManager.token();
+
+termkit.inputManager.tokenPlain.prototype.transmute = function () {
+  if (this.contents.length == 0) {
+    return new termkit.inputManager.tokenEmpty();
+  }
+};
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -368,6 +377,10 @@ termkit.inputManager.tokenQuoted = function (contents) {
 };
 
 termkit.inputManager.tokenQuoted.prototype = new termkit.inputManager.token();
+
+termkit.inputManager.tokenQuoted.prototype.transmute = function () {
+  return false;
+};
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -382,6 +395,10 @@ termkit.inputManager.tokenEmpty.prototype.transmute = function () {
   if ((this.contents == '"') || (this.contents == "'")) {
     return new termkit.inputManager.tokenQuoted(this.contents);
   }
+  else {
+    return new termkit.inputManager.tokenPlain(this.contents);
+  }
+  return this.prototype.transmute();
 };
 
 ///////////////////////////////////////////////////////////////////////////////

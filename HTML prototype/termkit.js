@@ -115,12 +115,12 @@ termkit.inputManager.tokenList = function ($field, onChange) {
 
 termkit.inputManager.tokenList.prototype.debug = function () {
   $.each(this.tokens, function (index) {
-    $('body').append('<div>'+ index +': '+ this.type +' "' + this.contents +'" (' + this.locked +')');
+    $('#debug').append('<div>'+ index +': '+ this.type +' "' + this.contents +'" (' + this.locked +')');
   });
 };
 
 termkit.inputManager.tokenList.prototype.add = function (token, index) {
-  //$('body').append('<div>list add '+ token +' @ '+ index);
+  //$('#debug').append('<div>list add '+ token +' @ '+ index);
   token.parent = this;
 
   if (arguments.length < 2 || index == -1) {
@@ -133,7 +133,7 @@ termkit.inputManager.tokenList.prototype.add = function (token, index) {
 
 termkit.inputManager.tokenList.prototype.remove = function (token) {
   var index = this.indexOf(token);
-  //$('body').append('<div>list remove ' + token +' @ '+ index);
+  //$('#debug').append('<div>list remove ' + token +' @ '+ index);
   if (index < 0) return;
   this.tokens.splice(index, 1);
   
@@ -142,7 +142,7 @@ termkit.inputManager.tokenList.prototype.remove = function (token) {
 
 termkit.inputManager.tokenList.prototype.replace = function (token, tokens) {
   var index = this.indexOf(token), self = this;
-  //$('body').append('<div>list replace ' + token +' @ '+ index);
+  //$('#debug').append('<div>list replace ' + token +' @ '+ index);
   this.remove(index);
   $.each($.isArray(tokens) && tokens || [tokens], function () {
     self.add(this, index++);
@@ -220,7 +220,7 @@ termkit.inputManager.caret.prototype = {
   },
 
   moveTo: function (selection) {
-    $('body').append('<div>moving to token ' + selection.anchorToken + ' @ ' + selection.anchorOffset);
+    $('#debug').append('<div>moving to token ' + selection.anchorToken + ' @ ' + selection.anchorOffset);
     
     // Ensure caret is cleanly removed from its existing position.
     this.remove();
@@ -350,7 +350,7 @@ $(document).ready(function () {
       if ($.isFunction(this)) {
         var old = object[index];
         object[index] = function () {
-          async($('body').append('<div>'+ id +'.' + index +' - ' +' '+ arguments));
+          async($('#debug').append('<div>'+ id +'.' + index +' - ' +' '+ arguments));
           return old.apply(this, arguments);
         };
       }

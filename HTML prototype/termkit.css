@@ -1,9 +1,19 @@
+body {
+  background: #000;
+  color: #fff;
+}
+
+#debug {
+  color: #555;
+}
+
 .termkitTokenField {
-  border: 1px dotted #eee;
+  border: 1px dotted #555;
   line-height: 28px;
-  padding: 5px;
+  padding: 20px;
   
-  font-family: "Lucida Grande";
+  font-family: "Bitstream Vera Sans Mono";
+  font-size: 70%;
 /*  letter-spacing: 1px;*/
   
   cursor: text;
@@ -35,6 +45,8 @@
   vertical-align: middle;
   -webkit-appearance: none;
   white-space: pre-wrap;
+  
+  color: #fff;
 }
 
 .termkitTokenField span#caret input:focus {
@@ -55,19 +67,19 @@
 }
 
 .termkitTokenField > span.token-plain {
-  padding: 5px 8px 3px;
-  -webkit-border-radius: 1em;
+  padding: .5em .5em .3em;
+  -webkit-border-radius: .25em;
   margin-left: 2px;
-  -webkit-box-shadow: 0px 1px 1px rgba(0,0,0,.25);
-  background: #fff -webkit-gradient(linear, left top, left bottom, from(#fff), to(#eee));
+  -webkit-box-shadow: 0px -1px 1px rgba(255,255,255,.5);
+  background: #555 -webkit-gradient(linear, left top, left bottom, from(#555), to(#333));
 }
 
 .termkitTokenField > span.token-quoted {
-  padding: 5px 8px 3px;
-  -webkit-border-radius: 1em;
+  padding: .5em .75em .3em;
+  -webkit-border-radius: .25em;
   margin-left: 2px;
-  -webkit-box-shadow: 0px 1px 1px rgba(0,0,0,.25);
-  background: #eee -webkit-gradient(linear, left top, left bottom, from(#eee), to(#ccc));
+  -webkit-box-shadow: 0px -1px 1px rgba(255,255,255,.75);
+  background: #777 -webkit-gradient(linear, left top, left bottom, from(#777), to(#555));
 /*  background: #def -webkit-gradient(linear, left top, left bottom, from(#def), to(#bcd));*/
 }
 

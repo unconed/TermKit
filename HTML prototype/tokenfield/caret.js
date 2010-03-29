@@ -28,7 +28,12 @@ termkit.tokenField.caret.prototype = {
   },
 
   moveTo: function (selection) {
-    $('#debug').append('<div>moving to token ' + selection.anchorToken + ' @ ' + selection.anchorOffset);
+    $('#debug').append('<div>moving to token ' + selection.anchor.token.contents + ' @ ' + selection.anchor.offset);
+
+    selection.validate();
+
+    $('#debug').append('<div>moving to valid token ' + selection.anchor.token.contents + ' @ ' + selection.anchor.offset);
+    
     
     // Ensure caret is cleanly removed from its existing position.
     this.remove();
@@ -37,22 +42,11 @@ termkit.tokenField.caret.prototype = {
   
     // Examine target token.
     this.selection = selection;
-    var token = selection.anchorToken;
+    var token = selection.anchor.token;
     var $token = token.$element;
     var text = token.contents;
 
-    if (text.length < selection.anchorOffset) {
-      // Out-of-bounds, move to next token.
-      var next = this.tokenList.next(token);
-      if (next) {
-        selection.anchor(next, selection.anchorOffset - text.length - 1);
-        return this.moveTo(selection);
-      }
-      else {
-        return;
-      }
-    }
-    else if (text == '' || (text.length == selection.anchorOffset)) {
+    if (text == '' || (text.length == selection.anchor.offset)) {
       // TODO: boudns checking should be done by selection obj validation
       // Append caret at the end of the token.
       $token.append(this.$element);
@@ -60,13 +54,13 @@ termkit.tokenField.caret.prototype = {
     }
     else {
       // Inside bounds, split text node and insert caret.
-      this.prefix = text.substring(0, selection.anchorOffset);
-      this.suffix = text.substring(selection.anchorOffset);
+      this.prefix = text.substring(0, selection.anchor.offset);
+      this.suffix = text.substring(selection.anchor.offset);
       
       // should call token.update() and split resulting textnode instead 
       
       // Split the text node at the given offset.
-      this.token.$element
+      token.$element
         .empty()
         .append(this.prefix)
         .append(this.$element)
@@ -120,7 +114,7 @@ termkit.tokenField.caret.prototype = {
 
   updateContents: function () {
     if (!this.selection) return;
-    this.selection.anchorOffset = this.$input[0].selectionStart + this.prefix.length;
+    this.selection.anchor.offset = this.$input[0].selectionStart + this.prefix.length;
     
     var old = this.token;
     this.token.contents = this.prefix + this.$input.val() + this.suffix;

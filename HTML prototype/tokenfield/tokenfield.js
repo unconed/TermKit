@@ -27,7 +27,7 @@ termkit.tokenField = function (field) {
   
   this.tokenList = new termkit.tokenField.tokenList(this.$field, function (t) { self.refreshToken(t); });
   this.caret = new termkit.tokenField.caret(this.tokenList);
-  this.selection = new termkit.tokenField.selection();
+  this.selection = new termkit.tokenField.selection(this.tokenList);
   
   // Set field event handlers.
   $field.mousedown(function (e) { self.fieldMouseDown(e); });
@@ -46,7 +46,7 @@ termkit.tokenField.prototype = {
       this.tokenList.add(token);
       this.tokenList.refreshField(this.$field);
 
-      this.selection.anchor(token);
+      this.selection.anchor = { token: token };
       this.caret.moveTo(this.selection);
     
     }
@@ -75,7 +75,7 @@ termkit.tokenField.prototype = {
       this.tokenList.replace(token, update);
       this.tokenList.refreshField();
 
-      this.selection.anchor(this.tokenList.tokens[index], this.selection.anchorOffset);
+      this.selection.anchor = { token: this.tokenList.tokens[index], offset: this.selection.anchor.offset };
       this.caret.moveTo(this.selection);
     }
   },

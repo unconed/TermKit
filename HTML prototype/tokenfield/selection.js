@@ -3,25 +3,57 @@
 /**
  * Represents a selection inside the token-field.
  */
-termkit.tokenField.selection = function () {
-  this.anchorToken = null;
-  this.anchorOffset = 0;
-  this.focusToken = null;
-  this.focusOffset = 0;
+termkit.tokenField.selection = function (tokenList) {
+  this.tokenList = tokenList;
+  this._anchor = { token: null, offset: 0 };
+  this._focus = { token: null, offset: 0 };
 };
 
 termkit.tokenField.selection.prototype = {
 
-  anchor: function (token, offset) {
-    this.focusToken = this.anchorToken = token || null;
-    this.focusOffset = this.anchorOffset = offset || 0;
+  get anchor() { return this._anchor; },
+  set anchor(point) {
+    this._focus.token = this._anchor.token = point.token || null;
+    this._focus.offset = this._anchor.offset = point.offset || 0;
   },
 
-  focus: function (token, offset) {
-    this.focusToken = token || this.anchorToken;
-    this.focusOffset = offset || this.anchorOffset;
+  get focus() { return this._focus; },
+  set focus(point) {
+    this._focus.token = point.token || this._anchor.token;
+    this._focus.offset = point.offset || this._anchor.offset;
   },
 
+  checkBounds: function (point) {
+    var token = point.token, offset = point.offset;
+    while (token && (offset > token.contents.length)) {
+      var next = this.tokenList.next(token);
+      if (next) {
+        offset -= token.contents.length - 1;
+        token = next;
+      }
+      else {
+        offset = token.contents.length;
+      }
+    };
+
+    while (token && (offset < 0)) {
+      var prev = this.tokenList.prev(token);
+      if (prev) {
+        offset += token.contents.length;
+        token = prev;
+      }
+      else {
+        offset = 0;
+      }
+    };
+
+    return { token: token, offset: offset };
+  },
+
+  validate: function () {
+    this.anchor = this.checkBounds(this.anchor);
+    this.focus = this.checkBounds(this.focus);
+  },
 };
 
 })(jQuery);

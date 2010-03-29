@@ -85,6 +85,11 @@ body {
 color: #ddd;
 }
 
+.termkitTokenField > span.token-empty span#caret input {
+  width: 1px !important;
+  margin-top: -2px;
+}
+
 .termkitTokenField > span.token-empty {
   background: none;
   padding: 0;

@@ -1,9 +1,11 @@
 (function ($) {
 
+var tf = termkit.tokenField;
+
 /**
  * Emulates a caret inside a token using an invisible ad-hoc textfield.
  */
-termkit.tokenField.caret = function (tokenList) {
+tf.caret = function (tokenList) {
   this.tokenList = tokenList;
   
   this.$element = this.$markup;
@@ -16,7 +18,7 @@ termkit.tokenField.caret = function (tokenList) {
   this.prefix = this.suffix = '';
 };
 
-termkit.tokenField.caret.prototype = {
+tf.caret.prototype = {
   get $markup() {
     var $caret = $('<span id="caret"><input /><span class="measure"></span></span>');
     var self = this;
@@ -27,7 +29,7 @@ termkit.tokenField.caret.prototype = {
     return $caret;
   },
 
-  moveTo: function (selection) {
+  moveTo: function (selection, event) {
     $('#debug').append('<div>moving to token ' + selection.anchor.token.contents + ' @ ' + selection.anchor.offset);
 
     selection.validate();
@@ -70,7 +72,7 @@ termkit.tokenField.caret.prototype = {
     this.token.locked = true;
 
     // Sync state.
-    this.updateContents();
+    this.updateContents(event);
   },
   
   remove: function () {
@@ -104,23 +106,23 @@ termkit.tokenField.caret.prototype = {
     this.remove();
   },
 
-  onKeyPress: function (event) {
-//    async.call(this, function () {
-//      this.updateContents();
-//    });
-  },
-
-  updateContents: function () {
+  updateContents: function (event) {
     if (!this.selection) return;
     this.selection.anchor.offset = this.$input[0].selectionStart + this.prefix.length;
     
     var old = this.token;
-    this.token.contents = this.prefix + this.$input.val() + this.suffix;
+    var updated = this.prefix + this.$input.val() + this.suffix;
 
     // Needs to be async, otherwise DOM weirdness occurs??
-    async.call(this, function () {
-      this.tokenList.onChange(this.token);
-    });
+    if (this.token.contents != updated) {
+      this.token.contents = updated;
+      async.call(this, function () {
+        // Merge stored key/char codes in, effectively merging keydown/keypress info.
+        event.keyCode = this.keyCode;
+        event.charCode = this.charCode;
+        this.tokenList.onChange(this.token, event);
+      });
+    }
 
     if (old == this.token) {
       this.$measure.text(this.$input.val());
@@ -136,7 +138,7 @@ termkit.tokenField.caret.prototype = {
           async.call(this, function () {
             var selection = this.selection;
             selection.anchor.offset--;
-            this.moveTo(selection);
+            this.moveTo(selection, event);
           });
           return;
         }
@@ -146,16 +148,23 @@ termkit.tokenField.caret.prototype = {
           async.call(this, function () {
             var selection = this.selection;
             selection.anchor.offset++;
-            this.moveTo(selection);
+            this.moveTo(selection, event);
           });
           return;
         }
         break;
     };
     
+    this.keyCode = event.keyCode;
+    this.charCode = 0;
+    
     async.call(this, function () {
-      this.updateContents();
+      this.updateContents(event);
     });
+  },
+
+  onKeyPress: function (event) {
+    this.charCode = event.charCode;
   },
 
   reset: function () {

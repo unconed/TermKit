@@ -1,15 +1,17 @@
 (function ($) {
 
+var tf = termkit.tokenField;
+
 /**
  * Manages the list of tokens.
  */
-termkit.tokenField.tokenList = function ($field, onChange) {
+tf.tokenList = function ($field, onChange) {
   this.$field = $field;
   this.tokens = [];
   this.onChange = onChange || (function () {});
 };
 
-termkit.tokenField.tokenList.prototype = {
+tf.tokenList.prototype = {
   debug: function () {
     $.each(this.tokens, function (index) {
       $('#debug').append('<div>'+ index +': '+ this.type +' "' + this.contents +'" (' + this.locked +')');
@@ -18,7 +20,7 @@ termkit.tokenField.tokenList.prototype = {
 
   add: function (token, index) {
     //$('#debug').append('<div>list add '+ token +' @ '+ index);
-    token.parent = this;
+    token.tokenList = this;
 
     if (arguments.length < 2 || index == -1) {
       this.tokens.push(token);
@@ -34,7 +36,7 @@ termkit.tokenField.tokenList.prototype = {
     if (index < 0) return;
     this.tokens.splice(index, 1);
   
-    token.parent = null;
+    token.tokenList = null;
   },
 
   replace: function (token, tokens) {

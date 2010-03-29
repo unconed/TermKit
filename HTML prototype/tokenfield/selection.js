@@ -1,15 +1,17 @@
 (function ($) {
 
+var tf = termkit.tokenField;
+
 /**
  * Represents a selection inside the token-field.
  */
-termkit.tokenField.selection = function (tokenList) {
+tf.selection = function (tokenList) {
   this.tokenList = tokenList;
   this._anchor = { token: null, offset: 0 };
   this._focus = { token: null, offset: 0 };
 };
 
-termkit.tokenField.selection.prototype = {
+tf.selection.prototype = {
 
   get anchor() { return this._anchor; },
   set anchor(point) {

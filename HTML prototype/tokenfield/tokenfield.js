@@ -25,7 +25,7 @@ termkit.tokenField = function (field) {
   var self = this;
   var $field = this.$field = $(this.field = field);
   
-  this.tokenList = new termkit.tokenField.tokenList(this.$field, function (t) { self.refreshToken(t); });
+  this.tokenList = new termkit.tokenField.tokenList(this.$field, function (a,b) { self.refreshToken(a,b); });
   this.caret = new termkit.tokenField.caret(this.tokenList);
   this.selection = new termkit.tokenField.selection(this.tokenList);
   
@@ -54,8 +54,11 @@ termkit.tokenField.prototype = {
     event.preventDefault();
   },
 
-  refreshToken: function (token) {
-    var update = token.evolve(this.selection);
+  refreshToken: function (token, event) {
+    var update = token.evolve(this.selection, event);
+    if (!update) {
+      update = token.munge(this.selection, event);
+    }
     if (update) {
       // Allow both single replacement token as well as array of tokens.
       if (update.length === undefined) update = [update];
@@ -63,20 +66,42 @@ termkit.tokenField.prototype = {
       // Try to transmute token in place if possible to retain native caret/editing state.
       if (update.length == 1) {
         if (token.transmute(update[0])) {
+          this.refreshToken(token, event);
           return;
         }
       }
 
-      // Replace with new token(s).
-      var index = this.tokenList.indexOf(token);
-
+      // Apply lingering edits to contents.
       this.caret.remove();
 
+      // Replace with new token(s).
+      var index = this.tokenList.indexOf(token);
       this.tokenList.replace(token, update);
       this.tokenList.refreshField();
 
-      this.selection.anchor = { token: this.tokenList.tokens[index], offset: this.selection.anchor.offset };
-      this.caret.moveTo(this.selection);
+      // Make sure caret ends up somewhere sensible.
+      var prev;
+      if (update.length) {
+        this.selection.anchor = { token: this.tokenList.tokens[index], offset: this.selection.anchor.offset };
+        this.caret.moveTo(this.selection, event);
+      }
+      else {
+        if (prev = this.tokenList.tokens[index - 1]) {
+          this.selection.anchor = { token: prev, offset: prev.contents.length };
+          this.caret.moveTo(this.selection, event);
+        }
+      } 
+
+      // Apply munging rules to newly created tokens, if any.
+      var self = this;
+      $.each(update, function () {
+        self.refreshToken(this, event);
+      });
+    }
+
+    // Don't keep lingering empties around.
+    if (token.type == 'empty' && this.selection.anchor.token != token) {
+      this.tokenList.remove(token);
     }
   },
 };

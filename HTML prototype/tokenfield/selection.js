@@ -28,7 +28,7 @@ termkit.tokenField.selection.prototype = {
     while (token && (offset > token.contents.length)) {
       var next = this.tokenList.next(token);
       if (next) {
-        offset -= token.contents.length - 1;
+        offset -= token.contents.length + 1;
         token = next;
       }
       else {
@@ -39,7 +39,7 @@ termkit.tokenField.selection.prototype = {
     while (token && (offset < 0)) {
       var prev = this.tokenList.prev(token);
       if (prev) {
-        offset += token.contents.length;
+        offset += prev.contents.length + 1;
         token = prev;
       }
       else {

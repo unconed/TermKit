@@ -47,21 +47,13 @@ termkit.tokenField.caret.prototype = {
     var text = token.contents;
 
     if (text == '') {
-      // TODO: boudns checking should be done by selection obj validation
       // Append caret at the end of the token.
       $token.append(this.$element);
-      this.prefix = this.suffix = '';
+      this.$input.focus();
     }
     else {
-      this.prefix = this.suffix = '';
       this.$input.val(text);
 
-      // Inside bounds, split text node and insert caret.
-      //this.prefix = text.substring(0, selection.anchor.offset);
-      //this.suffix = text.substring(selection.anchor.offset);
-      
-      // should call token.update() and split resulting textnode instead 
-      
       // Split the text node at the given offset.
       token.$element
         .empty()
@@ -69,15 +61,16 @@ termkit.tokenField.caret.prototype = {
         .append(this.$element)
         .append(this.suffix);
 
-      this.$element.selectionStart = selection.anchor.offset;
+      this.$input.focus();
+      this.$input[0].selectionEnd = this.$input[0].selectionStart = selection.anchor.offset;
     }
 
     // Prevent token object from updating itself.
     this.token = token;
     this.token.locked = true;
 
-    // Focus caret.
-    this.$input.focus();
+    // Sync state.
+    this.updateContents();
   },
   
   remove: function () {
@@ -136,6 +129,30 @@ termkit.tokenField.caret.prototype = {
   },
   
   onKeyDown: function (event) {
+    // Intercept special keys
+    switch (event.keyCode) {
+      case 37: // Left arrow
+        if (this.selection.anchor.offset == 0) {
+          async.call(this, function () {
+            var selection = this.selection;
+            selection.anchor.offset--;
+            this.moveTo(selection);
+          });
+          return;
+        }
+        break;
+      case 39: // Right arrow
+        if (this.selection.anchor.offset == this.token.contents.length) {
+          async.call(this, function () {
+            var selection = this.selection;
+            selection.anchor.offset++;
+            this.moveTo(selection);
+          });
+          return;
+        }
+        break;
+    };
+    
     async.call(this, function () {
       this.updateContents();
     });

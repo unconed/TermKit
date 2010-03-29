@@ -97,7 +97,7 @@ termkit.tokenField.tokenPlain.prototype = $.extend(new termkit.tokenField.token(
     if (this.contents.length == 0) {
       return new termkit.tokenField.tokenEmpty();
     }
-    var split = this.contents.split(/\s/);
+    var split = this.contents.replace(/^\s+/, '').split(/\s+/);
     if (split.length > 1) {
       var update = [];
       $.each(split, function () {

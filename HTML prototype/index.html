@@ -9,6 +9,14 @@
   <script type="text/javascript" charset="utf-8" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.0/jquery.js"></script>
   <script type="text/javascript" charset="utf-8" src="termkit.js"></script>
 
+  <script type="text/javascript" charset="utf-8" src="tokenfield/tokenfield.js"></script>
+  <script type="text/javascript" charset="utf-8" src="tokenfield/tokenlist.js"></script>
+  <script type="text/javascript" charset="utf-8" src="tokenfield/selection.js"></script>
+  <script type="text/javascript" charset="utf-8" src="tokenfield/caret.js"></script>
+  <script type="text/javascript" charset="utf-8" src="tokenfield/token.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="commandstream/commandstream.js"></script>
+
   <link rel="stylesheet" href="termkit.css" type="text/css" media="screen" title="no title" charset="utf-8" />
   
 	<style type="text/css" media="screen">
@@ -19,7 +27,8 @@
   
 <script type="text/javascript" charset="utf-8">
   $(function () {
-    $('#commandline').termkitTokenField();
+    $('#commandline1').termkitTokenField();
+    $('#commandline2').termkitTokenField();
   });
 </script>
 </head>
@@ -28,7 +37,9 @@
 
 <h1>WebKit Terminal - UI prototype</h1>
 
-<div id="commandline"></div>
+<div id="commandline1"></div>
+
+<div id="commandline2"></div>
 
 <div id="debug"></div>
 

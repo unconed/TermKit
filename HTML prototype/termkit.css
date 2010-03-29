@@ -66,6 +66,12 @@ body {
   white-space: pre-wrap;
 }
 
+.termkitTokenField > span.token:after {
+  font-size: 0;
+  content: ' ';
+  vertical-align: bottom;
+}
+
 .termkitTokenField > span.token-plain {
   padding: .5em .5em .3em;
   -webkit-border-radius: .25em;
@@ -82,7 +88,7 @@ body {
   -webkit-box-shadow: 0px -1px 1px rgba(210,230,255,.75);
   background: #678 -webkit-gradient(linear, left top, left bottom, from(#678), to(#456));
 /*  background: #def -webkit-gradient(linear, left top, left bottom, from(#def), to(#bcd));*/
-color: #ddd;
+  color: #ddd;
 }
 
 .termkitTokenField > span.token-empty span#caret input {

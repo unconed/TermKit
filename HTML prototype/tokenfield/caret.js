@@ -46,16 +46,19 @@ termkit.tokenField.caret.prototype = {
     var $token = token.$element;
     var text = token.contents;
 
-    if (text == '' || (text.length == selection.anchor.offset)) {
+    if (text == '') {
       // TODO: boudns checking should be done by selection obj validation
       // Append caret at the end of the token.
       $token.append(this.$element);
-      this.prefix = text;
+      this.prefix = this.suffix = '';
     }
     else {
+      this.prefix = this.suffix = '';
+      this.$input.val(text);
+
       // Inside bounds, split text node and insert caret.
-      this.prefix = text.substring(0, selection.anchor.offset);
-      this.suffix = text.substring(selection.anchor.offset);
+      //this.prefix = text.substring(0, selection.anchor.offset);
+      //this.suffix = text.substring(selection.anchor.offset);
       
       // should call token.update() and split resulting textnode instead 
       
@@ -65,6 +68,8 @@ termkit.tokenField.caret.prototype = {
         .append(this.prefix)
         .append(this.$element)
         .append(this.suffix);
+
+      this.$element.selectionStart = selection.anchor.offset;
     }
 
     // Prevent token object from updating itself.

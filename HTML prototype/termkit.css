@@ -9,7 +9,7 @@ body {
 
 .termkitTokenField {
   border: 1px dotted #555;
-  line-height: 28px;
+  line-height: 22px;
   padding: 20px;
   
   font-family: "Bitstream Vera Sans Mono";
@@ -27,7 +27,7 @@ body {
 .termkitTokenField span#caret {
   display: inline-block;
   overflow: hidden;
-  height: 28px;
+  height: 22px;
   vertical-align: bottom;
 }
 
@@ -72,15 +72,17 @@ body {
   margin-left: 2px;
   -webkit-box-shadow: 0px -1px 1px rgba(255,255,255,.5);
   background: #555 -webkit-gradient(linear, left top, left bottom, from(#555), to(#333));
+  color: #bbb;
 }
 
 .termkitTokenField > span.token-quoted {
   padding: .5em .75em .3em;
   -webkit-border-radius: .25em;
   margin-left: 2px;
-  -webkit-box-shadow: 0px -1px 1px rgba(255,255,255,.75);
-  background: #777 -webkit-gradient(linear, left top, left bottom, from(#777), to(#555));
+  -webkit-box-shadow: 0px -1px 1px rgba(210,230,255,.75);
+  background: #678 -webkit-gradient(linear, left top, left bottom, from(#678), to(#456));
 /*  background: #def -webkit-gradient(linear, left top, left bottom, from(#def), to(#bcd));*/
+color: #ddd;
 }
 
 .termkitTokenField > span.token-empty {

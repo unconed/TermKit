@@ -69,16 +69,16 @@ body {
 .termkitTokenField > span.token-plain {
   padding: .5em .5em .3em;
   -webkit-border-radius: .25em;
-  margin-left: 2px;
+  margin: 0 1px 0 0;
   -webkit-box-shadow: 0px -1px 1px rgba(255,255,255,.5);
   background: #555 -webkit-gradient(linear, left top, left bottom, from(#555), to(#333));
-  color: #bbb;
+  color: #ccc;
 }
 
 .termkitTokenField > span.token-quoted {
   padding: .5em .75em .3em;
   -webkit-border-radius: .25em;
-  margin-left: 2px;
+  margin: 0 3px 0 2px;
   -webkit-box-shadow: 0px -1px 1px rgba(210,230,255,.75);
   background: #678 -webkit-gradient(linear, left top, left bottom, from(#678), to(#456));
 /*  background: #def -webkit-gradient(linear, left top, left bottom, from(#def), to(#bcd));*/

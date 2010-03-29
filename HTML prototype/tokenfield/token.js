@@ -114,7 +114,7 @@ tf.tokenEmpty = function () {
   tf.token.call(this, 'empty', '');
 };
 
-tf.tokenEmpty.triggerEmpty = function (selection, event) {
+tf.tokenEmpty.triggerEmpty = function (offset, event) {
   return [new tf.tokenEmpty()];
 };
 

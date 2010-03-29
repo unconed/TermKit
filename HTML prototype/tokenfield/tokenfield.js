@@ -25,9 +25,12 @@ termkit.tokenField = function (field) {
   var self = this;
   var $field = this.$field = $(this.field = field);
   
-  this.tokenList = new termkit.tokenField.tokenList(this.$field, function (a,b) { self.refreshToken(a,b); });
+  this.tokenList = new termkit.tokenField.tokenList(this.$field);
   this.caret = new termkit.tokenField.caret(this.tokenList);
   this.selection = new termkit.tokenField.selection(this.tokenList);
+  
+  // Set caret token onchange handler.
+  this.caret.onchange = function (a,b) { self.refreshToken(a,b); };
   
   // Set field event handlers.
   $field.mousedown(function (e) { self.fieldMouseDown(e); });

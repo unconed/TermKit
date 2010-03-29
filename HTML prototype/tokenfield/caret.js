@@ -14,6 +14,9 @@ tf.caret = function (tokenList) {
   
   this.token = null;
   this.selection = null;
+  this.onchange = function () {};
+  
+  this.autocomplete = new tf.autocomplete(this);
   
   this.prefix = this.suffix = '';
 };
@@ -30,12 +33,9 @@ tf.caret.prototype = {
   },
 
   moveTo: function (selection, event) {
-    $('#debug').append('<div>moving to token ' + selection.anchor.token.contents + ' @ ' + selection.anchor.offset);
 
+    // Make sure selection is within bounds.
     selection.validate();
-
-    $('#debug').append('<div>moving to valid token ' + selection.anchor.token.contents + ' @ ' + selection.anchor.offset);
-    
     
     // Ensure caret is cleanly removed from its existing position.
     this.remove();
@@ -54,6 +54,7 @@ tf.caret.prototype = {
       this.$input.focus();
     }
     else {
+      // Fill-in existing token contents.
       this.$input.val(text);
 
       // Split the text node at the given offset.
@@ -115,12 +116,14 @@ tf.caret.prototype = {
 
     // Needs to be async, otherwise DOM weirdness occurs??
     if (this.token.contents != updated) {
+      this.autocomplete.remove();
       this.token.contents = updated;
       async.call(this, function () {
         // Merge stored key/char codes in, effectively merging keydown/keypress info.
         event.keyCode = this.keyCode;
         event.charCode = this.charCode;
-        this.tokenList.onChange(this.token, event);
+        this.onchange(this.token, event);
+        this.autocomplete.attach();
       });
     }
 

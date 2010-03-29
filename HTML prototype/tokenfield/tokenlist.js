@@ -5,10 +5,9 @@ var tf = termkit.tokenField;
 /**
  * Manages the list of tokens.
  */
-tf.tokenList = function ($field, onChange) {
+tf.tokenList = function ($field) {
   this.$field = $field;
   this.tokens = [];
-  this.onChange = onChange || (function () {});
 };
 
 tf.tokenList.prototype = {

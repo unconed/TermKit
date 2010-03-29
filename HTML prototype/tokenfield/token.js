@@ -172,7 +172,6 @@ tf.tokenQuoted.triggerRequote = function (offset, event) {
   if (offset == 1 && tf.tokenQuoted.requoteWaiting) {
     var prev = this.tokenList.prev(this);
     prev.contents = prev.contents + this.contents;
-    $('body').append('<div>requote done');
     tf.tokenQuoted.requoteWaiting = false;
     return [];
   }

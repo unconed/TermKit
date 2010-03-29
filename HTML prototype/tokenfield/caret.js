@@ -123,7 +123,9 @@ tf.caret.prototype = {
         event.keyCode = this.keyCode;
         event.charCode = this.charCode;
         this.onchange(this.token, event);
-        this.autocomplete.attach();
+        var self = this;
+        this.autocompleteTimer && clearTimeout(this.autocompleteTimer);
+        this.autocompleteTimer = setTimeout(function () { this.autocompleteTimer = null; self.autocomplete.attach(); }, 1000);
       });
     }
 

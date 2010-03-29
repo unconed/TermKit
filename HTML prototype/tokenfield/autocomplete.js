@@ -27,6 +27,8 @@ tf.autocomplete.prototype = {
   attach: function () {
     // Clean up.
     this.remove();
+
+    if (this.caret.selection.anchor.token == null) return;
     
     // Attach bubble.
     this.caret.$element.before(this.$element);

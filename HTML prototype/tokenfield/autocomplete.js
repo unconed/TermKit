@@ -9,7 +9,7 @@ tf.autocomplete = function (caret) {
   this.caret = caret;
   
   this.$element = this.$markup;
-  this.items = ['foo', 'bar', '.txt'];
+  this.items = ['foo'];//, 'bar', '.txt'];
   this.prefix = '';
 };
 

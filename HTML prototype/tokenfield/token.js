@@ -18,29 +18,6 @@ tf.token = function (type, contents) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-tf.token.triggers = {
-  '*': [
-    { changes: /./, callback: tf.tokenQuoted.triggerResetQuote },
-  ],
-  'empty': [
-    { contents: /^["']/, callback: tf.tokenQuoted.triggerRequote },
-    { contents: /["']/,  callback: tf.tokenQuoted.triggerQuote },
-    { contents: /./,     callback: tf.tokenPlain.triggerCharacter },
-    { contents: / /,     callback: tf.tokenPlain.triggerEmpty },
-  ],
-  'plain': [
-    { contents: /^ ?$/,   callback: tf.tokenEmpty.triggerEmpty },
-    { changes: / /,    callback: tf.tokenPlain.splitSpace },
-    { changes: /["']/, callback: tf.tokenQuoted.triggerQuote },
-  ],
-  'quoted': [
-    { changes: /["']/, callback: tf.tokenQuoted.triggerRequote },
-    { changes: /["']/, callback: tf.tokenQuoted.triggerUnquote },
-  ],
-};
-
-///////////////////////////////////////////////////////////////////////////////
-
 tf.token.prototype = {
   // Return active markup for this token.
   get $markup() {
@@ -245,6 +222,29 @@ tf.tokenQuoted.prototype = $.extend(new tf.token(), {
   },
 
 });
+
+///////////////////////////////////////////////////////////////////////////////
+
+tf.token.triggers = {
+  '*': [
+    { changes: /./, callback: tf.tokenQuoted.triggerResetQuote },
+  ],
+  'empty': [
+    { contents: /^["']/, callback: tf.tokenQuoted.triggerRequote },
+    { contents: /["']/,  callback: tf.tokenQuoted.triggerQuote },
+    { contents: /./,     callback: tf.tokenPlain.triggerCharacter },
+    { contents: / /,     callback: tf.tokenPlain.triggerEmpty },
+  ],
+  'plain': [
+    { contents: /^ ?$/,   callback: tf.tokenEmpty.triggerEmpty },
+    { changes: / /,    callback: tf.tokenPlain.splitSpace },
+    { changes: /["']/, callback: tf.tokenQuoted.triggerQuote },
+  ],
+  'quoted': [
+    { changes: /["']/, callback: tf.tokenQuoted.triggerRequote },
+    { changes: /["']/, callback: tf.tokenQuoted.triggerUnquote },
+  ],
+};
 
 
 })(jQuery);

@@ -16,14 +16,40 @@ tf.token = function (type, contents) {
   this.allowEmpty = false;
 };
 
+///////////////////////////////////////////////////////////////////////////////
+
+tf.token.triggers = {
+  '*': [
+    { changes: /./, callback: tf.tokenQuoted.triggerResetQuote },
+  ],
+  'empty': [
+    { contents: /^["']/, callback: tf.tokenQuoted.triggerRequote },
+    { contents: /["']/,  callback: tf.tokenQuoted.triggerQuote },
+    { contents: /./,     callback: tf.tokenPlain.triggerCharacter },
+    { contents: / /,     callback: tf.tokenPlain.triggerEmpty },
+  ],
+  'plain': [
+    { contents: /^ ?$/,   callback: tf.tokenEmpty.triggerEmpty },
+    { changes: / /,    callback: tf.tokenPlain.splitSpace },
+    { changes: /["']/, callback: tf.tokenQuoted.triggerQuote },
+  ],
+  'quoted': [
+    { changes: /["']/, callback: tf.tokenQuoted.triggerRequote },
+    { changes: /["']/, callback: tf.tokenQuoted.triggerUnquote },
+  ],
+};
+
+///////////////////////////////////////////////////////////////////////////////
+
 tf.token.prototype = {
+  // Return active markup for this token.
   get $markup() {
     var $token = $('<span>').data('token', this);
     var self = this;
-    $token//. bind events
     return $token;
   },
 
+  // Type/class
   get type() { return this._type; },
   set type(type) {
     type = type || 'unknown';
@@ -31,6 +57,7 @@ tf.token.prototype = {
     this.update();
   },
 
+  // Text of contents
   get contents() { return this._contents; },
   set contents(contents) {
     contents = contents || '';
@@ -38,70 +65,80 @@ tf.token.prototype = {
     this.update();
   },
   
+  // Update the element.
   update: function () {
+    this.$element.data('token', this);
     this.$element.attr('class', 'token token-' + this.type);
     if (!this.locked) {
       this.$element.html(escapeText(this.contents));
     }
   },
 
+  // Transmute this token into a different type/class in-place.
   transmute: function (token) {
     if (this.contents == token.contents) {
       this.constructor = token.constructor;
-      this.evolve = token.evolve;
+      this.checkSelf = token.checkSelf;
+      this.checkTriggers = token.checkTriggers;
       this.type = token.type;
       this.allowEmpty = token.allowEmpty;
       return true;
     }
   },
   
-  munge: function (selection, event) {
+  // Use triggers to respond to a creation or change event.
+  // @return Array of replacement tokens for this token (optional).
+  checkTriggers: function (selection, event) {
     var token = this, t = tf.token.triggers;
-    if (t[this.type]) {
-      var update, triggers = [].concat(t[this.type], t['*']);
-      $.each(triggers, function () {
-        var match, changes = '';
-        // Check keycode constraints
-        if (this.keys && this.keys.length) {
-          if (!event || !event.keyCode || ($.inArray(event.keyCode, this.keys) < 0)) {
-            return;
-          }
-        }
-        // Check charcode constraints
-        if (this.chars && this.chars.length) {
-          if (!event || !event.charCode || ($.inArray(event.charCode, this.chars) < 0)) {
-            return;
-          }
-        }
-        // If this token is being edited, capture individual changes
-        if (event && event.charCode && (token == selection.anchor.token)) {
-          var o = selection.anchor.offset;
-          changes = token.contents.substring(o - 1, o);
-        }
-        // Check contents contraints
-        if (this.contents && (match = this.contents.exec(token.contents))) {
-          update = this.callback.call(token, match.index + match[0].length, event);
-          if (update) {
-            return false;
-          }
-        }
-        // Check changes contraints
-        if (this.changes && (match = this.changes.exec(changes))) {
-          update = this.callback.call(token, selection.anchor.offset, event);
-          if (update) {
-            return false;
-          }
-        }
-      });
-      if (update) {
-        return update;
+    // Apply type 
+    var update, triggers = [].concat(t[this.type] || [], t['*'] || []);
+    $.each(triggers, function () {
+      var match, changes = '';
+      // If this token's contents are being edited, capture individual changes as they come in.
+      if (event && event.charCode && (token == selection.anchor.token)) {
+        var o = selection.anchor.offset;
+        changes = token.contents.substring(o - 1, o);
       }
+      // Check keycode constraints
+      if (this.keys && this.keys.length) {
+        if (!event || !event.keyCode || ($.inArray(event.keyCode, this.keys) < 0)) {
+          return;
+        }
+      }
+      // Check charcode constraints
+      if (this.chars && this.chars.length) {
+        if (!event || !event.charCode || ($.inArray(event.charCode, this.chars) < 0)) {
+          return;
+        }
+      }
+      // Check contents contraints
+      if (this.contents && (match = this.contents.exec(token.contents))) {
+        update = this.callback.call(token, match.index + match[0].length, event);
+        if (update) {
+          return false;
+        }
+      }
+      // Check changes contraints
+      if (this.changes && (match = this.changes.exec(changes))) {
+        update = this.callback.call(token, selection.anchor.offset, event);
+        if (update) {
+          return false;
+        }
+      }
+    });
+    // Return array of replacement tokens.
+    if (update) {
+      return update;
     }
     return false;
   },
 
-  evolve: function () {
+  checkSelf: function () {
     return false;
+  },
+  
+  toString: function () {
+    return '['+ this.contents + '(' + this.type +')]';
   },
 };
 
@@ -204,32 +241,10 @@ tf.tokenQuoted.triggerUnquote = function (offset, event) {
 
 tf.tokenQuoted.prototype = $.extend(new tf.token(), {
 
-  evolve: function (selection, event) {
+  checkSelf: function (selection, event) {
   },
 
 });
 
-///////////////////////////////////////////////////////////////////////////////
-
-tf.token.triggers = {
-  '*': [
-    { changes: /./, callback: tf.tokenQuoted.triggerResetQuote },
-  ],
-  'empty': [
-    { contents: /^["']/, callback: tf.tokenQuoted.triggerRequote },
-    { contents: /["']/,  callback: tf.tokenQuoted.triggerQuote },
-    { contents: /./,     callback: tf.tokenPlain.triggerCharacter },
-    { contents: / /,     callback: tf.tokenPlain.triggerEmpty },
-  ],
-  'plain': [
-    { contents: /^ ?$/,   callback: tf.tokenEmpty.triggerEmpty },
-    { changes: / /,    callback: tf.tokenPlain.splitSpace },
-    { changes: /["']/, callback: tf.tokenQuoted.triggerQuote },
-  ],
-  'quoted': [
-    { changes: /["']/, callback: tf.tokenQuoted.triggerRequote },
-    { changes: /["']/, callback: tf.tokenQuoted.triggerUnquote },
-  ],
-};
 
 })(jQuery);

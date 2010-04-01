@@ -21,13 +21,13 @@ $.fn.termkitTokenField = function (options) {
 /**
  * Input manager for token-based field.
  */
-termkit.tokenField = function (field) {
+var tf = termkit.tokenField = function (field) {
   var self = this;
   var $field = this.$field = $(this.field = field);
   
-  this.tokenList = new termkit.tokenField.tokenList(this.$field);
-  this.caret = new termkit.tokenField.caret(this.tokenList);
-  this.selection = new termkit.tokenField.selection(this.tokenList);
+  this.tokenList = new tf.tokenList(this.$field);
+  this.caret = new tf.caret(this.tokenList);
+  this.selection = new tf.selection(this.tokenList);
   
   // Set caret token onchange handler.
   this.caret.onchange = function (a,b) { self.refreshToken(a,b); };
@@ -37,31 +37,60 @@ termkit.tokenField = function (field) {
   
 };
 
-termkit.tokenField.prototype = {
+tf.prototype = {
+  
+  // Respond to mouse clicks.
   fieldMouseDown: function (event) {
     var $target = $(event.target);
+    
+    // Clicking in the empty area.
     if ($target.is('.termkitTokenField')) {
 
+      // Clean-up edit state, apply lingering edits.
       this.caret.remove();
-    
-      var token = new termkit.tokenField.tokenEmpty();
 
+      // Create new empty token.
+      var token = new tf.tokenEmpty();
       this.tokenList.add(token);
       this.tokenList.refreshField(this.$field);
 
+      // Move caret into it.
       this.selection.anchor = { token: token };
       this.caret.moveTo(this.selection);
     
     }
+    
+    // Clicking on the caret's input field (in proxy).
+    if ($target.is('.measure')) {
+      // Target the underlying token.
+      $target = $(event.target = $target.parents('span.token')[0]);
+    }
+    
+    // Clicking on a token.
+    if ($target.is('.token, .measure')) {
+
+      // Place the caret on the clicked location.
+      var token = $target.data('token');
+      this.selection.anchor = tf.selection.fromEvent(event);
+      this.caret.moveTo(this.selection);
+
+    }
+    
     event.stopPropagation();
     event.preventDefault();
   },
 
+  // Refresh the given token in response to input.
   refreshToken: function (token, event) {
-    var update = token.evolve(this.selection, event);
+    
+    // Check own rules.
+    var update = token.checkSelf(this.selection, event);
     if (!update) {
-      update = token.munge(this.selection, event);
+      // Check triggers.
+      update = token.checkTriggers(this.selection, event);
     }
+    
+    // Insert replacement tokens if given.
     if (update) {
       // Allow both single replacement token as well as array of tokens.
       if (update.length === undefined) update = [update];
@@ -74,7 +103,7 @@ termkit.tokenField.prototype = {
         }
       }
 
-      // Apply lingering edits to contents.
+      // Clean-up edit state, apply lingering edits.
       this.caret.remove();
 
       // Replace with new token(s).
@@ -84,18 +113,21 @@ termkit.tokenField.prototype = {
 
       // Make sure caret ends up somewhere sensible.
       var prev;
+      // Does this token still exist?
       if (update.length) {
+        // Inside replacement token at same offset.
         this.selection.anchor = { token: this.tokenList.tokens[index], offset: this.selection.anchor.offset };
         this.caret.moveTo(this.selection, event);
       }
       else {
+        // At the end of the previous token.
         if (prev = this.tokenList.tokens[index - 1]) {
           this.selection.anchor = { token: prev, offset: prev.contents.length };
           this.caret.moveTo(this.selection, event);
         }
       } 
 
-      // Apply munging rules to newly created tokens, if any.
+      // Recurse processing rules to newly created tokens, if any.
       var self = this;
       $.each(update, function () {
         self.refreshToken(this, event);

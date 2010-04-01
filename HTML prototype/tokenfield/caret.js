@@ -22,6 +22,8 @@ tf.caret = function (tokenList) {
 };
 
 tf.caret.prototype = {
+  
+  // Return active markup for implementing the caret.
   get $markup() {
     var $caret = $('<span id="caret"><input /><span class="measure"></span></span>');
     var self = this;
@@ -32,6 +34,7 @@ tf.caret.prototype = {
     return $caret;
   },
 
+  // Insert the caret on the given selection.
   moveTo: function (selection, event) {
 
     // Make sure selection is within bounds.
@@ -64,6 +67,7 @@ tf.caret.prototype = {
         .append(this.$element)
         .append(this.suffix);
 
+      // Focus the input at the right offset.
       this.$input.focus();
       this.$input[0].selectionEnd = this.$input[0].selectionStart = selection.anchor.offset;
     }
@@ -108,31 +112,38 @@ tf.caret.prototype = {
   },
 
   updateContents: function (event) {
+    // Contents might have changed, reset selection.
     if (!this.selection) return;
     this.selection.anchor.offset = this.$input[0].selectionStart + this.prefix.length;
     
+    // Recompose contents from input.
     var old = this.token;
     var updated = this.prefix + this.$input.val() + this.suffix;
 
-    // Needs to be async, otherwise DOM weirdness occurs??
+    // Check for changes and apply them.
     if (this.token.contents != updated) {
       this.autocomplete.remove();
       this.token.contents = updated;
+      
+      // Notify callers of event
+      // (asynchronous to give the DOM time to finish event handling).
       async.call(this, function () {
         // Merge stored key/char codes in, effectively merging keydown/keypress info.
         event.keyCode = this.keyCode;
         event.charCode = this.charCode;
         this.onchange(this.token, event);
+        
+        // TODO: replace with real autocomplete
         var self = this;
         this.autocompleteTimer && clearTimeout(this.autocompleteTimer);
         this.autocompleteTimer = setTimeout(function () { this.autocompleteTimer = null; self.autocomplete.attach(); }, 1000);
       });
     }
 
-    if (old == this.token) {
-      this.$measure.text(this.$input.val());
-      this.$input.css('width', this.$measure.width() + 20);
-    }
+    // Adapt the size of the measuring span to fit the text.
+    this.$measure.text(this.$input.val());
+    // Enlarge the input to make room for the next keystroke.
+    this.$input.css('width', this.$measure.width() + this.$measure.height() + 1);
   },
   
   onKeyDown: function (event) {
@@ -163,12 +174,15 @@ tf.caret.prototype = {
     this.keyCode = event.keyCode;
     this.charCode = 0;
     
+    // Contents might have changed.
     async.call(this, function () {
       this.updateContents(event);
     });
   },
 
   onKeyPress: function (event) {
+    // Log character code for this keyboard input.
+    // Used in delayed onkeydown handler.
     this.charCode = event.charCode;
   },
 

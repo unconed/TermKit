@@ -55,12 +55,20 @@ body {
   outline: 0;
 }
 
-.termkitTokenField span#caret span.measure {
+.termkitTokenField span#caret > span.measure {
   position: relative;
   z-index: 2;
   opacity: 0;
-  white-space: pre-wrap;
+  white-space: pre;
 }
+
+.termkitTokenField span.token > span.measure {
+  position: absolute;
+  z-index: 2;
+  opacity: 0;
+  white-space: pre;
+}
+
 
 /************/
 
@@ -138,7 +146,7 @@ body {
 /************/
 
 .termkitTokenField > span.token {
-  white-space: pre-wrap;
+  white-space: pre;
 }
 
 .termkitTokenField > span.token:after {

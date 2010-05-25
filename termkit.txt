@@ -1,0 +1,74 @@
+TermKit
+
+Goal: next gen terminal / command application
+
+Addresses following problems:
+1) Monospace character grid with ansi colors is not rich enough to display modern files / media / visualizations / metadata.
+2) Piping binary or text streams between apps is bad for everyone:
+   * Humans have to suffer syntax, cannot reflow/manipulate output in real-time
+   * Computers have to suffer ambiguities
+3) Synchronous input/output makes you wait
+4) String-based command line requires arcane syntax
+5) Commands with more than 1 screenful of output are unwieldy
+
+Programs / commands
+* Output processor for common cli tools
+* Custom implementation of ls and friends, with support for mimicking classic shell behaviour with a 2.0 twist
+
+Cool input scenarios:
+* Command input is smart and adapts the semantics based on single character 'commands' which are abstractions of the old bash syntax. E.g. beginning and ending an encapsulated string is done with ".
+
+Cool output scenarios:
+* Listings of files, anywhere, show an icon with distinguished typography for filename vs meta. Quicklook integration on the icon.
+* Output of a command is a series of figures. Figures never go beyond the size of the viewport
+* Command output is interactive: has elements which can be focused, selected/unselected, opened, right clicked, dragged and dropped
+
+Good desktop citizen:
+* Dragging a file on the terminal window makes a folder icon appear on the side for dropping it on the CWD. Can also drag the file into the command line to reference it as an argument.
+* Can drag files, snippets, JSON/CSV off the terminal
+* Tear-off tabs/windows
+
+
+terminal is broken:
+
+* long command output -> scroll up
+* place cursor in middle of line inside quotes, hit enter -> gets executed.
+
+displays only facts, not things i want to know:
+* displays owners, permission flags... doesn't say whether I am allowed to edit or not (use opacity / color)
+
+
+0.1: UI prototype
+ [X] simulated in safari/webkit.app
+ [X] functional input line with tokenization, cursor keys and backspace/delete
+ - functional autocomplete on tokens
+ - simulated commands
+ - simulated output with collapsible sections
+ 
+0.2: App prototype
+ - cocoa app
+ - webkit in single window view (but built to scale to multiple tabs)
+ - custom JS termkit object w/ system IO
+ - real piped unix commands
+ - real directory listings
+ 
+ + python bash anonymizer script to collect usage patterns from local geeks
+   turns filenames.foooo.ext into random.random.ext
+   turns "quoted strings" into "xxxxx xxxxx xxxxx xxx xxxx"
+   turns url://xxxxxxx/xxxxxx
+   turns xxxx@xxxx:xxxx
+
+0.3: Command suite
+ - two-tier commands
+ - read man pages
+ - implement version control
+ - implement tar gzip
+ - OS X quicklook integration
+ - OS X icon loading
+
+0.4: Modularization / theming
+ - split off command processor rules / autocomplete handlers into separable blocks
+ - add plug-in mechanism with drop-in functionality
+ - allow loading of command/theme stylesheets
+
+0.5: 

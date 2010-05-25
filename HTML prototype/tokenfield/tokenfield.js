@@ -5,7 +5,6 @@ $.fn.termkitTokenField = function (options) {
 
   // Don't process same field twice.
   if ($container.is('.termkitTokenField')) return;
-  $container.addClass('termkitTokenField');  
 
   // Parse options.
   var defaults = {
@@ -25,24 +24,34 @@ var tf = termkit.tokenField = function (field) {
   var self = this;
   var $field = this.$field = $(this.field = field);
   
+  $field.addClass('termkitTokenField');  
+  
   this.tokenList = new tf.tokenList(this.$field);
   this.caret = new tf.caret(this.tokenList);
   this.selection = new tf.selection(this.tokenList);
   
-  // Set caret token onchange handler.
-  this.caret.onchange = function (a,b) { self.refreshToken(a,b); };
+  // Track editing inside tokens using the caret.
+  this.caret.onchange = function (token, event) { self.refreshToken(token, event); };
+  
+  // Provide external events.
+  this.onchange = function () {};
   
   // Set field event handlers.
-  $field.mousedown(function (e) { self.fieldMouseDown(e); });
+  $field.mousedown(function (event) { self.fieldMouseDown(event); });
   
 };
 
 tf.prototype = {
   
+  // Return contents.
+  getContents: function () {
+    return [].concat(this.tokenList.tokens);
+  },
+  
   // Respond to mouse clicks.
   fieldMouseDown: function (event) {
     var $target = $(event.target);
-    
+
     // Clicking in the empty area.
     if ($target.is('.termkitTokenField')) {
 
@@ -69,15 +78,18 @@ tf.prototype = {
     // Clicking on a token.
     if ($target.is('.token, .measure')) {
 
+      // Clean-up edit state, apply lingering edits.
+      this.caret.remove();
+
       // Place the caret on the clicked location.
       var token = $target.data('token');
       this.selection.anchor = tf.selection.fromEvent(event);
       this.caret.moveTo(this.selection);
-
     }
-    
+
     event.stopPropagation();
     event.preventDefault();
+    
   },
 
   // Refresh the given token in response to input.
@@ -138,6 +150,8 @@ tf.prototype = {
     if (token.type == 'empty' && this.selection.anchor.token != token) {
       this.tokenList.remove(token);
     }
+    
+    this.onchange.call(token, event, this.getContents());
   },
 };
 

@@ -5,7 +5,6 @@ $.fn.termkitCommandStream = function (options) {
 
   // Don't process same field twice.
   if ($container.is('.termkitCommandStream')) return;
-  $container.addClass('termkitCommandStream');  
 
   // Parse options.
   var defaults = {
@@ -15,6 +14,36 @@ $.fn.termkitCommandStream = function (options) {
   // Create input manager for field.
   var input = new termkit.commandStream($container[0]);
 }
+
+///////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Input manager for token-based field.
+ */
+var cs = termkit.commandStream = function (stream) {
+  var self = this;
+  var $stream = this.$stream = $(this.stream = stream);
+
+  $stream.addClass('termkitCommandStream');  
+  
+  this.commandList = new cs.commandList(this.$stream);
+  
+  this.newCommand();
+  this.newCommand();
+  this.commandList.refreshStream();
+};
+
+cs.prototype = {
+  
+  newCommand: function () {
+    this.commandList.add(new cs.command());
+  },
+  
+  // Respond to mouse clicks.
+  foo: function (event) {
+  },
+
+};
 
 ///////////////////////////////////////////////////////////////////////////////
 

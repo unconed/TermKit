@@ -12,6 +12,7 @@ tf.token = function (type, contents) {
   this.type = type;
   this.contents = contents;
   this.tokenList = null;
+  this.flags = {};
 
   this.allowEmpty = false;
 };
@@ -19,6 +20,7 @@ tf.token = function (type, contents) {
 ///////////////////////////////////////////////////////////////////////////////
 
 tf.token.prototype = {
+  
   // Return active markup for this token.
   get $markup() {
     var $token = $('<span>').data('token', this);
@@ -41,8 +43,8 @@ tf.token.prototype = {
     this._contents = contents;
     this.update();
   },
-  
-  // Update the element.
+
+  // Update the element's markup in response to internal changes.
   update: function () {
     this.$element.data('token', this);
     this.$element.attr('class', 'token token-' + this.type);
@@ -51,7 +53,7 @@ tf.token.prototype = {
     }
   },
 
-  // Transmute this token into a different type/class in-place.
+  // Transmute this token into a different type/class in-place to maintain focus/state.
   transmute: function (token) {
     if (this.contents == token.contents) {
       this.constructor = token.constructor;

@@ -60,8 +60,8 @@ tf.selection.prototype = {
 
   // Validate both endpoints.
   validate: function () {
-    this.anchor = this.checkBounds(this.anchor);
-    this.focus = this.checkBounds(this.focus);
+    this._anchor = this.checkBounds(this._anchor);
+    this._focus = this.checkBounds(this._focus);
   },
   
   toString: function () {
@@ -116,6 +116,6 @@ tf.selection.fromEvent = function (event) {
   var center = (right + left) / 2;
   $('body').append('<div>'+ center + ' ' + relativeOffset);
   return { token: token, offset: low + ((relativeOffset > center) ? 1 : 0) };
-},
+};
 
 })(jQuery);

@@ -1,0 +1,61 @@
+Prototype:
+
+1) UI prototypes
+
+[alpha] Token field
+  [X] plain text
+  [X] encapsed string
+  [X] token transmutation
+  [X] refactored code into separate files + object literal style
+  [X] design mockup
+  [X] commandstream mockup
+  [X] move validity of selection anchor/focus pos into selection obj, out of caret obj
+  [X] caret left/right with fulltoken input
+  [X] autocomplete popup / edit mode
+  [X] clickable mouse position
+  [X] fix event bindings lost when clicking inside textfield
+!  [ ] fix backspacing around edges of tokens
+  [ ] write external bindings for tokenfield
+    => tokenfield abstracts, interface for matching should be only multiregexp + callback
+    . on change -> process tokens, apply multiregexps
+    . register multiregexp
+    . execute command
+    
+  [ ] rewrite $element / $markup pattern to create new $markup on demand when doing insert/remove from DOM
+  [ ] caret positions around allowempty tokens and ^/$
+  [ ] caret.remove() shouldn't need to touch tokenList when pruning empties -> let triggers do it
+
+[ ] inline autocomplete
+  [X] panel overlayed on token
+  [X] alignment
+  [ ] keyboard controls up/down
+  
+[ ] command stream
+  [X] list of collapsible sections
+  [X] host token field
+  [ ] host output
+  [ ] up/down to change focus
+  [ ] anchored scrolling, auto-expand to fill view
+  [ ] add forking the stream
+
+
+2) Command/token autocomplete
+  [X] token multi-regexp patterns
++ [.] triggers system, unify with token field triggers a bit?
+  [ ] autocomplete state
+  [ ] autocomplete a string / command
+  [ ] autocomplete filesystem
+  [ ] autocomplete dir / file distinction
+
+3) Smart output with selectable things
+  [ ] Invoke a new process, capture output
+  [ ] define JSON streaming format
+    . content type (+ mime)
+    - streaming format:
+      * simple object
+      * stream of objects
+      * typed multipart
+    . top level stream of objects
+    - make test py script that streams in objects
+    - transform layer, JS template output into stream
+    - make a script for git (arguments, file/dir, ...)

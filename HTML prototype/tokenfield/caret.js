@@ -72,7 +72,7 @@ tf.caret.prototype = {
       this.$input[0].selectionEnd = this.$input[0].selectionStart = selection.anchor.offset;
     }
 
-    // Prevent token object from updating itself.
+    // Prevent token object from updating itself during editing.
     this.token = token;
     this.token.locked = true;
 
@@ -81,6 +81,9 @@ tf.caret.prototype = {
   },
   
   remove: function () {
+    // Remove autocomplete popup.
+    this.autocomplete.remove();
+
     // Detach caret elements from document.
     this.$element.detach();
 
@@ -147,6 +150,9 @@ tf.caret.prototype = {
   },
   
   onKeyDown: function (event) {
+    // Forward to autocomplete if open.
+    if (this.autocomplete && (this.autocomplete.onKeyDown(event) === false)) return false;
+    
     // Intercept special keys
     switch (event.keyCode) {
       case 37: // Left arrow
@@ -174,7 +180,7 @@ tf.caret.prototype = {
     this.keyCode = event.keyCode;
     this.charCode = 0;
     
-    // Contents might have changed.
+    // Call updateContents when event processing is done (see onKeyPress).
     async.call(this, function () {
       this.updateContents(event);
     });

@@ -13,6 +13,7 @@ $.fn.termkitTokenField = function (options) {
 
   // Create input manager for field.
   var input = new termkit.tokenField($container[0]);
+  $container.append(input.$element);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -20,29 +21,37 @@ $.fn.termkitTokenField = function (options) {
 /**
  * Input manager for token-based field.
  */
-var tf = termkit.tokenField = function (field) {
+var tf = termkit.tokenField = function () {
   var self = this;
-  var $field = this.$field = $(this.field = field);
+
+  this.$element = this.$markup();  
   
-  $field.addClass('termkitTokenField');  
-  
-  this.tokenList = new tf.tokenList(this.$field);
+  this.tokenList = new tf.tokenList();
   this.caret = new tf.caret(this.tokenList);
   this.selection = new tf.selection(this.tokenList);
   
   // Track editing inside tokens using the caret.
-  this.caret.onchange = function (token, event) { self.refreshToken(token, event); };
+  this.caret.onchange = function (token, event) { self.updateToken(token, event); };
   
   // Provide external events.
   this.onchange = function () {};
   
   // Set field event handlers.
-  $field.mousedown(function (event) { self.fieldMouseDown(event); });
+  this.$element.mousedown(function (event) { self.fieldMouseDown(event); });
   
+  // Refresh markup.
+  this.updateElement();
 };
 
 tf.prototype = {
   
+  // Return active markup for this field.
+  $markup: function () {
+    var $token = $('<div class="termkitTokenField">').data('controller', this);
+    var self = this;
+    return $token;
+  },
+
   // Return contents.
   getContents: function () {
     return [].concat(this.tokenList.tokens);
@@ -61,7 +70,7 @@ tf.prototype = {
       // Create new empty token.
       var token = new tf.tokenEmpty();
       this.tokenList.add(token);
-      this.tokenList.refreshField(this.$field);
+      this.updateElement();
 
       // Move caret into it.
       this.selection.anchor = { token: token };
@@ -82,7 +91,7 @@ tf.prototype = {
       this.caret.remove();
 
       // Place the caret on the clicked location.
-      var token = $target.data('token');
+      var token = $target.data('controller');
       this.selection.anchor = tf.selection.fromEvent(event);
       this.caret.moveTo(this.selection);
     }
@@ -92,8 +101,17 @@ tf.prototype = {
     
   },
 
+  // Refresh the field by re-inserting all token elements.
+  updateElement: function () {
+    var $element = this.$element.empty();
+    $.each(this.tokenList.tokens, function () {
+      this.updateElement();
+      $element.append(this.$element);
+    });
+  },
+
   // Refresh the given token in response to input.
-  refreshToken: function (token, event) {
+  updateToken: function (token, event) {
     
     // Check own rules.
     var update = token.checkSelf(this.selection, event);
@@ -110,7 +128,7 @@ tf.prototype = {
       // Try to transmute token in place if possible to retain native caret/editing state.
       if (update.length == 1) {
         if (token.transmute(update[0])) {
-          this.refreshToken(token, event);
+          this.updateToken(token, event);
           return;
         }
       }
@@ -121,7 +139,7 @@ tf.prototype = {
       // Replace with new token(s).
       var index = this.tokenList.indexOf(token);
       this.tokenList.replace(token, update);
-      this.tokenList.refreshField();
+      this.updateElement();
 
       // Make sure caret ends up somewhere sensible.
       var prev;
@@ -142,7 +160,7 @@ tf.prototype = {
       // Recurse processing rules to newly created tokens, if any.
       var self = this;
       $.each(update, function () {
-        self.refreshToken(this, event);
+        self.updateToken(this, event);
       });
     }
 

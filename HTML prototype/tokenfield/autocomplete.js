@@ -8,15 +8,16 @@ var tf = termkit.tokenField;
 tf.autocomplete = function (caret) {
   this.caret = caret;
   
-  this.$element = this.$markup;
+  this.$element = this.$markup();
   this.items = [];
   this.prefix = '';
   this.selected = 0;
+  this.token = null;
 };
 
 tf.autocomplete.prototype = {
-  get $markup() {
-    var $popup = $('<span id="autocomplete"><span class="stretch"><span class="fill"></span><span class="lines"></span></span>');
+  $markup: function () {
+    var $popup = $('<span class="autocomplete"><span class="stretch"><span class="fill"></span><span class="lines"></span></span>').data('controller', this);
     var self = this;
     $popup;/*.find('input')
       .keydown(function (e) { self.onKeyDown(e); })
@@ -35,9 +36,9 @@ tf.autocomplete.prototype = {
     this.caret.$element.before(this.$element);
     
     // Extract prefix for autocompletion.
-    var a = this.caret.selection.anchor;
-    this.prefix = a.token.contents.substring(0, a.offset);
-    this.handler = a.token.autocomplete || (function () { });
+    this.token = this.caret.selection.anchor.token;
+    this.prefix = this.token.contents.substring(0, this.caret.selection.anchor.offset);
+    this.handler = this.token.autocomplete || (function () { });
   
     // Sync state.
     this.updateContents();
@@ -49,6 +50,7 @@ tf.autocomplete.prototype = {
     this.items = [];
     this.prefix = '';
     this.selected = 0;
+    this.token = null;
     
     // Reset caret position.
     //this.caret.$element.find('input').css('marginTop', 0);
@@ -92,9 +94,22 @@ tf.autocomplete.prototype = {
     }
   },
   
+  onComplete: function (event) {
+    if (this.token) {
+      this.caret.setContents(this.prefix + this.items[this.selected], event);
+      this.remove();
+    }
+  },
+  
   onKeyDown: function (event) {
     // Intercept special keys
     switch (event.keyCode) {
+      case 9: // TAB
+      case 13: // Enter
+        this.onComplete(event);
+        event.preventDefault();
+        event.stopPropagation();
+        break;
       case 37: // Left arrow
         break;
       case 39: // Right arrow

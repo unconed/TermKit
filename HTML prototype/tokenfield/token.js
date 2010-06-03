@@ -6,7 +6,7 @@ var tf = termkit.tokenField;
  * Represents a single token in the field.
  */
 tf.token = function (type, contents) {
-  this.$element = this.$markup;
+  this.$element = this.$markup();
 
   this.locked = false;
   this.type = type;
@@ -20,20 +20,25 @@ tf.token = function (type, contents) {
 ///////////////////////////////////////////////////////////////////////////////
 
 tf.token.prototype = {
-  
+
   // Return active markup for this token.
-  get $markup() {
-    var $token = $('<span>').data('token', this);
+  $markup: function () {
+    var $token = $('<span>').data('controller', this);
     var self = this;
     return $token;
   },
 
+  // Pass-through length of contents
+  get length() {
+    return this.contents.length;
+  },
+  
   // Type/class
   get type() { return this._type; },
   set type(type) {
     type = type || 'unknown';
     this._type = type;
-    this.update();
+    this.updateElement();
   },
 
   // Text of contents
@@ -41,12 +46,12 @@ tf.token.prototype = {
   set contents(contents) {
     contents = contents || '';
     this._contents = contents;
-    this.update();
+    this.updateElement();
   },
 
   // Update the element's markup in response to internal changes.
-  update: function () {
-    this.$element.data('token', this);
+  updateElement: function () {
+    this.$element.data('controller', this);
     this.$element.attr('class', 'token token-' + this.type);
     if (!this.locked) {
       this.$element.html(escapeText(this.contents));

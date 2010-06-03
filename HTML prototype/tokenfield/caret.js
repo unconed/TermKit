@@ -8,7 +8,7 @@ var tf = termkit.tokenField;
 tf.caret = function (tokenList) {
   this.tokenList = tokenList;
   
-  this.$element = this.$markup;
+  this.$element = this.$markup();
   this.$input = this.$element.find('input');
   this.$measure = this.$element.find('.measure');
   
@@ -24,8 +24,8 @@ tf.caret = function (tokenList) {
 tf.caret.prototype = {
   
   // Return active markup for implementing the caret.
-  get $markup() {
-    var $caret = $('<span id="caret"><input /><span class="measure"></span></span>');
+  $markup: function() {
+    var $caret = $('<span id="caret"><input /><span class="measure"></span></span>').data('controller', this);
     var self = this;
     $caret.find('input')
       .keydown(function (e) { self.onKeyDown(e); })
@@ -99,7 +99,7 @@ tf.caret.prototype = {
     }
     else {
       this.tokenList.remove(this.token);
-      this.tokenList.refreshField();
+      this.onchange(this.token, event);
     }
 
     // Reset caret state.
@@ -112,6 +112,14 @@ tf.caret.prototype = {
 
   onBlur: function (element) {
     this.remove();
+  },
+
+  setContents: function (string, event) {
+    this.prefix = '';
+    this.$input.val(string);
+    this.suffix = '';
+    
+    this.updateContents(event);
   },
 
   updateContents: function (event) {

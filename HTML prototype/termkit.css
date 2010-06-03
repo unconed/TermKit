@@ -1,5 +1,5 @@
 body {
-  background: #000;
+  background: #234;
   color: #fff;
 }
 
@@ -7,14 +7,52 @@ body {
   color: #555;
 }
 
+#terminal {
+  background: #000;
+  position: relative;
+  width: 900px;
+  height: 600px;
+}
+
+/************/
+
+.termkitCommandStream {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: auto;
+
+  font-family: "Bitstream Vera Sans Mono";
+  font-size: 70%;
+  /*  letter-spacing: 1px;*/
+}
+
+.termkitCommandStream .context {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 10px;
+  
+  background: #444 -webkit-gradient(linear, left top, left bottom, from(#555), to(#333));
+}
+
+.termkitCommandStream .context .path {
+  float: left;
+}
+
+.termkitCommandStream .context .user {
+  float: right;
+}
+
+/************/
+
 .termkitTokenField {
   border: 1px dotted #555;
   line-height: 22px;
   padding: 20px;
-  
-  font-family: "Bitstream Vera Sans Mono";
-  font-size: 70%;
-/*  letter-spacing: 1px;*/
   
   cursor: text;
 }
@@ -72,7 +110,7 @@ body {
 
 /************/
 
-.termkitTokenField span#autocomplete {
+.termkitTokenField span.autocomplete {
   position: relative;
   display: inline-block;
   overflow: visible;
@@ -82,15 +120,15 @@ body {
 /*  top: -21px;*/
 }
 
-.termkitTokenField span#autocomplete .stretch {
+.termkitTokenField span.autocomplete .stretch {
   position: absolute;
   margin-top: -.1em;
 }
 
-.termkitTokenField span#autocomplete .lines {
+.termkitTokenField span.autocomplete .lines {
 }
 
-.termkitTokenField span#autocomplete .fill {
+.termkitTokenField span.autocomplete .fill {
   position: absolute;
   top: 0;
   left: 0;
@@ -101,7 +139,7 @@ body {
   background: #555 -webkit-gradient(linear, left top, left bottom, from(#555), to(#333));
 }
 
-.termkitTokenField span#autocomplete .line {
+.termkitTokenField span.autocomplete .line {
   position: relative;
   z-index: 2;
   display: block;
@@ -109,39 +147,39 @@ body {
   height: 21px;
 }
 
-.termkitTokenField span#autocomplete .line span.prefix {
+.termkitTokenField span.autocomplete .line span.prefix {
   opacity: 0.5;
 }
 
-.termkitTokenField span#autocomplete .line:nth-child(2n) {
+.termkitTokenField span.autocomplete .line:nth-child(2n) {
 /*  background: -webkit-gradient(linear, left top, left bottom, from(rgba(0,0,0,.2)), to(rgba(0,0,0,.25)));*/
 }
 
-.termkitTokenField span#autocomplete .line.active {
+.termkitTokenField span.autocomplete .line.active {
   background: rgba(0, 0, 0, .35);
 }
 
-.termkitTokenField span#autocomplete .line.active span.prefix {
+.termkitTokenField span.autocomplete .line.active span.prefix {
   opacity: 0;
 }
 
-.termkitTokenField span.token-plain span#autocomplete > span {
+.termkitTokenField span.token-plain span.autocomplete > span {
   margin-left: -.5em;
 }  
 
-.termkitTokenField span.token-quoted span#autocomplete > span {
+.termkitTokenField span.token-quoted span.autocomplete > span {
   margin-left: -.75em;
 }  
 
-.termkitTokenField span.token-plain span#autocomplete .line {
+.termkitTokenField span.token-plain span.autocomplete .line {
   padding: 0 .5em 0;
 }
 
-.termkitTokenField span.token-quoted span#autocomplete .line {
+.termkitTokenField span.token-quoted span.autocomplete .line {
   padding: 0 .75em 0;
 }
 
-.termkitTokenField span.token-quoted span#autocomplete .fill {
+.termkitTokenField span.token-quoted span.autocomplete .fill {
   -webkit-box-shadow: 0px -1px 1px rgba(160,180,192,1), 0px 1px 6px rgba(0,0,0,1), 3px 1px 6px rgba(0,0,0,1);
   background: #678 -webkit-gradient(linear, left top, left bottom, from(#678), to(#456));
 }

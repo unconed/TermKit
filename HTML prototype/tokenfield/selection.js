@@ -76,7 +76,7 @@ tf.selection.prototype = {
  */
 tf.selection.fromEvent = function (event) {
   // Find token.
-  var $target = $(event.target), token = $target.data('token');
+  var $target = $(event.target), token = $target.data('controller');
   if (token.contents == '') {
     return { token: token, offset: 0 };
   }

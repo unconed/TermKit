@@ -5,12 +5,16 @@ var tf = termkit.tokenField;
 /**
  * Manages the list of tokens.
  */
-tf.tokenList = function ($field) {
-  this.$field = $field;
+tf.tokenList = function () {
   this.tokens = [];
 };
 
 tf.tokenList.prototype = {
+  // Pass-through length of array
+  get length() {
+    return this.tokens.length;
+  },
+
   // Simple debug output.
   debug: function () {
     $('#debug').empty();
@@ -65,15 +69,6 @@ tf.tokenList.prototype = {
   // Previous iterator.
   prev: function (token) {
     return this.tokens[this.indexOf(token) - 1];
-  },
-
-  // Refresh the given field by re-inserting all token elements.
-  refreshField: function () {
-    var $field = this.$field.empty();
-    $.each(this.tokens, function () {
-      this.update();
-      $field.append(this.$element);
-    });
   },
 };
 

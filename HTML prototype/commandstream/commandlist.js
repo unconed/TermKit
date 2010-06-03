@@ -5,12 +5,16 @@ var cs = termkit.commandStream;
 /**
  * Manages the list of executed commands.
  */
-cs.commandList = function ($stream) {
-  this.$stream = $stream;
+cs.commandList = function () {
   this.commands = [];
 };
 
 cs.commandList.prototype = {
+  // Pass-through length of array
+  get length() {
+    return this.commands.length;
+  },
+  
   // Simple debug output.
   debug: function () {
     $('#debug').empty();
@@ -65,13 +69,6 @@ cs.commandList.prototype = {
     return this.commands[this.indexOf(command) - 1];
   },
 
-  // Refresh the given stream by re-inserting all command elements.
-  refreshStream: function () {
-    var $stream = this.$stream.empty();
-    $.each(this.commands, function () {
-      $stream.append(this.$element);
-    });
-  },
 };
 
 })(jQuery);

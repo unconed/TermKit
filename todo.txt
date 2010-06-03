@@ -14,7 +14,7 @@ Prototype:
   [X] autocomplete popup / edit mode
   [X] clickable mouse position
   [X] fix event bindings lost when clicking inside textfield
-!  [ ] fix backspacing around edges of tokens
+  [ ] fix backspacing around edges of tokens
   [ ] write external bindings for tokenfield
     => tokenfield abstracts, interface for matching should be only multiregexp + callback
     . on change -> process tokens, apply multiregexps
@@ -33,6 +33,7 @@ Prototype:
 [ ] command stream
   [X] list of collapsible sections
   [X] host token field
+  [X] context bar by command
   [ ] host output
   [ ] up/down to change focus
   [ ] anchored scrolling, auto-expand to fill view
@@ -59,3 +60,8 @@ Prototype:
     - make test py script that streams in objects
     - transform layer, JS template output into stream
     - make a script for git (arguments, file/dir, ...)
+
+
+bugs:
+[ ] backspacing around token edges
+[ ] autocomplete in empty token -> hit enter -> invisible

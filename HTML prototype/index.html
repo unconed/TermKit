@@ -19,6 +19,7 @@
 
   <script type="text/javascript" charset="utf-8" src="commandstream/commandstream.js"></script>
   <script type="text/javascript" charset="utf-8" src="commandstream/commandlist.js"></script>
+  <script type="text/javascript" charset="utf-8" src="commandstream/commandcontext.js"></script>
   <script type="text/javascript" charset="utf-8" src="commandstream/command.js"></script>
 
   <link rel="stylesheet" href="termkit.css" type="text/css" media="screen" title="no title" charset="utf-8" />
@@ -31,8 +32,7 @@
   
 <script type="text/javascript" charset="utf-8">
   $(function () {
-    $('#commandline1').termkitCommandStream();
-//    $('#commandline2').termkitTokenField();
+    $('#terminal').termkitCommandStream();
   });
 </script>
 </head>
@@ -41,9 +41,7 @@
 
 <h1>WebKit Terminal - UI prototype</h1>
 
-<div id="commandline1"></div>
-
-<div id="commandline2"></div>
+<div id="terminal"></div>
 
 <div id="debug"></div>
 

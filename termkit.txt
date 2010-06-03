@@ -41,7 +41,7 @@ displays only facts, not things i want to know:
 0.1: UI prototype
  [X] simulated in safari/webkit.app
  [X] functional input line with tokenization, cursor keys and backspace/delete
- - functional autocomplete on tokens
+ [X] functional autocomplete on tokens
  - simulated commands
  - simulated output with collapsible sections
  

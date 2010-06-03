@@ -5,9 +5,10 @@ var cs = termkit.commandStream;
 /**
  * Represents a single command in the stream.
  */
-cs.command = function (type, contents) {
-  this.$element = this.$markup;
+cs.command = function () {
+  this.$element = this.$markup();
 
+  this.context = new cs.commandContext();
   this.collapsed = true;
 };
 
@@ -15,17 +16,21 @@ cs.command = function (type, contents) {
 
 cs.command.prototype = {
   // Return active markup for this command.
-  get $markup() {
+  $markup: function () {
     var self = this;
-    var $command = $('<div class="command">').data('command', this);
-    this.tokenField = new termkit.tokenField($command);
+    var $command = $('<div class="command">').data('controller', this);
+
+    this.tokenField = new termkit.tokenField();
     this.tokenField.onchange = function (e, t) { self.checkTriggers(e, t); }
+
+    $command.append(this.tokenField.$element);
+
     return $command;
   },
 
   // Update the element.
-  update: function () {
-    this.$element.data('command', this);
+  updateElement: function () {
+    this.$element.data('controller', this);
   },
 
   // Use triggers to respond to a creation or change event.
@@ -96,7 +101,6 @@ cs.commandExecutable = function () {
 };
 
 cs.commandExecutable.triggerExecutable = function (offset, event, tokens) {
-  $('body').append('<div>trigger exec '+ offset +' - '+ event +' - '+ tokens);
   var token = tokens[offset];
   if (!token.flags.commandExecutable) {
     token.flags.commandExecutable = true;

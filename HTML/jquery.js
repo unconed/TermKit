@@ -4166,7 +4166,12 @@ jQuery.each({
 			}
 
 			if ( this.parentNode ) {
+			  try {
 				 this.parentNode.removeChild( this );
+			  }
+			  catch (e) {
+			    console.log(this);
+			  }
 			}
 		}
 	},

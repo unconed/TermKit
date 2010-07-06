@@ -42,3 +42,17 @@ function async(func) {
 function escapeText(text) {
   return String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
+
+function bug(object, type) {
+  $.each(object, function (index) {
+    if ($.isFunction(this)) {
+      var original = this;
+      object[index] = function () {
+        console.log(type +'.'+ index);
+        console.log(arguments);
+        original.apply(this, arguments);
+      };
+    }
+  });
+}
+

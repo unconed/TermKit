@@ -19,6 +19,8 @@ tf.caret = function (tokenList) {
   this.autocomplete = new tf.autocomplete(this);
   
   this.prefix = this.suffix = '';
+  
+//  bug(this, 'caret');
 };
 
 tf.caret.prototype = {
@@ -81,16 +83,17 @@ tf.caret.prototype = {
   },
   
   remove: function () {
+    // Guard against recursive calls due to e.g. triggering onblur when detaching caret from DOM.
+    if (!this.token || !this.token.locked) return;
+
     // Remove autocomplete popup.
     this.autocomplete.remove();
 
-    // Detach caret elements from document.
-    this.$element.detach();
-
-    if (!this.token) return;
-
     // Let token update itself.
     this.token.locked = false;
+
+    // Detach caret elements from document.
+    this.$element.detach();
 
     // Update token with new combined text value.
     var value = this.prefix + this.$measure.text() + this.suffix;
@@ -106,8 +109,8 @@ tf.caret.prototype = {
     this.$measure.html('');
     this.$input.val('');
     this.prefix = this.suffix = '';
-    this.token = null;
     this.selection = null;
+    this.token = null;
   },
 
   onBlur: function (element) {

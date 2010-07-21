@@ -17,6 +17,7 @@ Programs / commands
 
 Cool input scenarios:
 * Command input is smart and adapts the semantics based on single character 'commands' which are abstractions of the old bash syntax. E.g. beginning and ending an encapsulated string is done with ".
+* Inline consultation of man pages with autocompletion of command line arguments
 
 Cool output scenarios:
 * Listings of files, anywhere, show an icon with distinguished typography for filename vs meta. Quicklook integration on the icon.
@@ -46,9 +47,13 @@ displays only facts, not things i want to know:
  - simulated output with collapsible sections
  
 0.2: App prototype
- - cocoa app
- - webkit in single window view (but built to scale to multiple tabs)
+ [X] cocoa app
+ [X] webkit in single window view (but built to scale to multiple tabs)
  - custom JS termkit object w/ system IO
+   termkit.* -> JS
+   system.* -> native
+     system.files. -> modeled after node.js ?
+     
  - real piped unix commands
  - real directory listings
  
@@ -72,3 +77,11 @@ displays only facts, not things i want to know:
  - allow loading of command/theme stylesheets
 
 0.5: 
+
+
+references:
+
+textmate html output features
+http://blog.macromates.com/2005/html-output-for-commands/
+
+bcat: browser cat tool

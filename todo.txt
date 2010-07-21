@@ -15,20 +15,21 @@ Prototype:
   [X] clickable mouse position
   [X] fix event bindings lost when clicking inside textfield
   [ ] fix backspacing around edges of tokens
-  [ ] write external bindings for tokenfield
+  [ ] caret positions around allowempty tokens and ^/$
+  [ ] caret.remove() shouldn't need to touch tokenList when pruning empties -> let triggers do it
+    
+  [?] write external bindings for tokenfield
     => tokenfield abstracts, interface for matching should be only multiregexp + callback
     . on change -> process tokens, apply multiregexps
     . register multiregexp
     . execute command
-    
   [?] rewrite $element / $markup pattern to create new $markup on demand when doing insert/remove from DOM
-  [ ] caret positions around allowempty tokens and ^/$
-  [ ] caret.remove() shouldn't need to touch tokenList when pruning empties -> let triggers do it
 
 [ ] inline autocomplete
   [X] panel overlayed on token
   [X] alignment
   [X] keyboard controls up/down
+  [ ] hit enter after autocomplete in empty token -> undefined
   
 [ ] command stream
   [X] list of collapsible sections
@@ -43,8 +44,8 @@ Prototype:
 2) Command/token autocomplete
   [X] token multi-regexp patterns
 + [.] triggers system, unify with token field triggers a bit?
-  [ ] autocomplete state
   [X] autocomplete a string / command
+  [ ] autocomplete empties
   [ ] autocomplete filesystem
   [ ] autocomplete dir / file distinction
 

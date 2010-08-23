@@ -19,7 +19,7 @@ $.fn.termkitCommandStream = function (options) {
 ///////////////////////////////////////////////////////////////////////////////
 
 /**
- * Input manager for token-based field.
+ * Input manager for command stream.
  */
 var cs = termkit.commandStream = function (stream) {
   var self = this;

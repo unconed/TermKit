@@ -14,7 +14,8 @@ tf.caret = function (tokenList) {
   
   this.token = null;
   this.selection = null;
-  this.onchange = function () {};
+  this.onChange = function () {};
+  this.onSubmit = function () {};
   
   this.autocomplete = new tf.autocomplete(this);
   
@@ -102,7 +103,7 @@ tf.caret.prototype = {
     }
     else {
       this.tokenList.remove(this.token);
-      this.onchange(this.token, event);
+      this.onChange(this.token, event);
     }
 
     // Reset caret state.
@@ -145,7 +146,7 @@ tf.caret.prototype = {
         // Merge stored key/char codes in, effectively merging keydown/keypress info.
         event.keyCode = this.keyCode;
         event.charCode = this.charCode;
-        this.onchange(this.token, event);
+        this.onChange(this.token, event);
         
         // TODO: replace with real autocomplete
         var self = this;
@@ -166,6 +167,11 @@ tf.caret.prototype = {
     
     // Intercept special keys
     switch (event.keyCode) {
+      case 13: // Return
+        async.call(this, function () {
+          this.onSubmit(this.token, event);
+        });
+        break;
       case 37: // Left arrow
         if (this.selection.anchor.offset == 0) {
           async.call(this, function () {

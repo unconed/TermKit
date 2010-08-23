@@ -31,10 +31,12 @@ var tf = termkit.tokenField = function () {
   this.selection = new tf.selection(this.tokenList);
   
   // Track editing inside tokens using the caret.
-  this.caret.onchange = function (token, event) { self.updateToken(token, event); };
+  this.caret.onChange = function (token, event) { self.updateToken(token, event); };
+  this.caret.onSubmit = function (token, event) { self.submitToken(token, event); };
   
   // Provide external events.
-  this.onchange = function () {};
+  this.onChange = function () {};
+  this.onSubmit = function () {};
   
   // Set field event handlers.
   this.$element.mousedown(function (event) { self.fieldMouseDown(event); });
@@ -169,7 +171,12 @@ tf.prototype = {
       this.tokenList.remove(token);
     }
     
-    this.onchange.call(token, event, this.getContents());
+    this.onChange.call(token, event, this.getContents());
+  },
+
+  // Submit from the given token.
+  submitToken: function (token, event) {
+    this.onSubmit.call(token, event, this.getContents());
   },
 };
 

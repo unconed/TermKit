@@ -10,7 +10,12 @@ cs.command = function () {
 
   this.context = new cs.commandContext();
   this.collapsed = true;
+  this.state = cs.command.STATE_WAITING;
 };
+
+cs.command.STATE_WAITING = 0;
+cs.command.STATE_RUNNING = 1;
+cs.command.STATE_DONE = 1;
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -21,7 +26,8 @@ cs.command.prototype = {
     var $command = $('<div class="command">').data('controller', this);
 
     this.tokenField = new termkit.tokenField();
-    this.tokenField.onchange = function (e, t) { self.checkTriggers(e, t); }
+    this.tokenField.onChange = function (e, t) { self.checkTriggers(e, t); }
+    this.tokenField.onSubmit = function (e, t) { self.submitCommand(e, t); }
 
     $command.append(this.tokenField.$element);
 
@@ -32,10 +38,19 @@ cs.command.prototype = {
   updateElement: function () {
     this.$element.data('controller', this);
   },
+  
+  // Execute command.
+  submitCommand: function (event, tokens) {
+    alert(tokens);
+  },
 
   // Use triggers to respond to a creation or change event.
   // @return Array of replacement commands for this command (optional).
   checkTriggers: function (event, tokens) {
+
+    // No triggers for no tokens.
+    if (tokens.length == 0) return;
+
     var command = this, t = cs.command.triggers;
     $.each(t, function () {
       var trigger = this;
@@ -118,7 +133,7 @@ cs.commandExecutable.prototype = $.extend(new cs.command(), {});
 
 cs.command.triggers = [
   { // path match, environment var match, ... ?
-    anchor: '',
+    anchor: '^',
     0: /[a-zA-Z0-9_-]+/,
     callback: cs.commandExecutable.triggerExecutable,
   },

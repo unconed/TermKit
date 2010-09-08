@@ -1,52 +1,48 @@
 (function ($) {
 
-$.fn.termkitCommandStream = function (options) {
+$.fn.termkitCommandView = function (options) {
   var $container = this;
-
-  // Don't process same field twice.
-  if ($container.is('.termkitCommandStream')) return;
 
   // Parse options.
   var defaults = {
   };
   options = $.extend({}, defaults, options);
 
-  // Create input manager for field.
-  var input = new termkit.commandStream();
+  // Create controller for field.
+  var input = new termkit.commandView();
   $container.append(input.$element);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 /**
- * Input manager for command stream.
+ * Controller for command view.
  */
-var cs = termkit.commandStream = function (stream) {
+var cv = termkit.commandView = function (view) {
   var self = this;
 
   this.$element = this.$markup();
 
-  // Prepare structural markup.
-  this.$element.html('<div class="commands"></div><div class="context"></div>');
+  // Find structural markup.
   this.$commands = $(this.$element).find('.commands');
   this.$context = $(this.$element).find('.context');
   
   this.activeCommand = 0;
-  this.commandList = new cs.commandList();
+  this.commandList = new cv.commandList();
   
   this.newCommand();
 };
 
-cs.prototype = {
+cv.prototype = {
   
-  // Return active markup for this field.
+  // Return active markup for this widget.
   $markup: function () {
-    var $token = $('<div class="termkitCommandStream">').data('controller', this);
+    var $commandView = $('<div class="termkitCommandView"><div class="commands"></div><div class="context"></div>').data('controller', this);
     var self = this;
-    return $token;
+    return $commandView;
   },
 
-  // Refresh the given stream by re-inserting all command elements.
+  // Refresh the given view by re-inserting all command elements.
   updateElement: function () {
     // Refresh commands.
     var $commands = this.$commands.empty();
@@ -62,7 +58,7 @@ cs.prototype = {
   },
   
   newCommand: function () {
-    this.commandList.add(new cs.command());
+    this.commandList.add(new cv.command());
     this.activeCommand = this.commandList.length - 1;
     this.updateElement();
   },

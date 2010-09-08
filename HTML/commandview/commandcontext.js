@@ -1,11 +1,11 @@
 (function ($) {
   
-var cs = termkit.commandStream;
+var cv = termkit.commandView;
 
 /**
  * Represents the system context for a command.
  */
-cs.commandContext = function () {
+cv.commandContext = function () {
   this.$element = this.$markup();
   
   this.$path = this.$element.find('.path');
@@ -15,7 +15,7 @@ cs.commandContext = function () {
   this.user = null;
 };
 
-cs.commandContext.prototype = {
+cv.commandContext.prototype = {
   // Return active markup for this command.
   $markup: function () {
     var self = this;

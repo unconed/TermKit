@@ -21,7 +21,16 @@ body {
 
 /************/
 
-.termkitCommandStream {
+.termkitProgressIndicator {
+  width: 24px;
+  height: 24px;
+  margin: 10px;
+  background: #000 url('../Images/loading-black.gif');
+}
+
+/************/
+
+.termkitCommandView {
   position: absolute;
   top: 0;
   left: 0;
@@ -29,12 +38,12 @@ body {
   bottom: 0;
   overflow: auto;
 
-  font-family: "Bitstream Vera Sans Mono";
+  font-family: "BitStream Vera Sans Mono";
   font-size: 70%;
   /*  letter-spacing: 1px;*/
 }
 
-.termkitCommandStream .context {
+.termkitCommandView .context {
   position: absolute;
   left: 0;
   right: 0;
@@ -44,12 +53,28 @@ body {
   background: #444 -webkit-gradient(linear, left top, left bottom, from(#555), to(#333));
 }
 
-.termkitCommandStream .context .path {
+.termkitCommandView .context .path {
   float: left;
 }
 
-.termkitCommandStream .context .user {
+.termkitCommandView .context .user {
   float: right;
+}
+
+.termkitCommandView .command {
+  position: relative;
+}
+
+.termkitCommandView .command > span.sigil {
+  position: absolute;
+  left: 10px;
+  top: 15px;
+}
+
+.termkitCommandView .command .termkitProgressIndicator {
+  position: absolute;
+  right: 0;
+  top: 0;
 }
 
 /************/
@@ -57,7 +82,7 @@ body {
 .termkitTokenField {
   border: 1px dotted #555;
   line-height: 22px;
-  padding: 20px;
+  padding: 10px 10px 10px 30px;
   
   cursor: text;
 }

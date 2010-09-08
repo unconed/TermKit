@@ -36,16 +36,14 @@ tf.token.prototype = {
   // Type/class
   get type() { return this._type; },
   set type(type) {
-    type = type || 'unknown';
-    this._type = type;
+    this._type = type || 'unknown';
     this.updateElement();
   },
 
   // Text of contents
   get contents() { return this._contents; },
   set contents(contents) {
-    contents = contents || '';
-    this._contents = contents;
+    this._contents = contents || '';
     this.updateElement();
   },
 

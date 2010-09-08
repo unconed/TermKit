@@ -1,15 +1,15 @@
 (function ($) {
 
-var cs = termkit.commandStream;
+var cv = termkit.commandView;
 
 /**
  * Manages the list of executed commands.
  */
-cs.commandList = function () {
+cv.commandList = function () {
   this.commands = [];
 };
 
-cs.commandList.prototype = {
+cv.commandList.prototype = {
   // Pass-through length of array
   get length() {
     return this.commands.length;

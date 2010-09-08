@@ -3,15 +3,12 @@
 $.fn.termkitTokenField = function (options) {
   var $container = this;
 
-  // Don't process same field twice.
-  if ($container.is('.termkitTokenField')) return;
-
   // Parse options.
   var defaults = {
   };
   options = $.extend({}, defaults, options);
 
-  // Create input manager for field.
+  // Create controller for field.
   var input = new termkit.tokenField($container[0]);
   $container.append(input.$element);
 }
@@ -19,7 +16,7 @@ $.fn.termkitTokenField = function (options) {
 ///////////////////////////////////////////////////////////////////////////////
 
 /**
- * Input manager for token-based field.
+ * Controller for token-based field.
  */
 var tf = termkit.tokenField = function () {
   var self = this;

@@ -38,7 +38,7 @@ tf.autocomplete.prototype = {
     // Extract prefix for autocompletion.
     this.token = this.caret.selection.anchor.token;
     this.prefix = this.token.contents.substring(0, this.caret.selection.anchor.offset);
-    this.handler = this.token.autocomplete || (function () { });
+    this.handler = this.token.autocomplete;
   
     // Sync state.
     this.updateContents();
@@ -95,7 +95,7 @@ tf.autocomplete.prototype = {
   },
   
   onComplete: function (event) {
-    if (this.token) {
+    if (this.token && this.selected < this.items.length) {
       this.caret.setContents(this.prefix + this.items[this.selected], event);
       this.remove();
     }

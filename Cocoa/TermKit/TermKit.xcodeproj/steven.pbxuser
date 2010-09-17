@@ -35,6 +35,20 @@
 			B0965B6111DB274800350D83 /* TermKit */,
 		);
 		perUserDictionary = {
+			PBXConfiguration.PBXFileTableDataSource3.PBXBookmarksDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXBookmarksDataSource_NameID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					200,
+					200,
+					382.58349609375,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXBookmarksDataSource_LocationID,
+					PBXBookmarksDataSource_NameID,
+					PBXBookmarksDataSource_CommentsID,
+				);
+			};
 			PBXConfiguration.PBXFileTableDataSource3.PBXFileTableDataSource = {
 				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
 				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
@@ -62,7 +76,7 @@
 				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
 				PBXFileTableDataSourceColumnWidthsKey = (
 					20,
-					576,
+					533,
 					60,
 					20,
 					48,
@@ -79,25 +93,25 @@
 					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 301101321;
-			PBXWorkspaceStateSaveDate = 301101321;
+			PBXPerProjectTemplateStateSaveDate = 306407835;
+			PBXWorkspaceStateSaveDate = 306407835;
 		};
 		perUserProjectItems = {
-			B0B02B5111E31ABD004C960F /* PBXTextBookmark */ = B0B02B5111E31ABD004C960F /* PBXTextBookmark */;
-			B0B02BA311E31FE8004C960F /* PBXTextBookmark */ = B0B02BA311E31FE8004C960F /* PBXTextBookmark */;
-			B0B02BE811E323E3004C960F /* PBXTextBookmark */ = B0B02BE811E323E3004C960F /* PBXTextBookmark */;
-			B0B02BF911E32469004C960F /* PBXTextBookmark */ = B0B02BF911E32469004C960F /* PBXTextBookmark */;
-			B0B02C0C11E46834004C960F /* PBXTextBookmark */ = B0B02C0C11E46834004C960F /* PBXTextBookmark */;
-			B0B1897A11E7BD4F00C62CEC /* PBXTextBookmark */ = B0B1897A11E7BD4F00C62CEC /* PBXTextBookmark */;
-			B0B1897B11E7BD4F00C62CEC /* PBXTextBookmark */ = B0B1897B11E7BD4F00C62CEC /* PBXTextBookmark */;
-			B0B1897C11E7BD4F00C62CEC /* PBXTextBookmark */ = B0B1897C11E7BD4F00C62CEC /* PBXTextBookmark */;
-			B0B1897D11E7BD4F00C62CEC /* PBXTextBookmark */ = B0B1897D11E7BD4F00C62CEC /* PBXTextBookmark */;
-			B0B1897F11E7BD4F00C62CEC /* PBXTextBookmark */ = B0B1897F11E7BD4F00C62CEC /* PBXTextBookmark */;
-			B0B1899C11E7C2BA00C62CEC /* PBXTextBookmark */ = B0B1899C11E7C2BA00C62CEC /* PBXTextBookmark */;
-			B0B1899D11E7C2BA00C62CEC /* PBXTextBookmark */ = B0B1899D11E7C2BA00C62CEC /* PBXTextBookmark */;
-			B0B1899E11E7C2BA00C62CEC /* PBXBookmark */ = B0B1899E11E7C2BA00C62CEC /* PBXBookmark */;
-			B0DD3F9711F2C45E00DE67FC /* PlistBookmark */ = B0DD3F9711F2C45E00DE67FC /* PlistBookmark */;
-			B0DD3F9811F2C45E00DE67FC /* PlistBookmark */ = B0DD3F9811F2C45E00DE67FC /* PlistBookmark */;
+			B0B02B5111E31ABD004C960F = B0B02B5111E31ABD004C960F /* PBXTextBookmark */;
+			B0B02BA311E31FE8004C960F = B0B02BA311E31FE8004C960F /* PBXTextBookmark */;
+			B0B02BE811E323E3004C960F = B0B02BE811E323E3004C960F /* PBXTextBookmark */;
+			B0B02BF911E32469004C960F = B0B02BF911E32469004C960F /* PBXTextBookmark */;
+			B0B02C0C11E46834004C960F = B0B02C0C11E46834004C960F /* PBXTextBookmark */;
+			B0B1897A11E7BD4F00C62CEC = B0B1897A11E7BD4F00C62CEC /* PBXTextBookmark */;
+			B0B1897B11E7BD4F00C62CEC = B0B1897B11E7BD4F00C62CEC /* PBXTextBookmark */;
+			B0B1897C11E7BD4F00C62CEC = B0B1897C11E7BD4F00C62CEC /* PBXTextBookmark */;
+			B0B1897D11E7BD4F00C62CEC = B0B1897D11E7BD4F00C62CEC /* PBXTextBookmark */;
+			B0B1897F11E7BD4F00C62CEC = B0B1897F11E7BD4F00C62CEC /* PBXTextBookmark */;
+			B0B1899C11E7C2BA00C62CEC = B0B1899C11E7C2BA00C62CEC /* PBXTextBookmark */;
+			B0B1899D11E7C2BA00C62CEC = B0B1899D11E7C2BA00C62CEC /* PBXTextBookmark */;
+			B0B1899E11E7C2BA00C62CEC = B0B1899E11E7C2BA00C62CEC /* PBXBookmark */;
+			B0DD3F9711F2C45E00DE67FC = B0DD3F9711F2C45E00DE67FC /* PlistBookmark */;
+			B0DD3F9811F2C45E00DE67FC = B0DD3F9811F2C45E00DE67FC /* PlistBookmark */;
 		};
 		sourceControlManager = B0965B7511DB275200350D83 /* Source Control */;
 		userBuildSettings = {
@@ -353,7 +367,7 @@
 		);
 		name = "/Users/steven/Projects/TermKit/Cocoa/TermKit/TermKit-Info.plist";
 		rLen = 0;
-		rLoc = 9223372036854775807;
+		rLoc = 9223372036854775808;
 	};
 	B0DD3F9811F2C45E00DE67FC /* PlistBookmark */ = {
 		isa = PlistBookmark;
@@ -364,6 +378,6 @@
 		);
 		name = "/Users/steven/Projects/TermKit/Cocoa/TermKit/TermKit-Info.plist";
 		rLen = 0;
-		rLoc = 9223372036854775807;
+		rLoc = 9223372036854775808;
 	};
 }

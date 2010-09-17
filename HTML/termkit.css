@@ -67,14 +67,14 @@ body {
 
 .termkitCommandView .command > span.sigil {
   position: absolute;
-  left: 10px;
+  left: 15px;
   top: 15px;
 }
 
 .termkitCommandView .command .termkitProgressIndicator {
   position: absolute;
-  right: 0;
-  top: 0;
+  left: -2px;
+  top: -1px;
 }
 
 /************/
@@ -82,9 +82,13 @@ body {
 .termkitTokenField {
   border: 1px dotted #555;
   line-height: 22px;
-  padding: 10px 10px 10px 30px;
+  padding: 11px 10px 9px 35px;
   
   cursor: text;
+}
+
+.termkitTokenField::after {
+  content: ' ';
 }
 
 .termkitTokenField.focused {

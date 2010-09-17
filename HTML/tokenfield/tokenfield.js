@@ -1,20 +1,5 @@
 (function ($) {
 
-$.fn.termkitTokenField = function (options) {
-  var $container = this;
-
-  // Parse options.
-  var defaults = {
-  };
-  options = $.extend({}, defaults, options);
-
-  // Create controller for field.
-  var input = new termkit.tokenField($container[0]);
-  $container.append(input.$element);
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
 /**
  * Controller for token-based field.
  */
@@ -107,6 +92,9 @@ tf.prototype = {
       this.updateElement();
       $element.append(this.$element);
     });
+    if (!this.tokenList.tokens.length) {
+      $element.append(new tf.tokenEmpty().$element);
+    }
   },
 
   // Refresh the given token in response to input.

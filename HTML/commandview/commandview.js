@@ -1,24 +1,9 @@
 (function ($) {
 
-$.fn.termkitCommandView = function (options) {
-  var $container = this;
-
-  // Parse options.
-  var defaults = {
-  };
-  options = $.extend({}, defaults, options);
-
-  // Create controller for field.
-  var input = new termkit.commandView();
-  $container.append(input.$element);
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
 /**
  * Controller for command view.
  */
-var cv = termkit.commandView = function (view) {
+var cv = termkit.commandView = function (client, session) {
   var self = this;
 
   this.$element = this.$markup();

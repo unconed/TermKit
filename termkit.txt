@@ -1,27 +1,30 @@
 TermKit
-
++++ -
 Goal: next gen terminal / command application
 
 Addresses following problems:
-1) Monospace character grid with ansi colors is not rich enough to display modern files / media / visualizations / metadata.
+1) Monospace character grid with ansi colors is not rich enough to display modern files / media / visualizations / metadata. Cannot effectively handle large output, long/wide tables or direct interaction.
 2) Piping binary or text streams between apps is bad for everyone:
    * Humans have to suffer syntax, cannot reflow/manipulate output in real-time
    * Computers have to suffer ambiguities
-3) Synchronous input/output makes you wait
-4) String-based command line requires arcane syntax
-5) Commands with more than 1 screenful of output are unwieldy
+3) Synchronous input/output makes you wait. SSH keystroke latency is frustrating.
+4) String-based command line requires arcane syntax, results in mistakes, repeated attempts at escaping, etc.
+5) Unix commands are "useless by default", and when asked, will only tell you raw data, not useful facts. e.g. "rwxr-xr-x" instead of "You can't edit this file."
+
++++ -
 
 Programs / commands
 * Output processor for common cli tools
 * Custom implementation of ls and friends, with support for mimicking classic shell behaviour with a 2.0 twist
 
 Cool input scenarios:
-* Command input is smart and adapts the semantics based on single character 'commands' which are abstractions of the old bash syntax. E.g. beginning and ending an encapsulated string is done with ".
-* Inline consultation of man pages with autocompletion of command line arguments
+* As you type, the command is visually tokenized and highlighted. tokens can display autocomplete suggestions, icons and indicators inline.
+* Instead of quoting and escaping, keys like " and > just trigger the creation of special tokens which are visually different and represent e.g. a quoted string, an argument, a regular expression. to type the special characters literally, just press them twice. the 'command' is just the concatenation of these tokens, interpreted the same way bash interprets a string.
+* Man pages are consulted inline with autocomplete options for arguments and (later) required arguments
 
 Cool output scenarios:
 * Listings of files, anywhere, show an icon with distinguished typography for filename vs meta. Quicklook integration on the icon.
-* Output of a command is a series of figures. Figures never go beyond the size of the viewport
+* Can complete several tasks at once asynchronously, show real-time progress for all of them together in e.g. a task-list widget.
 * Command output is interactive: has elements which can be focused, selected/unselected, opened, right clicked, dragged and dropped
 
 Good desktop citizen:
@@ -29,15 +32,7 @@ Good desktop citizen:
 * Can drag files, snippets, JSON/CSV off the terminal
 * Tear-off tabs/windows
 
-
-terminal is broken:
-
-* long command output -> scroll up
-* place cursor in middle of line inside quotes, hit enter -> gets executed.
-
-displays only facts, not things i want to know:
-* displays owners, permission flags... doesn't say whether I am allowed to edit or not (use opacity / color)
-
++++ -
 
 0.1: UI prototype
  [X] simulated in safari/webkit.app
@@ -49,13 +44,12 @@ displays only facts, not things i want to know:
 0.2: App prototype
  [X] cocoa app
  [X] webkit in single window view (but built to scale to multiple tabs)
- - custom JS termkit object w/ system IO
-   termkit.* -> JS
-   system.* -> native
-     system.files. -> modeled after node.js ?
-     
- - real piped unix commands
- - real directory listings
+ [X] design back-end protocol
+ [X] node JS back-end, running separately
+ [X] connect socket
+ [X] establish session
+ [ ] passive command implementation
+ [ ] JS module template, integrated both runtimes.
  
  + python bash anonymizer script to collect usage patterns from local geeks
    turns filenames.foooo.ext into random.random.ext
@@ -71,12 +65,155 @@ displays only facts, not things i want to know:
  - OS X quicklook integration
  - OS X icon loading
 
-0.4: Modularization / theming
+0.4: Modularization
  - split off command processor rules / autocomplete handlers into separable blocks
+ - server-side hook system
  - add plug-in mechanism with drop-in functionality
+
+0.5: Theming
+ - polished UI
  - allow loading of command/theme stylesheets
 
-0.5: 
+
+Node JS daemon / 'NodeKit'.
++ Fast enough for server work, concurrency/scaling included
++ Advanced JavaScript
++ Cross-platform on unix
++ Process / io / everything integration
++ Self-contained binary, can be included in .app
+- separate from UI / front-end
+- no mac-specific APIs or low-level C access
+
+ => back-end platform, runs locally, can run remotely, or perhaps tunnel its interaction over SSH somehow?
+
+WebKit/Cocoa front-end
++ Rich, stylable display + jQuery
++ Advanced JavaScript
++ Intimate OS X access, Obj-C, bridgeable with JS
+
+The split:
+Front-end = display, formatting, interaction. Runs in an (enhanced) browser with a websocket to back-end.
+Back-end:
+
+1) Local NodeKit: Start node daemon on startup, connect using direct websocket ws://localhost:2222.
+2) Remote NodeKit SSH: Daemon is running, use ssh to set up tunnel between local rand port # and remote 2222. connect local websocket to tunnel.
+3) Remote NodeKit WSS: Daemon is running, use WSS to connect directly, must authenticate? don't want to replicate OpenSSH, but rudimentary auth could be useful.
+
+
+DNODE versus custom protocol.
+
+depends on needs of command-implementers.
+
+ * execute method, preferably by dynamic name lookup (messaging)
+ * return values asynchronously to affect the UI:
+   - report progress (download, copy, grep, ...)
+   - append data to view (listing, query table)
+   - 
+ * consistent command return status for indicator / logging / processing / triggers
+
++++ Command architecture
+
+The webkit front end is intended to be a view first and foremost. It is an active view that maintains its own contents based on messages to and from the back-end.
+
+problem: if front-end is agnostic, then how to make commands smarter?
+
+ > shell-OS interface is server-side
+ > server-side only executes processes/commands, routes streams and provides output.
+ > separeate data in/out from ui in/out. datastream vs viewstream
+ 
+ data in/out:
+ content-type: unix/pipe
+               application/jsonstream
+ ...
+ 
+ serverside has hook system / listener system for manipulating references. this lets e.g. SVN output revision control flags on files transparently. this would apply across the entire shell view automatically.
+ 
++++ UI stream structure
+
+ > shell-specific interaction rules are client-side.
+ > rich widget lib for display, extensible
+ > widgets are streamed to client like infograph-ML. objects are smartly typed and have callback commands defined for them. callbacks can be stateful or stateless. though stateful is only intended to be used for interactive commands.
+
+ tableview / listcontainer -> generic, scales form simple list to tabled headers w/ simple syntax
+ object references for files and other things. are multi-typed and annotated on server-side.
+ 
+ view out:
+ 
+ view.task('task')
+ view.progress('task', 50, 0, 100)
+ view.table('table')
+ view.append('table', []) <- generic method, adapts to target type
+ 
+ View Object Model:
+ simple reference by named IDs
+ arrays of objects
+ objects can have children
+ 
+ {
+   id: 'table',
+   type: 'table',
+   children: [
+    { type: 'row' }
+   ]
+ }
+
++++ --
+
+session.open.shell
+session.open.mysql
+session.open.git
+
+command.run
+
+direct embedding in websocket frame:
+
+stream := 
+[type, sequence, data]
+ -> not just a straight up dict because i don't want to hog the 'type' or 'sequence' keys in {data}.
+
+>
+['session.open.mysql', 1, {
+  ''
+}],
+
+<
+['return', 1, {
+  sessionId: 1,
+  status: 'ok',
+}],
+
+>
+['session.close', 2, {
+  id: 1,
+}],
+<
+['return', 2, {
+  status: 'ok',
+}],
+>
+['command.run', 3, { // shell session
+  'session': 1,
+  'id': 1,
+  'context': '/path',
+  'commands': [
+    ['svn', 'up'],
+  ],
+}]
+<
+['return', 3, {
+  status: 'ok',
+}]
+<
+['task', {
+  tasks: []
+}]
+
+
+jsonStream.send('session.mysql', {
+  'username': 'foobar',
+}, function (msg) {
+  
+});
 
 
 references:
@@ -85,3 +222,23 @@ textmate html output features
 http://blog.macromates.com/2005/html-output-for-commands/
 
 bcat: browser cat tool
+
+protocol:
+
+
+command output:
+* has to be rich
+* has to be easy to generate
+* has to size to multiple layouts, including on the fly
+* has to be interactive
+
+current widget model:
+* base = viewcontroller 
+* instantiated OO
+* $markup / $element pattern for jquery manipulation
+
+more ideas:
+* autocorrection of mistyped commands
+* unified progress indicator during command
+* history access
+* don't execute if invalid command

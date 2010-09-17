@@ -24,45 +24,49 @@ Prototype:
     . register multiregexp
     . execute command
   [?] rewrite $element / $markup pattern to create new $markup on demand when doing insert/remove from DOM
+  [?] unified viewcontroller class?
 
-[ ] inline autocomplete
+[X] inline autocomplete
   [X] panel overlayed on token
   [X] alignment
   [X] keyboard controls up/down
-  [ ] hit enter after autocomplete in empty token -> undefined
+  [X] hit enter after autocomplete in empty token -> undefined
   
-[ ] command stream
+[ ] command view
   [X] list of collapsible sections
   [X] host token field
   [X] context bar by command
   [ ] host output
   [ ] up/down to change focus
   [ ] anchored scrolling, auto-expand to fill view
-  [ ] add forking the stream
-
+  [ ] add forking the view with tabs and hosted/nested sessions
 
 2) Command/token autocomplete
   [X] token multi-regexp patterns
 + [.] triggers system, unify with token field triggers a bit?
   [X] autocomplete a string / command
-  [ ] autocomplete empties
+  [X] autocomplete empties
   [ ] autocomplete filesystem
   [ ] autocomplete dir / file distinction
 
 3) Smart output with selectable things
-  [ ] Invoke a new process, capture output
-  [ ] define JSON streaming format
-    . content type (+ mime)
-    - streaming format:
-      * simple object
-      * stream of objects
-      * typed multipart
-    . top level stream of objects
-    - make test py script that streams in objects
-    - transform layer, JS template output into stream
-    - make a script for git (arguments, file/dir, ...)
+  [X] research FastCGI socket protocol
+  [X] add socket.io to client
+  [X] make socket connection to daemon
+  [X] set up client handling
+  [X] establish controller for stream
+  [X] invoke new session
 
+4) NodeKit daemon
+  [X] socket.io listener
+  [X] keep state of sessions
+  [ ] allow path navigation
+  [ ] define datastream format
+  [ ] define viewstream format
+  [ ] make ls / cd commands
+  [ ] Invoke a new process, capture output
+  - make a script for git (arguments, file/dir, ...)
 
 bugs:
 [ ] backspacing around token edges
-[ ] autocomplete in empty token -> hit enter -> invisible
+

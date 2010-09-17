@@ -20,6 +20,17 @@ $(document).ready(function () {
 
 //  mark(termkit.tokenField.token, 'tokenField.token');
 //  mark(termkit.tokenField.token.prototype, 'tokenField.token');
+
+  var client = new termkit.client();
+  client.onConnect = function () {
+    client.invoke('session.open.shell', {}, function (data) {
+      var view = new termkit.commandView(client, data);
+      $('#terminal').append(view.$element);
+    });
+
+  };
+
+
 });
 
 })(jQuery);

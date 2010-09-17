@@ -23,9 +23,11 @@ $(document).ready(function () {
 
   var client = new termkit.client();
   client.onConnect = function () {
-    client.invoke('session.open.shell', {}, function (data) {
-      var view = new termkit.commandView(client, data);
+    client.invoke('session.open.shell', {}, function (environment) {
+      var shell = new termkit.client.shell(client, environment);
+      var view = new termkit.commandView(shell);
       $('#terminal').append(view.$element);
+      console.log(environment);
     });
 
   };

@@ -102,6 +102,7 @@ tf.autocomplete.prototype = {
   },
   
   onKeyDown: function (event) {
+    var attached = this.token && this.items.length;
     // Intercept special keys
     switch (event.keyCode) {
       case 9: // TAB
@@ -109,6 +110,10 @@ tf.autocomplete.prototype = {
         this.onComplete(event);
         event.preventDefault();
         event.stopPropagation();
+        if (attached) return false;
+        break;
+      case 27: // Escape
+        this.remove();
         break;
       case 37: // Left arrow
         break;

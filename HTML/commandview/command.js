@@ -5,11 +5,11 @@ var cv = termkit.commandView;
 /**
  * Represents a single command in the view.
  */
-cv.command = function () {
+cv.command = function (context) {
   this.$element = this.$markup();
   this.$sigil = this.$element.find('.sigil');
 
-  this.context = new cv.commandContext();
+  this.context = context;
   this.collapsed = true;
   this.state = cv.command.STATE_WAITING;
   
@@ -20,7 +20,8 @@ cv.command = function () {
 cv.command.STATE_WAITING = 0;
 cv.command.STATE_RUNNING = 1;
 cv.command.STATE_SUCCESS = 2;
-cv.command.STATE_ERROR   = 3;
+cv.command.STATE_WARNING = 3;
+cv.command.STATE_ERROR   = 4;
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -146,13 +147,16 @@ cv.commandExecutable = function () {
 cv.commandExecutable.triggerExecutable = function (offset, event, tokens) {
   var token = tokens[offset];
   if (!token.flags.commandExecutable) {
+    var self = this;
     token.flags.commandExecutable = true;
-    token.autocomplete = cv.commandExecutable.autocompleteExecutable;
+    token.autocomplete = function () {
+      return cv.commandExecutable.autocompleteExecutable.apply(self, arguments);
+    };
   }
 };
 
 cv.commandExecutable.autocompleteExecutable = function (offset, event, tokens) {
-  return ['foo', 'bar', '.txt'];
+  return ['foo', 'bar', '.txt', this.context.user];
 };
 
 cv.commandExecutable.prototype = $.extend(new cv.command(), {});

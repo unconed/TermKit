@@ -31,6 +31,7 @@ Prototype:
   [X] alignment
   [X] keyboard controls up/down
   [X] hit enter after autocomplete in empty token -> undefined
+  [X] escape to close popup
   
 [ ] command view
   [X] list of collapsible sections
@@ -60,6 +61,7 @@ Prototype:
 4) NodeKit daemon
   [X] socket.io listener
   [X] keep state of sessions
+  [X] export environment
   [ ] allow path navigation
   [ ] define datastream format
   [ ] define viewstream format

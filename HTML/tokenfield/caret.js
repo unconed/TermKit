@@ -149,9 +149,11 @@ tf.caret.prototype = {
         this.onChange(this.token, event);
         
         // TODO: replace with real autocomplete
+        this.autocomplete.attach();
+        /*
         var self = this;
         this.autocompleteTimer && clearTimeout(this.autocompleteTimer);
-        this.autocompleteTimer = setTimeout(function () { this.autocompleteTimer = null; self.autocomplete.attach(); }, 1000);
+        this.autocompleteTimer = setTimeout(function () { this.autocompleteTimer = null; self.autocomplete.attach(); }, 1000);*/
       });
     }
 

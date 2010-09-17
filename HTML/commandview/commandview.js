@@ -3,8 +3,12 @@
 /**
  * Controller for command view.
  */
-var cv = termkit.commandView = function (client, session) {
+var cv = termkit.commandView = function (shell) {
   var self = this;
+
+  this.shell = shell;
+  this.environment = shell.environment;
+  this.context = new cv.commandContext(this.environment);
 
   this.$element = this.$markup();
 
@@ -12,7 +16,7 @@ var cv = termkit.commandView = function (client, session) {
   this.$commands = $(this.$element).find('.commands');
   this.$context = $(this.$element).find('.context');
   
-  this.activeCommand = 0;
+  this.activeIndex = 0;
   this.commandList = new cv.commandList();
   
   this.newCommand();
@@ -36,15 +40,19 @@ cv.prototype = {
     });
     
     // Refresh context bar.
-    var command = this.commandList.commands[this.activeCommand];
+    var command = this.activeCommand();
     if (command && command.context) {
       this.$context.empty().append(command.context.$element);
     }
   },
   
+  activeCommand: function () {
+    return this.commandList.commands[this.activeIndex];
+  },
+  
   newCommand: function () {
-    this.commandList.add(new cv.command());
-    this.activeCommand = this.commandList.length - 1;
+    this.commandList.add(new cv.command(this.context));
+    this.activeIndex = this.commandList.length - 1;
     this.updateElement();
   },
   

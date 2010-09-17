@@ -59,7 +59,7 @@ exports.router.prototype = {
           }
 
           // Return run status.
-          invoke('return', sequence, out);
+          invoke('return', out);
         }
       }
     }
@@ -94,7 +94,7 @@ exports.handlers = {
     var session = new shell.shell(this);
     this.addSession(session);
     
-    return { sessionId: session.id };
+    return session.environment;
   },
   
   'session.close': function (args, invoke) {

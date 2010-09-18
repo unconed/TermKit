@@ -57,36 +57,36 @@ exports.shell.prototype = {
 
 exports.shell.commands = {
   'cd': function (tokens, invoke, exit) {
-    if (tokens.length == 2) {
-      var path = tokens[1], self = this;
-
-      // Resolve relative paths.
-      if (path[0] != '/') {
-        path = this.cwd + '/' + path;
-      }
-
-      // Fetch absolute path.
-      fs.realpath(path, function (err, path) {
-        console.log('realpath', path);
-        if (err) {
-          return exit(true);
-        }
-          
-        // See if path exists.
-        fs.stat(path, function (err, stats) {
-          console.log('stat', stats);
-          if (!err && stats.isDirectory()) {
-            self.cwd = path;
-            self.sync(invoke);
-            exit();
-          }
-          else {
-            exit(true);
-          }
-        });
-
-      });
+    if (tokens.length != 2) {
+      return exit(true);
     }
+    var path = tokens[1], self = this;
+
+    // Resolve relative paths.
+    if (path[0] != '/') {
+      path = this.cwd + '/' + path;
+    }
+
+    // Fetch absolute path.
+    fs.realpath(path, function (err, path) {
+      console.log('realpath', path);
+      if (err) {
+        return exit(true);
+      }
+        
+      // See if path exists.
+      fs.stat(path, function (err, stats) {
+        console.log('stat', stats);
+        if (!err && stats.isDirectory()) {
+          self.cwd = path;
+          self.sync(invoke);
+          exit();
+        }
+        else {
+          exit(true);
+        }
+      });
+    });
   },
 };
 

@@ -66,6 +66,7 @@ body {
   position: absolute;
   left: 15px;
   top: 15px;
+  color: #ccc;
 }
 
 .termkitCommandView .command .termkitProgressIndicator {
@@ -248,10 +249,11 @@ body {
 .termkitTokenField > span.token-plain {
   padding: .5em .5em .3em;
   -webkit-border-radius: .25em;
-  margin: 0 1px 0 0;
-  -webkit-box-shadow: 0px -1px 1px rgba(128,128,128,1);
-  background: #555 -webkit-gradient(linear, left top, left bottom, from(#555), to(#333));
-  color: #ccc;
+  margin: 0 2px 0 0;
+  -webkit-box-shadow: 0px -1px 1px rgba(192,192,192,.6);
+  background: #555 -webkit-gradient(linear, left top, left bottom, from(#666), to(#444));
+  background: #222 -webkit-gradient(linear, left top, left bottom, from(#3a3a3a), to(#272727));
+  color: #ddd;
 }
 
 .termkitTokenField > span.token-quoted {
@@ -259,9 +261,9 @@ body {
   -webkit-border-radius: .25em;
   margin: 0 3px 0 2px;
   -webkit-box-shadow: 0px -1px 1px rgba(160,180,192,1);
-  background: #678 -webkit-gradient(linear, left top, left bottom, from(#678), to(#456));
+  background: #578 -webkit-gradient(linear, left top, left bottom, from(#578), to(#356));
 /*  background: #def -webkit-gradient(linear, left top, left bottom, from(#def), to(#bcd));*/
-  color: #ddd;
+  color: #cef;
 }
 
 .termkitTokenField > span.token-empty span#caret input {

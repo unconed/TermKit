@@ -7,8 +7,6 @@ var cv = termkit.commandView = function (shell) {
   var self = this;
 
   this.shell = shell;
-  this.environment = shell.environment;
-  this.context = new cv.commandContext(this.environment);
 
   this.$element = this.$markup();
 
@@ -17,9 +15,9 @@ var cv = termkit.commandView = function (shell) {
   this.$context = $(this.$element).find('.context');
   
   this.activeIndex = 0;
+  this.beginIndex = 0;
+  this.endIndex = 0;
   this.commandList = new cv.commandList();
-  
-  this.newCommand();
 };
 
 cv.prototype = {
@@ -33,11 +31,12 @@ cv.prototype = {
 
   // Refresh the given view by re-inserting all command elements.
   updateElement: function () {
-    // Refresh commands.
-    var $commands = this.$commands.empty();
-    $.each(this.commandList.commands, function () {
-      $commands.append(this.$element);
-    });
+    if (this.endIndex < this.commandList.length) {
+      for (; this.endIndex < this.commandList.length; ++this.endIndex) {
+        var command = this.commandList.commands[this.endIndex];
+        this.$commands.append(command.$element);
+      }
+    }
     
     // Refresh context bar.
     var command = this.activeCommand();
@@ -51,9 +50,11 @@ cv.prototype = {
   },
   
   newCommand: function () {
-    this.commandList.add(new cv.command(this.context));
+    var command = new cv.command(this, new cv.commandContext(this.shell));
+    this.commandList.add(command);
     this.activeIndex = this.commandList.length - 1;
     this.updateElement();
+    command.tokenField.focus();
   },
   
   // Respond to mouse clicks.

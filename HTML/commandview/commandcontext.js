@@ -5,14 +5,16 @@ var cv = termkit.commandView;
 /**
  * Represents the system context for a command.
  */
-cv.commandContext = function (environment) {
+cv.commandContext = function (shell) {
   this.$element = this.$markup();
   
   this.$path = this.$element.find('.path');
   this.$user = this.$element.find('.user');
 
-  this.path = environment.home;
-  this.user = environment.user;
+  this.shell = shell;
+
+  this.path = shell.environment.cwd;
+  this.user = shell.environment.user;
 };
 
 cv.commandContext.prototype = {

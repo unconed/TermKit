@@ -1,4 +1,4 @@
-var shell = require("shell");
+var shell = require("shell/shell");
 
 /**
  * Processes incoming messages on a connection and sends replies.
@@ -39,27 +39,37 @@ exports.router.prototype = {
         if (exports.handlers[method]) {
           // Create callback for sending reply messages.
           var self = this,
-              invoke = function (method, args) { self.send(method, sequence, args); };
+              invoke = function (method, args) { self.send(method, sequence, args); },
+          // Look up session.
+              session = args.sessionId && this.getSession(args.sessionId),
 
-          // Execute method.
-          var out = exports.handlers[method].call(this, args, invoke);
+          // Set up return handler.
+              exit = function (out) {
+                // Process shortcut return values
+                if (typeof out == 'object') {
+                  out = { status: 'ok', code: 0, data: out };
+                }
+                else if (out === false || out === null || out === undefined) {
+                  out = { status: 'ok', code: 0 };
+                }
+                else if (out === true) {
+                  out = { status: 'error', code: 1 };
+                }
+                else if (typeof out == 'number') {
+                  out = { status: !out ? 'ok' : 'error', code: out };
+                }
 
-          // Process shortcut return values
-          if (typeof out == 'object') {
-            out = { status: 'ok', code: 0, data: out };
-          }
-          if (out === true) {
-            out = { status: 'ok', code: 0 };
-          }
-          if (out === false) {
-            out = { status: 'error', code: 1 };
-          }
-          if (typeof out == 'number') {
-            out = { status: !out ? 'ok' : 'error', code: out };
-          }
+                // Return run status.
+                invoke('return', out);
+              },
 
-          // Return run status.
-          invoke('return', out);
+          // Execute method in context.
+              out = exports.handlers[method].call(this, args, invoke, exit, session);
+
+          // If return value given, command has completed synchronously.
+          if (out !== undefined && out !== null) {
+            exit(out);
+          }
         }
       }
     }
@@ -67,6 +77,7 @@ exports.router.prototype = {
   
   send: function (method, sequence, args) {
     var json = JSON.stringify([ method, sequence, args ]);
+    console.log('sending '+json);
     this.connection.send(json);
   },
   
@@ -90,20 +101,23 @@ exports.router.prototype = {
  * Method handlers.
  */
 exports.handlers = {
-  'session.open.shell': function (args, invoke) {
+  'session.open.shell': function (args, invoke, exit) {
     var session = new shell.shell(this);
     this.addSession(session);
     
     return session.environment;
   },
   
-  'session.close': function (args, invoke) {
-    var session = this.getSession(args[id]);
+  'session.close': function (args, invoke, exit, session) {
     if (session) {
       session.close();
       this.removeSession();
       return true;
     }
     return false;
+  },
+  
+  'shell.run': function (args, invoke, exit, session) {
+    return session.run(args, invoke, exit);
   },
 };

@@ -122,6 +122,10 @@ tf.token.prototype = {
   toString: function () {
     return '['+ this.contents + '(' + this.type +')]';
   },
+  
+  toCommand: function () {
+    return this.contents;
+  },
 };
 
 ///////////////////////////////////////////////////////////////////////////////

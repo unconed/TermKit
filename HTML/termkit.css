@@ -82,7 +82,7 @@ body {
 .termkitTokenField {
   border: 1px dotted #555;
   line-height: 22px;
-  padding: 11px 10px 9px 35px;
+  padding: 10px 10px 10px 35px;
   
   cursor: text;
 }
@@ -221,7 +221,23 @@ body {
 /************/
 
 .termkitTokenField > span.token {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  max-width: 100%;
+}
+
+.termkitTokenField > span.token input {
+  max-width: 100%;
+}
+
+.termkitTokenField > span.token:not(:first-child)::after {
+  white-space: normal;
+  content: ' ';
+}
+
+.termkitTokenField > span.token:last-child::after {
   white-space: pre;
+  content: ' ';
 }
 
 .termkitTokenField > span.token:after {

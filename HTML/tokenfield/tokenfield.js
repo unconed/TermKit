@@ -36,9 +36,23 @@ tf.prototype = {
     return $token;
   },
 
-  // Return contents.
-  getContents: function () {
+  // Return contents as array of tokens.
+  get contents() {
     return [].concat(this.tokenList.tokens);
+  },
+  
+  focus: function () {
+    // Clean-up edit state, apply lingering edits.
+    this.caret.remove();
+
+    // Create new empty token.
+    var token = new tf.tokenEmpty();
+    this.tokenList.add(token);
+    this.updateElement();
+
+    // Move caret into it.
+    this.selection.anchor = { token: token };
+    this.caret.moveTo(this.selection);
   },
   
   // Respond to mouse clicks.
@@ -47,19 +61,7 @@ tf.prototype = {
 
     // Clicking in the empty area.
     if ($target.is('.termkitTokenField')) {
-
-      // Clean-up edit state, apply lingering edits.
-      this.caret.remove();
-
-      // Create new empty token.
-      var token = new tf.tokenEmpty();
-      this.tokenList.add(token);
-      this.updateElement();
-
-      // Move caret into it.
-      this.selection.anchor = { token: token };
-      this.caret.moveTo(this.selection);
-    
+      this.focus();
     }
     
     // Clicking on the caret's input field (in proxy).
@@ -100,10 +102,10 @@ tf.prototype = {
   // Refresh the given token in response to input.
   updateToken: function (token, event) {
     
-    // Check own rules.
+    // Apply own rules.
     var update = token.checkSelf(this.selection, event);
     if (!update) {
-      // Check triggers.
+      // Apply triggers.
       update = token.checkTriggers(this.selection, event);
     }
     
@@ -115,6 +117,7 @@ tf.prototype = {
       // Try to transmute token in place if possible to retain native caret/editing state.
       if (update.length == 1) {
         if (token.transmute(update[0])) {
+          // Recurse rules.
           this.updateToken(token, event);
           return;
         }
@@ -156,12 +159,12 @@ tf.prototype = {
       this.tokenList.remove(token);
     }
     
-    this.onChange.call(token, event, this.getContents());
+    this.onChange.call(token, event, this.contents);
   },
 
   // Submit from the given token.
   submitToken: function (token, event) {
-    this.onSubmit.call(token, event, this.getContents());
+    this.onSubmit.call(token, event, this.contents);
   },
 };
 

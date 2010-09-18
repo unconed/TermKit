@@ -27,6 +27,9 @@ $(document).ready(function () {
       var shell = new termkit.client.shell(client, environment);
       var view = new termkit.commandView(shell);
       $('#terminal').append(view.$element);
+
+      view.newCommand();
+
       console.log(environment);
     });
 

@@ -5,23 +5,18 @@ var cv = termkit.commandView;
 /**
  * Represents a single command in the view.
  */
-cv.command = function (context) {
+cv.command = function (commandView, context) {
   this.$element = this.$markup();
   this.$sigil = this.$element.find('.sigil');
 
+  this.commandView = commandView;
   this.context = context;
   this.collapsed = true;
-  this.state = cv.command.STATE_WAITING;
+  this.state = 'waiting';
   
   // Refresh markup.
   this.updateElement();
 };
-
-cv.command.STATE_WAITING = 0;
-cv.command.STATE_RUNNING = 1;
-cv.command.STATE_SUCCESS = 2;
-cv.command.STATE_WARNING = 3;
-cv.command.STATE_ERROR   = 4;
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -42,14 +37,14 @@ cv.command.prototype = {
     $command.append(this.progressIndicator.$element);
 
     this.progressIndicator.$element.hide();
-    
+
     return $command;
   },
 
   // State
   get state() { return this._state; },
   set state(state) {
-    this._state = state || cv.command.STATE_WAITING;
+    this._state = state || 'waiting';
     this.updateElement();
   },
 
@@ -64,13 +59,30 @@ cv.command.prototype = {
   updateElement: function () {
     this.$element.data('controller', this);
     this.$sigil.html(this.collapsed ? '▶' : '▼');
-    this.progressIndicator.$element[(this.state == cv.command.STATE_RUNNING) ? 'show' : 'hide']();
+    this.progressIndicator.$element[(this.state == 'running') ? 'show' : 'hide']();
   },
   
-  // Execute command.
+  // Execute tokenfield as command.
   submitCommand: function (event, tokens) {
-    this.state = cv.command.STATE_RUNNING;
+    var self = this;
+    this.state = 'running';
     this.collapsed = false;
+    
+    // Convert tokens into strings.
+    var command = tokens.map(function (t) { return t.toCommand(); });
+    this.context.shell.run(command, function (data, code, status) {
+      // Set appropriate return state.
+      self.state = {
+        'ok': 'ok',
+        'warning': 'warning',
+        'error': 'error',
+      }[status] || 'ok';
+      
+      // Open new command.
+      async(function () {
+        self.commandView.newCommand();
+      });
+    }, { });
   },
 
   // Use triggers to respond to a creation or change event.
@@ -155,8 +167,9 @@ cv.commandExecutable.triggerExecutable = function (offset, event, tokens) {
   }
 };
 
-cv.commandExecutable.autocompleteExecutable = function (offset, event, tokens) {
-  return ['foo', 'bar', '.txt', this.context.user];
+cv.commandExecutable.autocompleteExecutable = function (offset, event, tokens, callback) {
+  var suggestions = [];
+  callback(suggestions);
 };
 
 cv.commandExecutable.prototype = $.extend(new cv.command(), {});

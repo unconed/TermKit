@@ -34,21 +34,25 @@ var tc = termkit.client = function () {
 };
 
 tc.prototype = {
-  invoke: function (method, args, returnCallback, viewCallback) {
+  // Invoke a method on the server.
+  invoke: function (method, args, returnCallback, handlers) {
+    handlers = handlers || {};
+    handlers.Return = returnCallback;
+
     var sequence = this.nextId++;
-    this.handlers[sequence] = {
-      ret: returnCallback,
-      view: viewCallback,
-    };
-    console.log(method);
+    this.handlers[sequence] = handlers;
+
     this.send(method, sequence, args);
   },
   
+  // Pass a message to the server.
   send: function (method, sequence, args) {
     var json = JSON.stringify([ method, sequence, args ]);
+    console.log('sending '+json);
     this.socket.send(json);
   },  
 
+  // Receive a message from the server.
   message: function (data) {
     // Parse incoming message.
     var message = JSON.parse(data);
@@ -57,18 +61,21 @@ tc.prototype = {
           sequence = message[1],
           args = message[2];
 
+      console.log('received '+data);
+
       // Verify arguments.
       if (typeof message[1] == 'number') {
         // Locate handler for method and execute.
         var handler = this.handlers[sequence];
         if (handler) {
-          if (method == 'return') {
-            handler.ret && handler.ret(args.data, args.code, args.status);
+          var prefix = method.split('.')[0];
+          if (prefix == 'return') {
+            handler.Return && handler.Return(args.data, args.code, args.status);
             // Clean-up callbacks.
             delete this.handlers[sequence];
           }
           else {
-            handler.view && handler.view(method, args);
+            handler[prefix] && handler[prefix](method, args);
           }
         }
       }

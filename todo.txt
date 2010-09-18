@@ -16,6 +16,8 @@ Prototype:
   [X] fix event bindings lost when clicking inside textfield
   [ ] fix backspacing around edges of tokens
   [ ] caret positions around allowempty tokens and ^/$
+  [ ] switch between inline and block tokens -> input vs textarea.
+  [ ] fix wrapping of tokens
   [ ] caret.remove() shouldn't need to touch tokenList when pruning empties -> let triggers do it
     
   [?] write external bindings for tokenfield
@@ -44,7 +46,7 @@ Prototype:
 
 2) Command/token autocomplete
   [X] token multi-regexp patterns
-+ [.] triggers system, unify with token field triggers a bit?
+  [.] triggers system, unify with token field triggers a bit?
   [X] autocomplete a string / command
   [X] autocomplete empties
   [ ] autocomplete filesystem
@@ -62,10 +64,11 @@ Prototype:
   [X] socket.io listener
   [X] keep state of sessions
   [X] export environment
-  [ ] allow path navigation
+  [X] allow path navigation
+  [.] make ls / cd commands
+  [ ] split off worker(s) into process, actual shell
   [ ] define datastream format
   [ ] define viewstream format
-  [ ] make ls / cd commands
   [ ] Invoke a new process, capture output
   - make a script for git (arguments, file/dir, ...)
 

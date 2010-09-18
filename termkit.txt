@@ -168,7 +168,7 @@ command.run
 direct embedding in websocket frame:
 
 stream := 
-[type, sequence, data]
+[type, sequence, data, sessionId]
  -> not just a straight up dict because i don't want to hog the 'type' or 'sequence' keys in {data}.
 
 >
@@ -180,16 +180,23 @@ stream :=
 ['return', 1, {
   sessionId: 1,
   status: 'ok',
+  code: 0,
 }],
 
 >
 ['session.close', 2, {
-  id: 1,
+  sessionId: 1,
 }],
 <
 ['return', 2, {
   status: 'ok',
+  code: 0,
 }],
+>
+['path.autocomplete', 5, {
+  sessionId: 1,
+  
+}]
 >
 ['command.run', 3, { // shell session
   'session': 1,

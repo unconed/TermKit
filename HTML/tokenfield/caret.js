@@ -84,6 +84,7 @@ tf.caret.prototype = {
   },
   
   remove: function () {
+    console.log("remove ", this.token);
     // Guard against recursive calls due to e.g. triggering onblur when detaching caret from DOM.
     if (!this.token || !this.token.locked) return;
 
@@ -171,6 +172,7 @@ tf.caret.prototype = {
     switch (event.keyCode) {
       case 13: // Return
         async.call(this, function () {
+          this.remove();
           this.onSubmit(this.token, event);
         });
         break;

@@ -16,6 +16,7 @@ Prototype:
   [X] fix event bindings lost when clicking inside textfield
   [ ] fix backspacing around edges of tokens
   [ ] caret positions around allowempty tokens and ^/$
+  [ ] add icon/spinner support to tokens
   [ ] switch between inline and block tokens -> input vs textarea.
   [ ] fix wrapping of tokens
   [ ] caret.remove() shouldn't need to touch tokenList when pruning empties -> let triggers do it
@@ -34,14 +35,16 @@ Prototype:
   [X] keyboard controls up/down
   [X] hit enter after autocomplete in empty token -> undefined
   [X] escape to close popup
+  [ ] autocomplete icons, markup, widgets, etc
   
 [ ] command view
   [X] list of collapsible sections
   [X] host token field
   [X] context bar by command
+  [X] anchored scrolling
   [ ] host output
+  [ ] auto-expand to fill view
   [ ] up/down to change focus
-  [ ] anchored scrolling, auto-expand to fill view
   [ ] add forking the view with tabs and hosted/nested sessions
 
 2) Command/token autocomplete
@@ -65,8 +68,11 @@ Prototype:
   [X] keep state of sessions
   [X] export environment
   [X] allow path navigation
-  [.] make ls / cd commands
-  [ ] split off worker(s) into process, actual shell
+  [ ] worker process
+    [ ] spawn process
+    [ ] stream in/out json packets
+    [ ] sudo support (askpass env?)
++  [.] make ls / cd commands
   [ ] define datastream format
   [ ] define viewstream format
   [ ] Invoke a new process, capture output

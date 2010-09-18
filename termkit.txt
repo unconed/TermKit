@@ -38,8 +38,8 @@ Good desktop citizen:
  [X] simulated in safari/webkit.app
  [X] functional input line with tokenization, cursor keys and backspace/delete
  [X] functional autocomplete on tokens
- - simulated commands
- - simulated output with collapsible sections
+ [X] simulated commands
+  - simulated output with collapsible sections
  
 0.2: App prototype
  [X] cocoa app

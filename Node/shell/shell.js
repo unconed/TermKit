@@ -1,6 +1,7 @@
 var fs = require('fs');
 
-var spawn = require('child_process').spawn, exec = require('child_process').exec;
+var spawn = require('child_process').spawn,
+    exec = require('child_process').exec;
 
 exports.shell = function (server, connection) {
   //for (i in process.env) console.log(i + ' = '+process.env[i]);
@@ -90,12 +91,19 @@ exports.shell.commands = {
 };
 
 exports.shell.worker = function (env) {
+  // Extract location of source.
+  var path = process.argv[1].split('/');
+  path[path.length - 1 ] = 'shell/worker.js';
+  path = path.join('/');
+
   if (env.user == process.env.USER) {
-    // check out process.argv[1]
-//    exec('cd /Users/steven; pwd', function (error, stdout, stderr) { console.log(stdout); });
-//    spawn('node', ['worker.js'], { cwd: process.cwd() });
+    // Spawn regular worker.
+    spawn('node', [ path ], { cwd: process.cwd() });
   }
-//  spawn('sudo -S -u '+ shell.user +'node worker.js')
+  else {
+    // Spawn sudo worker.
+    
+  }
 };
 
 /*

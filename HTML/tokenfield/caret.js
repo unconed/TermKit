@@ -37,6 +37,18 @@ tf.caret.prototype = {
     return $caret;
   },
 
+  // Ensure the caret is in view.
+  scrollIntoView: function () {
+    if (this.$element) {
+      var offset = this.$element.offset();
+      var bottom = offset.top + this.$element.height() + 32 + 10;
+      var edge = $('body').scrollTop() + $('html').height();
+      if (bottom > edge) {
+        $('body').scrollTop($('body').scrollTop() + (bottom - edge));
+      }
+    }
+  },
+
   // Insert the caret on the given selection.
   moveTo: function (selection, event) {
 
@@ -162,6 +174,11 @@ tf.caret.prototype = {
     this.$measure.text(this.$input.val());
     // Enlarge the input to make room for the next keystroke.
     this.$input.css('width', this.$measure.width() + this.$measure.height() + 1);
+
+    // Ensure visible.
+    async.call(this, function () {
+      this.scrollIntoView();
+    });
   },
   
   onKeyDown: function (event) {

@@ -126,13 +126,58 @@ problem: if front-end is agnostic, then how to make commands smarter?
                application/jsonstream
  ...
  
++++ Data vs UI glue
+
+e.g.
+ get http://.../rss.xml
+ content-type: application/xml
+ 
+ -> process streams out xml data
+ -> must also generate/trigger viewing of xml tree
+ 
+[ ] A) Implied end-of-command pipe into default formatter for display.
+   Server-side handlers. Generic OS structures in shell/termkit namespace. App-specific, e.g. mysql handler turns query data into tables.
+   
+   Pro: complete separation of data and display
+   Pro: can pipe in any resource in the correct format. processing stages do not have to be termkit-capable.
+   Con: intermediate processes in pipeline cannot interact
+
+[X] B) Every program outputs viewstream parallel to datastream. invocation toggle to show only final output, or also intermediate? per-executable hints?
+  
+   Pro: view can be arbitrarily complex over simplistic data
+   Pro: two binaries which output the same datatypes can have radically different presentations
+   Con: need full wrapper around non-termkit processes
+   
+   chain of termkit / non-termkits:
+   
+       native               bridge    process   autodetect
+   Rich Datastream -> Typed Binary Data -> Std Out -> Typed Data -> Rich Datastream -> OUT
+   Viewstream      ->                 ---X                -------> ViewStream      -> OUT
+
+
+   get | grep
+   Data Stream:  .txt|html|... > .txt|html|...
+   View Stream: text obj (size, lines) > preformattedtext view / html tree view
+  
+   get | ungzip | untar
+   Data Stream:  .gz  > .tar  >   nothing
+   View Stream:  gzip obj (size)  > tar archive (files) > list of file refs (extracted)
+    
+    Need generic default formatter for data-in. Takes mime blob and turns into static display.
+     - Binary stream (blob, image, zip, csv, ...)
+     - Url/path reference
+     - HTML/XML
+     - 
+    
+    
+ 
  serverside has hook system / listener system for manipulating references. this lets e.g. SVN output revision control flags on files transparently. this would apply across the entire shell view automatically.
  
 +++ UI stream structure
 
  > shell-specific interaction rules are client-side.
  > rich widget lib for display, extensible
- > widgets are streamed to client like infograph-ML. objects are smartly typed and have callback commands defined for them. callbacks can be stateful or stateless. though stateful is only intended to be used for interactive commands.
+ > widgets are streamed to client like termkit-ML. objects are smartly typed and have callback commands defined for them. callbacks can be stateful or stateless. though stateful is only intended to be used for interactive commands.
 
  tableview / listcontainer -> generic, scales form simple list to tabled headers w/ simple syntax
  object references for files and other things. are multi-typed and annotated on server-side.

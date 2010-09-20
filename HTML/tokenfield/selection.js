@@ -114,7 +114,6 @@ tf.selection.fromEvent = function (event) {
 
   // Set position left or right.
   var center = (right + left) / 2;
-  $('body').append('<div>'+ center + ' ' + relativeOffset);
   return { token: token, offset: low + ((relativeOffset > center) ? 1 : 0) };
 };
 

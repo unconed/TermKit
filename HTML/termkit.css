@@ -69,6 +69,18 @@ body {
   color: #ccc;
 }
 
+.termkitCommandView .command > span.sigil-ok {
+  color: #9f7;
+}
+
+.termkitCommandView .command > span.sigil-warning {
+  color: #ff9;
+}
+
+.termkitCommandView .command > span.sigil-error {
+  color: #f77;
+}
+
 .termkitCommandView .command .termkitProgressIndicator {
   position: absolute;
   left: -2px;
@@ -82,7 +94,7 @@ body {
   border-width: 1px 0;
   line-height: 22px;
   padding: 10px 10px 10px 35px;
-  margin-bottom: -1px;
+  margin-top: -1px;
   
   cursor: text;
 }
@@ -230,6 +242,11 @@ body {
   max-width: 100%;
 }
 
+.termkitTokenField > span.token,
+.termkitTokenField > span.token input {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, .75);
+}
+
 .termkitTokenField > span.token:not(:first-child)::after {
   white-space: normal;
   content: ' ';
@@ -252,7 +269,7 @@ body {
   margin: 0 2px 0 0;
   -webkit-box-shadow: 0px -1px 1px rgba(192,192,192,.6);
   background: #555 -webkit-gradient(linear, left top, left bottom, from(#666), to(#444));
-  background: #222 -webkit-gradient(linear, left top, left bottom, from(#3a3a3a), to(#272727));
+  background: #333 -webkit-gradient(linear, left top, left bottom, from(#4a4a4a), to(#333333));
   color: #ddd;
 }
 
@@ -261,9 +278,12 @@ body {
   -webkit-border-radius: .25em;
   margin: 0 3px 0 2px;
   -webkit-box-shadow: 0px -1px 1px rgba(160,180,192,1);
-  background: #578 -webkit-gradient(linear, left top, left bottom, from(#578), to(#356));
-/*  background: #def -webkit-gradient(linear, left top, left bottom, from(#def), to(#bcd));*/
+  background: #578 -webkit-gradient(linear, left top, left bottom, from(#579), to(#357));
   color: #cef;
+
+  -webkit-box-shadow: 0px -1px 1px rgba(192,192,192,1);
+  background: #666 -webkit-gradient(linear, left top, left bottom, from(#777), to(#444));
+  color: #eee;
 }
 
 .termkitTokenField > span.token-empty span#caret input {

@@ -26,7 +26,7 @@ var tc = termkit.client = function () {
 
   // Message processing loop.
   s.on('message', function (data) {
-    self.message(data);
+    self.receive(data);
   }); 
 
   // Open connection.
@@ -35,31 +35,32 @@ var tc = termkit.client = function () {
 
 tc.prototype = {
   // Invoke a method on the server.
-  invoke: function (method, args, returnCallback, handlers) {
+  invoke: function (method, args, returnCallback, handlers, sessionId) {
     handlers = handlers || {};
     handlers.Return = returnCallback;
 
     var sequence = this.nextId++;
     this.handlers[sequence] = handlers;
 
-    this.send(method, sequence, args);
+    this.send(sessionId, sequence, method, args);
   },
   
   // Pass a message to the server.
-  send: function (method, sequence, args) {
-    var json = JSON.stringify([ method, sequence, args ]);
+  send: function (sessionId, sequence, method, args) {
+    var json = JSON.stringify([ sessionId, sequence, method, args ]);
     console.log('sending '+json);
     this.socket.send(json);
   },  
 
   // Receive a message from the server.
-  message: function (data) {
+  receive: function (data) {
     // Parse incoming message.
     var message = JSON.parse(data);
     if (message && message.length) {
-      var method = message[0],
+      var sessionId = message[0],
           sequence = message[1],
-          args = message[2];
+          method = message[2],
+          args = message[3];
 
       console.log('received '+data);
 
@@ -70,7 +71,7 @@ tc.prototype = {
         if (handler) {
           var prefix = method.split('.')[0];
           if (prefix == 'return') {
-            handler.Return && handler.Return(args.data, args.code, args.status);
+            handler.Return && handler.Return(args.data, args.code, args.status, sessionId);
             // Clean-up callbacks.
             delete this.handlers[sequence];
           }

@@ -45,6 +45,7 @@ Prototype:
   [ ] host output
   [ ] auto-expand to fill view
   [ ] up/down to change focus
+  [ ] tabbing
   [ ] add forking the view with tabs and hosted/nested sessions
 
 2) Command/token autocomplete
@@ -68,16 +69,17 @@ Prototype:
   [X] keep state of sessions
   [X] export environment
   [X] allow path navigation
-  [ ] worker process
-    [ ] spawn process
-    [ ] stream in/out json packets
-    [ ] sudo support (askpass env?)
-+  [.] make ls / cd commands
-  [ ] define datastream format
-  [ ] define viewstream format
++ [X] worker process
+    [X] refactor processor.js handler/return handling
+    [X] spawn process
+    [X] stream in/out json packets
+    [.] make ls / cd commands
+    [ ] define datastream format
+    [ ] define viewstream format
+  [ ] sudo support (askpass env?)
   [ ] Invoke a new process, capture output
-  - make a script for git (arguments, file/dir, ...)
 
-bugs:
-[ ] backspacing around token edges
+5) Command Suite
+[ ] make a script for git (arguments, file/dir, ...)
+[ ] mysql console
 

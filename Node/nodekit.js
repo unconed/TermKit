@@ -7,7 +7,7 @@ require.paths.unshift('.');
 // Load requirements.
 var http = require('http'),  
     io = require('socket.io')
-    processor = require("processor");
+    router = require("router");
 
 // Set up http server.
 var server = http.createServer(function (request, result) { 
@@ -21,7 +21,7 @@ server.listen(2222);
 // Set up WebSocket and handlers.
 var socket = io.listen(server); 
 socket.on('connection', function (client) {
-  var p = new processor.router(server, client);
+  var p = new router.router(server, client);
 });
 
 /*

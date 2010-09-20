@@ -5,15 +5,27 @@ var tc = termkit.client;
 /**
  * NodeKit shell representation.
  */
-tc.shell = function (client, environment) {
+tc.shell = function (client, environment, exit) {
   var self = this;
   
   this.client = client;
   this.environment = environment;
-  
+
+  this.client.invoke('session.open.shell', { }, function (data, code, status, sessionId) {
+    self.sessionId = sessionId;
+    exit();
+  }, this.hook());
 };
 
 tc.shell.prototype = {
+  
+  hook: function (handlers) {
+    var self = this;
+    handlers = handlers || [];
+    handlers['shell'] = function (m,a) { self.shellHandler(m, a); };
+    return handlers;
+  },
+  
   shellHandler: function (method, args) {
     switch (method) {
       case 'shell.environment':
@@ -25,13 +37,9 @@ tc.shell.prototype = {
   },
   
   run: function (tokens, exit, handlers) {
-    var self = this;
-    handlers['shell'] = function (m,a) { self.shellHandler(m, a); };
-    
     this.client.invoke('shell.run', {
       tokens: tokens,
-      sessionId: this.environment.sessionId,
-    }, exit, handlers);
+    }, exit, this.hook(handlers), this.sessionId);
   },
 };
 

@@ -58,7 +58,12 @@ cv.command.prototype = {
   // Update the element.
   updateElement: function () {
     this.$element.data('controller', this);
-    this.$sigil.html(this.collapsed ? '▶' : '▼');
+    var sigil = {
+      'ok': '✔',
+      'error': '✖',
+      'warning': '⚠',
+    }[this.state];
+    this.$sigil.attr('class', 'sigil sigil-'+this.state).html(this.collapsed ? '▶' : sigil);
     this.progressIndicator.$element[(this.state == 'running') ? 'show' : 'hide']();
   },
   
@@ -168,7 +173,7 @@ cv.commandExecutable.triggerExecutable = function (offset, event, tokens) {
 };
 
 cv.commandExecutable.autocompleteExecutable = function (offset, event, tokens, callback) {
-  var suggestions = [];
+  var suggestions = ['route', 'route6', 'view'];
   callback(suggestions);
 };
 

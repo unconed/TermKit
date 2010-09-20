@@ -1,117 +1,76 @@
-var fs = require('fs');
+var fs = require('fs'), net = require('net');
 
 var spawn = require('child_process').spawn,
     exec = require('child_process').exec;
 
-exports.shell = function (server, connection) {
-  //for (i in process.env) console.log(i + ' = '+process.env[i]);
-  this.environment = {
-    sessionId: 0,
-    cwd: process.env.HOME,
-    home: process.env.HOME,
-    user: process.env.USER,
-    uid: process.getuid(),
-    gid: process.getgid(),
-    path: process.env.PATH.split(':'),
-    manPath: process.env.MANPATH,
-    defaultShell: process.env.SHELL,
-  };
+exports.shell = function (sequence, args, exit, router) {
 
-  this.worker = new exports.shell.worker(this.environment);
-};
+  this.router = router;
+  this.buffer = "";
 
-exports.shell.prototype = {
+  var user = args.user || process.env.USER;
+  var self = this;
   
-  get id() {
-    return this.environment.sessionId;
-  },
-  set id(id) {
-    this.environment.sessionId = id;
-  },
-  
-  get cwd() {
-    return this.environment.cwd;
-  },
-  set cwd(cwd) {
-    this.environment.cwd = cwd;
-  },
-
-  run: function (args, invoke, exit) {
-    var tokens = args.tokens;
-    console.log('shell.run: ' + tokens.join(' '));
-    
-    var lead = tokens[0], handler;
-    if (handler = exports.shell.commands[lead]) {
-      handler.call(this, tokens, invoke, exit);
-    }
-    else {
-      // TODO: Replace with viewstream stderr equivalent
-      exit(true);
-    }
-  },
-  
-  sync: function (invoke) {
-    invoke('shell.environment', this.environment);
-  },
-};
-
-exports.shell.commands = {
-  'cd': function (tokens, invoke, exit) {
-    if (tokens.length != 2) {
-      return exit(true);
-    }
-    var path = tokens[1], self = this;
-
-    // Resolve relative paths.
-    if (path[0] != '/') {
-      path = this.cwd + '/' + path;
-    }
-
-    // Fetch absolute path.
-    fs.realpath(path, function (err, path) {
-      console.log('realpath', path);
-      if (err) {
-        return exit(true);
-      }
-        
-      // See if path exists.
-      fs.stat(path, function (err, stats) {
-        console.log('stat', stats);
-        if (!err && stats.isDirectory()) {
-          self.cwd = path;
-          self.sync(invoke);
-          exit();
-        }
-        else {
-          exit(true);
-        }
-      });
-    });
-  },
-};
-
-exports.shell.worker = function (env) {
   // Extract location of source.
-  var path = process.argv[1].split('/');
-  path[path.length - 1 ] = 'shell/worker.js';
+  var p, path = process.argv[1].split('/');
+  path[path.length - 1] = 'shell/worker.js';
   path = path.join('/');
+  
+  // Determine user identity.
+  if (user == process.env.USER) {
+    console.log('spawning shell worker: ' + path);
 
-  if (env.user == process.env.USER) {
     // Spawn regular worker.
-    spawn('node', [ path ], { cwd: process.cwd() });
+    p = this.process = spawn('/usr/local/bin/node', [ path ], {
+      cwd: process.cwd(),
+    });
   }
   else {
     // Spawn sudo worker.
-    
+    console.log('sudo not implemented');
+  }
+
+  if (p) {
+    // Bind exit.
+    p.on('exit', function (code) {
+      console.log('shell worker exited with code ' + code);
+    });
+
+    // Bind receiver.
+    p && p.stdout.on('data', function (data) { self.receive(data); });
+
+    // Initalize worker.
+    this.send([sequence, 'init', args ]);
+  }
+  else {
+    // Report error.
+    exit(true);
   }
 };
 
-/*
-stats.isFile()
-stats.isDirectory()
-stats.isBlockDevice()
-stats.isCharacterDevice()
-stats.isSymbolicLink() (only valid with fs.lstat())
-stats.isFIFO()
-stats.isSocket()
-*/
+exports.shell.prototype = {
+  run: function (sequence, args) {
+    this.send([sequence, 'run', args ]);
+  },
+  
+  close: function () {
+    this.process.stdin.close();
+  },
+  
+  send: function (data) {
+    var json = JSON.stringify(data);
+    this.process.stdin.write(json + "\u0000");
+  },
+  
+  receive: function (data) {
+    this.buffer += data;
+    while (this.buffer.indexOf("\u0000") >= 0) {
+      var chunk = this.buffer.split("\u0000").shift();
+      console.log("parsing "+ data);
+      var data = JSON.parse(chunk);
+      this.router.send(this.id, data[0], data[1], data[2]);
+      this.buffer = this.buffer.substring(chunk.length + 1);
+    }
+  }
+};
+

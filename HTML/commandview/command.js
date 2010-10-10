@@ -193,7 +193,7 @@ cv.commandExecutable.triggerExecutable = function (offset, event, tokens) {
 };
 
 cv.commandExecutable.autocompleteExecutable = function (offset, event, tokens, callback) {
-  var suggestions = ['route', 'route6', 'view'];
+  var suggestions = [];
   callback(suggestions);
 };
 

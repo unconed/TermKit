@@ -5,9 +5,12 @@ var fs = require('fs'),
 exports.shellCommands = {
 
   'cd': function (tokens, invoke, exit) {
+
+    var out = new view.bridge(invoke);
     
     // Restrict to simple "cd <dir>" syntax.
     if (tokens.length != 2) {
+      out.print('Usage: cd <dir>');
       return exit(true);
     }
     var path = tokens[1];
@@ -17,6 +20,7 @@ exports.shellCommands = {
       process.chdir(path);
     }
     catch (error) {
+      out.print(error);
       return exit(true);
     }
 
@@ -29,10 +33,6 @@ exports.shellCommands = {
     
     var out = new view.bridge(invoke);
 
-    out.print('hello world');
-    exit();
-    return;
-    
     // Parse out items to list.
     var items = [];
     if (tokens.length <= 1) {
@@ -44,65 +44,56 @@ exports.shellCommands = {
       }
     }
     
-    var units = items.length;
-    var i, error = 0;
+    var units = 0, error = 0;
 
-    // Helper to check exit condition
-    function end() {
-      // If all done, return error code.
-      if (--units == 0) {
-        exit(error != 0);
-      }
+    // Helper to check exit condition.
+    function track(callback) {
+      units++;
+      return function (a, b) {
+        callback(a, b);
+        if (--units == 0) {
+          exit(error != 0);
+        }
+      };
     }
-    
+
     // Process arguments.
     for (var i in items) (function (i, path) {
 
       // Stat the requested files / directories.
-      fs.stat(path, function (err, stats) {
-        if (!err && stats.isDirectory()) {
+      fs.stat(path, track(function (err, stats) {
+        
+        // Count errors.
+        error += ~~err;
+        
+        // Iterate valid directories.
+        if (stats && stats.isDirectory()) {
 
           // Prepare output.
-          out.print(view.blockList('files' + i));
+          out.print(view.itemList('files' + i));
 
           // Scan contents of found directories.
-          fs.readdir(path, function (err, files) {
+          fs.readdir(path, track(function (err, files) {
             if (!err) {
+
               var children = [];
               for (var j in files) (function (j, child) {
 
                 // Stat each child.
-                fs.stat(composePath(child, path), function (err, stats) {
+                fs.stat(composePath(child, path), track(function (err, stats) {
                   if (!err) {
 
-                    v.add('files' + i, j, view.fileReference(child, path, stats));
+                    out.add('files' + i, j, view.file(child, path, stats));
 
                   }
-                  else {
-                    // Child stat failed.
-                    error++;
-                  }
-                  end();
+                })); // fs.stat
+              })(j, files[j]); // for j in files
+            } // !err
+          })); // fs.readdir
+        } // if isDirectory
+      })); // fs.stat
+    })(i, items[i]); // for i in items
 
-                });
-              })(i, files[i]);
-              
-            }
-            else {
-              // Readdir failed.
-              error++;
-            }
-            end();
-          });
-
-        }
-        else {
-          // Stat failed and/or not a valid directory.
-          error++;
-          end();
-        }
-      });
-    })(i, items[i]);
   },
 
 };

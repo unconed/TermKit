@@ -73,7 +73,7 @@ exports.prepareOutput = function prepareOutput(object) {
 
   // Allow plain text output..
   if (object.constructor == "".constructor) {
-    object = exports.rawOutput(null, object);
+    object = exports.raw(null, object);
   }
 
   // Allow array of objects, if so, recurse.
@@ -87,11 +87,11 @@ exports.prepareOutput = function prepareOutput(object) {
 }
 
 /**
- * Container: block list
+ * Container: item list
  */
-exports.blockList = function (id, items) {
+exports.itemList = function (id, items) {
   return {
-    type: 'blocklist',
+    type: 'itemList',
     id: id || null,
     children: items || [],
   };
@@ -100,7 +100,7 @@ exports.blockList = function (id, items) {
 /**
  * Widget: raw output
  */
-exports.rawOutput = function (id, contents) {
+exports.raw = function (id, contents) {
   return {
     type: 'raw',
     id: id || null,
@@ -111,7 +111,7 @@ exports.rawOutput = function (id, contents) {
 /**
  * Widget: file reference.
  */
-exports.fileReference = function (name, path, stats) {
+exports.file = function (name, path, stats) {
   
   return {
     type: 'file',

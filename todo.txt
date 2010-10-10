@@ -52,7 +52,7 @@ Prototype:
 
 2) Command/token autocomplete
   [X] token multi-regexp patterns
-  [.] triggers system, unify with token field triggers a bit?
+  [X] triggers system, unify with token field triggers a bit?
   [X] autocomplete a string / command
   [X] autocomplete empties
   [ ] autocomplete filesystem
@@ -79,7 +79,7 @@ Prototype:
     [X] spawn process
     [X] stream in/out json packets
     [X] view proxy object on worker side
-    [.] make ls / cd commands
+    [X] make ls / cd commands
     [ ] define datastream format
     [ ] reroute stderr as viewstream. arrange pipes for command/view
   [ ] sudo support (askpass env?)

@@ -39,6 +39,8 @@ tc.prototype = {
     handlers = handlers || {};
     handlers.Return = returnCallback;
 
+    console.log(handlers);
+
     var sequence = this.nextId++;
     this.handlers[sequence] = handlers;
 

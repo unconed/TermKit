@@ -114,12 +114,11 @@ ov.outputNode.prototype = {
     if (typeof index != 'number') {
       index = this.children.length;
     }
-    var args = [ index, 0 ];
+    var args = [ index, 0 ].concat(collection);
 
     // Allow both single object and array.
     $.each(oneOrMany(collection), function () {
       self.adopt(this);
-      args.push(this);
     });
 
     // Add elements.

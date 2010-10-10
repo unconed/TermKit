@@ -36,10 +36,37 @@ body {
   width: 100%;
   margin: 0;
   padding: 0;
-  
-  min-height: 1em;
+}
 
+.termkitOutputView .itemList {
+  padding: 1em;
+}
+
+.termkitOutputView .widgetRaw {
+  padding: 1em;
+}
+
+.termkitOutputView .widgetFile {
+  padding: 1em;
+  clear: left;
+  overflow: hidden;
+}
+
+.termkitOutputView .widgetFile .icon {
+  float: left;
+  width: 48px;
+  height: 48px;
   background: #333;
+}
+
+.termkitOutputView .widgetFile .name, .termkitOutputView .widgetFile .meta {
+  padding-left: 64px;
+  color: #777;
+}
+
+.termkitOutputView .widgetFile .name {
+  font-weight: bold;
+  color: #fff;
 }
 
 /************/
@@ -101,6 +128,10 @@ body {
   position: absolute;
   left: -2px;
   top: -1px;
+}
+
+.termkitCommandView .command.command-open .termkitTokenField {
+  background: #222;
 }
 
 /************/

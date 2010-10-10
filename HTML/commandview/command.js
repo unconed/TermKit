@@ -63,14 +63,22 @@ cv.command.prototype = {
   
   // Update the element.
   updateElement: function () {
-    this.$element.data('controller', this);
+    var classes = [
+      'command',
+      'command-'+ this.state,
+      this.collapsed ? 'command-collapsed' : 'command-open'
+    ];
+    this.$element.data('controller', this).attr('class', classes.join(' '));
+
     var sigil = {
       'ok': '✔',
       'error': '✖',
       'warning': '⚠',
     }[this.state];
     this.$sigil.attr('class', 'sigil sigil-'+this.state).html(this.collapsed ? '▶' : sigil);
+
     this.progressIndicator.$element[(this.state == 'running') ? 'show' : 'hide']();
+
     this.outputView.$element[!this.collapsed ? 'show' : 'hide']();
   },
   

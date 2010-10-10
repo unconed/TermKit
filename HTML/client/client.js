@@ -39,8 +39,6 @@ tc.prototype = {
     handlers = handlers || {};
     handlers.Return = returnCallback;
 
-    console.log(handlers);
-
     var sequence = this.nextId++;
     this.handlers[sequence] = handlers;
 
@@ -50,7 +48,7 @@ tc.prototype = {
   // Pass a message to the server.
   send: function (sessionId, sequence, method, args) {
     var json = JSON.stringify([ sessionId, sequence, method, args ]);
-    console.log('sending '+json);
+//    console.log('sending '+json);
     this.socket.send(json);
   },  
 
@@ -64,7 +62,7 @@ tc.prototype = {
           method = message[2],
           args = message[3];
 
-      console.log('received '+data);
+//      console.log('received '+data);
 
       // Verify arguments.
       if (typeof message[1] == 'number') {

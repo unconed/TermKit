@@ -8,7 +8,7 @@ var tf = termkit.tokenField = function () {
 
   this.$element = this.$markup();  
   
-  this.tokenList = new tf.tokenList();
+  this.tokenList = new termkit.container();
   this.caret = new tf.caret(this.tokenList);
   this.selection = new tf.selection(this.tokenList);
   
@@ -38,7 +38,7 @@ tf.prototype = {
 
   // Return contents as array of tokens.
   get contents() {
-    return [].concat(this.tokenList.tokens);
+    return this.tokenList.contents;
   },
   
   focus: function () {
@@ -90,11 +90,11 @@ tf.prototype = {
   // Refresh the field by re-inserting all token elements.
   updateElement: function () {
     var $element = this.$element.empty();
-    $.each(this.tokenList.tokens, function () {
+    $.each(this.tokenList.collection, function () {
       this.updateElement();
       $element.append(this.$element);
     });
-    if (!this.tokenList.tokens.length) {
+    if (!this.tokenList.collection.length) {
       $element.append(new tf.tokenEmpty().$element);
     }
   },
@@ -136,12 +136,12 @@ tf.prototype = {
       // Does this token still exist?
       if (update.length) {
         // Inside replacement token at same offset.
-        this.selection.anchor = { token: this.tokenList.tokens[index], offset: this.selection.anchor.offset };
+        this.selection.anchor = { token: this.tokenList.collection[index], offset: this.selection.anchor.offset };
         this.caret.moveTo(this.selection, event);
       }
       else {
         // At the end of the previous token.
-        if (prev = this.tokenList.tokens[index - 1]) {
+        if (prev = this.tokenList.prev(index)) {
           this.selection.anchor = { token: prev, offset: prev.contents.length };
           this.caret.moveTo(this.selection, event);
         }

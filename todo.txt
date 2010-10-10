@@ -21,6 +21,7 @@ Prototype:
   [ ] fix wrapping of tokens
   [ ] caret.remove() shouldn't need to touch tokenList when pruning empties -> let triggers do it
     
+  [?] Unify tokenlist and commandlist into collection class, derive from.
   [?] write external bindings for tokenfield
     => tokenfield abstracts, interface for matching should be only multiregexp + callback
     . on change -> process tokens, apply multiregexps
@@ -42,9 +43,10 @@ Prototype:
   [X] host token field
   [X] context bar by command
   [X] anchored scrolling
-  [ ] host output
+  [X] host output
   [ ] auto-expand to fill view
-  [ ] up/down to change focus
+  [ ] command history
+  [ ] alt-up/down to change focus
   [ ] tabbing
   [ ] add forking the view with tabs and hosted/nested sessions
 
@@ -63,6 +65,9 @@ Prototype:
   [X] set up client handling
   [X] establish controller for stream
   [X] invoke new session
++  [ ] view parser/tree on client side
++  [ ] basic message output
+  [ ] list of files
 
 4) NodeKit daemon
   [X] socket.io listener
@@ -73,13 +78,13 @@ Prototype:
     [X] refactor processor.js handler/return handling
     [X] spawn process
     [X] stream in/out json packets
++    [ ] view proxy object on worker side
     [.] make ls / cd commands
     [ ] define datastream format
-    [ ] define viewstream format
+    [ ] reroute stderr as viewstream. arrange pipes for command/view
   [ ] sudo support (askpass env?)
   [ ] Invoke a new process, capture output
 
 5) Command Suite
 [ ] make a script for git (arguments, file/dir, ...)
 [ ] mysql console
-

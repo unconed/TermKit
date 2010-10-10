@@ -38,12 +38,16 @@ exports.router.prototype = {
         if (exports.handlers[method]) {
           // Look up session.
           var session = sessionId && this.getSession(sessionId),
+              returned = false;
             // Define convenient exit callback.
               exit = function (value, object) {
-                if (object) {
-                  value = [value, object];
+                if (!returned) {
+                  if (object) {
+                    value = [value, object];
+                  }
+                  self.send('return', sequence, returnObject(value));
+                  returned = true;
                 }
-                self.send('return', sequence, returnObject(value));
               };
           // Invoke method.
           exports.handlers[method].call(this, session, sequence, args, exit);

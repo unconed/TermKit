@@ -19,6 +19,7 @@ tc.shell = function (client, environment, exit) {
 
 tc.shell.prototype = {
   
+  // Hook into the given set of handlers.
   hook: function (handlers) {
     var self = this;
     handlers = handlers || [];
@@ -26,6 +27,7 @@ tc.shell.prototype = {
     return handlers;
   },
   
+  // Handler for view.* invocations.
   shellHandler: function (method, args) {
     switch (method) {
       case 'shell.environment':

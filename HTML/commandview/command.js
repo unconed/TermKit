@@ -26,17 +26,23 @@ cv.command.prototype = {
     var self = this;
     var $command = $('<div class="command"><span class="sigil"></span>').data('controller', this);
 
-    // Add tokenfield for command input.
+    // Create tokenfield for command input.
     this.tokenField = new termkit.tokenField();
     this.tokenField.onChange = function (e, t) { self.checkTriggers(e, t); }
     this.tokenField.onSubmit = function (e, t) { self.submitCommand(e, t); }
     
+    // Create throbber.
     this.progressIndicator = new termkit.progressIndicator();
+
+    // Create outputView for command output.
+    this.outputView = new termkit.outputView();
 
     $command.append(this.tokenField.$element);
     $command.append(this.progressIndicator.$element);
+    $command.append(this.outputView.$element);
 
     this.progressIndicator.$element.hide();
+    this.outputView.$element.hide();
 
     return $command;
   },
@@ -65,9 +71,10 @@ cv.command.prototype = {
     }[this.state];
     this.$sigil.attr('class', 'sigil sigil-'+this.state).html(this.collapsed ? '▶' : sigil);
     this.progressIndicator.$element[(this.state == 'running') ? 'show' : 'hide']();
+    this.outputView.$element[!this.collapsed ? 'show' : 'hide']();
   },
   
-  // Execute tokenfield as command.
+  // Execute tokenfield contents as command.
   submitCommand: function (event, tokens) {
     var self = this;
     this.state = 'running';
@@ -75,19 +82,24 @@ cv.command.prototype = {
     
     // Convert tokens into strings.
     var command = tokens.map(function (t) { return t.toCommand(); });
+
+    // Execute in current context.
     this.context.shell.run(command, function (data, code, status) {
-      // Set appropriate return state.
-      self.state = {
-        'ok': 'ok',
-        'warning': 'warning',
-        'error': 'error',
-      }[status] || 'ok';
+        // Set appropriate return state.
+        self.state = {
+          'ok': 'ok',
+          'warning': 'warning',
+          'error': 'error',
+        }[status] || 'ok';
       
-      // Open new command.
-      async(function () {
-        self.commandView.newCommand();
-      });
-    }, { });
+        // Open new command.
+        async(function () {
+          self.commandView.newCommand();
+        });
+      },
+      // Send all output to outputView.
+      this.outputView.hook()
+    );
   },
 
   // Use triggers to respond to a creation or change event.

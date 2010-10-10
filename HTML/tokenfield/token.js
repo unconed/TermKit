@@ -11,7 +11,7 @@ tf.token = function (type, contents) {
   this.locked = false;
   this.type = type;
   this.contents = contents;
-  this.tokenList = null;
+  this.container = null;
   this.flags = {};
 
   this.allowEmpty = false;
@@ -193,7 +193,7 @@ tf.tokenQuoted.triggerQuote = function (offset, event) {
 
 tf.tokenQuoted.triggerRequote = function (offset, event) {
   if (offset == 1 && tf.tokenQuoted.requoteWaiting) {
-    var prev = this.tokenList.prev(this);
+    var prev = this.container.prev(this);
     prev.contents = prev.contents + this.contents;
     tf.tokenQuoted.requoteWaiting = false;
     return [];

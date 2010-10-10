@@ -4,8 +4,8 @@ require.paths.unshift('shell');
 var builtin = require('builtin');
 var returnObject = require('util').returnObject;
 
-// Set up command processor.
-var commandProcessor = function (commandStream, returnStream) {
+// Set up worker command processor.
+var workerProcessor = function (commandStream, returnStream) {
   // Set up stream callbacks.
   var self = this;
   commandStream.on('data', function (data) { self.data(data); });
@@ -15,7 +15,7 @@ var commandProcessor = function (commandStream, returnStream) {
   this.buffer = '';
 };
 
-commandProcessor.prototype = {
+workerProcessor.prototype = {
   // Zero-delimited framing.
   data: function (data) {
     this.buffer += data;
@@ -37,20 +37,21 @@ commandProcessor.prototype = {
             self = this;
 
         if (typeof sequence == 'number') {
-          if (commandProcessor.handlers[method]) {
+          if (workerProcessor.handlers[method]) {
             // Define convenient invocation callback.
             var invoke = function (method, args) {
               self.send(sequence, method, args);
             };
             // Define convenient exit callback.
+            var returned = false;
             var exit = function (value, object) {
-              if (object) {
-                value = [value, object];
+              if (!returned) {
+                invoke('return', returnObject(value, object));
+                returned = true;
               }
-              invoke('return', returnObject(value));
             };
             // Invoke handler.
-            commandProcessor.handlers[method].call(this, args, invoke, exit);
+            workerProcessor.handlers[method].call(this, args, invoke, exit);
           }
         }
       }
@@ -81,7 +82,7 @@ commandProcessor.prototype = {
   },
 };
 
-commandProcessor.handlers = {
+workerProcessor.handlers = {
   "init": function (args, invoke, exit) {
     this.sync(invoke);
     exit(false);
@@ -104,7 +105,7 @@ commandProcessor.handlers = {
 var commandStream = process.openStdin(),
     returnStream = process.stdout;
 
-var p = new commandProcessor(commandStream, returnStream);
+var p = new workerProcessor(commandStream, returnStream);
 
 /*
 SYNC

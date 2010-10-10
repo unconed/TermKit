@@ -1,20 +1,5 @@
 (function ($) {
-
-$.fn.termkitProgressIndicator = function (options) {
-  var $container = this;
-
-  // Parse options.
-  var defaults = {
-  };
-  options = $.extend({}, defaults, options);
-
-  // Create controller for field.
-  var input = new termkit.progressIndicator();
-  $container.append(input.$element);
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
+ 
 /**
  * Controller for progress indicator.
  */

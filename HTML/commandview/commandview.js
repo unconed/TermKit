@@ -17,7 +17,8 @@ var cv = termkit.commandView = function (shell) {
   this.activeIndex = 0;
   this.beginIndex = 0;
   this.endIndex = 0;
-  this.commandList = new cv.commandList();
+
+  this.commandList = new termkit.container();  
 };
 
 cv.prototype = {
@@ -29,11 +30,11 @@ cv.prototype = {
     return $commandView;
   },
 
-  // Refresh the given view by re-inserting all command elements.
+  // Update the element's markup in response to internal changes.
   updateElement: function () {
     if (this.endIndex < this.commandList.length) {
       for (; this.endIndex < this.commandList.length; ++this.endIndex) {
-        var command = this.commandList.commands[this.endIndex];
+        var command = this.commandList.collection[this.endIndex];
         this.$commands.append(command.$element);
       }
     }
@@ -46,7 +47,7 @@ cv.prototype = {
   },
   
   activeCommand: function () {
-    return this.commandList.commands[this.activeIndex];
+    return this.commandList.collection[this.activeIndex];
   },
   
   newCommand: function () {

@@ -66,8 +66,8 @@ exports.shell.prototype = {
     this.buffer += data;
     while (this.buffer.indexOf("\u0000") >= 0) {
       var chunk = this.buffer.split("\u0000").shift();
-      console.log("parsing "+ data);
       var data = JSON.parse(chunk);
+      console.log('processing ', data);
       this.router.send(this.id, data[0], data[1], data[2]);
       this.buffer = this.buffer.substring(chunk.length + 1);
     }

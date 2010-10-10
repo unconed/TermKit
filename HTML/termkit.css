@@ -10,10 +10,6 @@ body {
   height: 100%;
 }
 
-#debug {
-  color: #555;
-}
-
 #terminal {
   background: #000;
   min-height: 100%;
@@ -26,6 +22,24 @@ body {
   height: 24px;
   margin: 10px;
   background: #000 url('../Images/loading-black.gif');
+}
+
+/************/
+
+.termkitOutputView {
+  font-family: "BitStream Vera Sans Mono";
+  font-size: 70%;
+}
+
+.termkitOutputView .isolate {
+  overflow: hidden;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  
+  min-height: 1em;
+
+  background: #333;
 }
 
 /************/
@@ -71,6 +85,7 @@ body {
 
 .termkitCommandView .command > span.sigil-ok {
   color: #9f7;
+  text-shadow: 0 0 5px rgba(0, 255, 0, 1), 0 0 10px rgba(0, 255, 0, 1), 0 0 20px rgba(0, 255, 0, 1);
 }
 
 .termkitCommandView .command > span.sigil-warning {
@@ -79,6 +94,7 @@ body {
 
 .termkitCommandView .command > span.sigil-error {
   color: #f77;
+  text-shadow: 0 0 5px rgba(255, 0 , 0, 1), 0 0 10px rgba(255, 0 , 0, 1), 0 0 20px rgba(255, 0 , 0, 1);
 }
 
 .termkitCommandView .command .termkitProgressIndicator {
@@ -264,7 +280,7 @@ body {
 }
 
 .termkitTokenField > span.token-plain {
-  padding: .5em .5em .3em;
+  padding: .45em .5em .35em;
   -webkit-border-radius: .25em;
   margin: 0 2px 0 0;
   -webkit-box-shadow: 0px -1px 1px rgba(192,192,192,.6);
@@ -274,7 +290,7 @@ body {
 }
 
 .termkitTokenField > span.token-quoted {
-  padding: .5em .75em .3em;
+  padding: .45em .75em .35em;
   -webkit-border-radius: .25em;
   margin: 0 3px 0 2px;
   -webkit-box-shadow: 0px -1px 1px rgba(160,180,192,1);

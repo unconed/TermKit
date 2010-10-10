@@ -58,8 +58,6 @@ tf.caret.prototype = {
     // Ensure caret is cleanly removed from its existing position.
     this.remove();
 
-    this.tokenList.debug();
-  
     // Examine target token.
     this.selection = selection;
     var token = selection.anchor.token;
@@ -96,7 +94,7 @@ tf.caret.prototype = {
   },
   
   remove: function () {
-    console.log("remove ", this.token);
+
     // Guard against recursive calls due to e.g. triggering onblur when detaching caret from DOM.
     if (!this.token || !this.token.locked) return;
 

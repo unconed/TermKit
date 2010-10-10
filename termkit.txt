@@ -99,17 +99,21 @@ Back-end:
 2) Remote NodeKit SSH: Daemon is running, use ssh to set up tunnel between local rand port # and remote 2222. connect local websocket to tunnel.
 3) Remote NodeKit WSS: Daemon is running, use WSS to connect directly, must authenticate? don't want to replicate OpenSSH, but rudimentary auth could be useful.
 
++++ Problems with UNIX
 
-DNODE versus custom protocol.
+Take the average unix command. How many arguments/switches actually affect the program's behaviour, rather than simply how it formats / sorts its output? Pathological example: ls.
 
-depends on needs of command-implementers.
 
- * execute method, preferably by dynamic name lookup (messaging)
- * return values asynchronously to affect the UI:
-   - report progress (download, copy, grep, ...)
-   - append data to view (listing, query table)
-   - 
- * consistent command return status for indicator / logging / processing / triggers
++++ Protocol considerations
+
+
+The output of a termkit command is split into data and view. The data is the raw information that is piped from one process to the next. 
+
+The view is a stream of dom-like objects and operators on them.
+
+There is an inherent assymmetry between view and 
+
+
 
 +++ Command architecture
 
@@ -125,6 +129,27 @@ problem: if front-end is agnostic, then how to make commands smarter?
  content-type: unix/pipe
                application/jsonstream
  ...
+ 
+ 
+ [ Front-End ]   ----->     [  Back-end ]
+ [  WebKit   ]   websocket  [  Node.js  ]
+                                 |   
+                                 |
+                                 v *
+                            [   Shell   ]
+                            [ Worker.js ]
+ 
+ 
+ Worker invokes process chain:
+ 
+                | events/sigs?         ^ view stream: commandkit objects
+  stdin         v                      |                stdout
+  ---->     [   proc1: args = command?   ]  ---->
+ 
+ outgoing view stream is tagged with:
+   * originating command = sequenceID (implied through invoke() / exit())
+   * view ID per process
+ 
  
 +++ Data vs UI glue
 
@@ -175,6 +200,13 @@ e.g.
  
 +++ UI stream structure
 
+viewstream:
+
+sessId: set
+seq: set, callback
+method: view.*
+
+
  > shell-specific interaction rules are client-side.
  > rich widget lib for display, extensible
  > widgets are streamed to client like termkit-ML. objects are smartly typed and have callback commands defined for them. callbacks can be stateful or stateless. though stateful is only intended to be used for interactive commands.
@@ -194,15 +226,61 @@ e.g.
  arrays of objects
  objects can have children
  
+ main structure = presentation
+ secondary structure = data
+ 
+ e.g. view boxes divided
+ create widgets
+ insert into widgets, <values>
+
+ view objects:
+
+ {
+   type: 'raw',
+   value: '<p>Hello world</p>',
+ }
+
  {
    id: 'table',
    type: 'table',
    children: [
-    { type: 'row' }
+    { type: 'row', children: "text label" },
+    { type: 'row', children: { .. other objs ... } },
    ]
  }
 
+ {
+   id: 'directory',
+   type: 'blocklist',
+   children: [
+    { type: 'file', path: '/foo/bar', attribs: { ... } },
+    { type: 'task', value: {.....} },
+   ]
+ }
+ 
+ view.insert({
+   id: 'download',
+   type: 'task',
+   progress: '50%',
+   label: "downloading wtf.gz",
+ });
+ view.update({
+   id: 'download',
+   progress: '60%',
+ });
+ 
+ -> instead of "id = ..", use jquery/css-esque selector?
+ 
+ values are either literal string, or object type
+ 
+ ['shell.run', 'ls']
+ {
+   id: 'listing',
+   type: 'table'
+ }
+
 +++ --
+
 
 session.open.shell
 session.open.mysql
@@ -213,30 +291,9 @@ command.run
 direct embedding in websocket frame:
 
 stream := 
-[type, sequence, data, sessionId]
+[sessionId, sequence, method, args]
  -> not just a straight up dict because i don't want to hog the 'type' or 'sequence' keys in {data}.
 
->
-['session.open.mysql', 1, {
-  ''
-}],
-
-<
-['return', 1, {
-  sessionId: 1,
-  status: 'ok',
-  code: 0,
-}],
-
->
-['session.close', 2, {
-  sessionId: 1,
-}],
-<
-['return', 2, {
-  status: 'ok',
-  code: 0,
-}],
 >
 ['path.autocomplete', 5, {
   sessionId: 1,
@@ -246,7 +303,6 @@ stream :=
 ['command.run', 3, { // shell session
   'session': 1,
   'id': 1,
-  'context': '/path',
   'commands': [
     ['svn', 'up'],
   ],
@@ -260,14 +316,13 @@ stream :=
   tasks: []
 }]
 
++++ -- UI guidelines
 
-jsonStream.send('session.mysql', {
-  'username': 'foobar',
-}, function (msg) {
-  
-});
+* Never ask Yes/No questions. Always use action verbs ('Delete', 'Don't Delete', 'Save and Quit', etc.)
+* Provide different levels of detail as different view models to toggle between.
 
 
++++ --
 references:
 
 textmate html output features
@@ -294,3 +349,4 @@ more ideas:
 * unified progress indicator during command
 * history access
 * don't execute if invalid command
+

@@ -23,24 +23,3 @@ var socket = io.listen(server);
 socket.on('connection', function (client) {
   var p = new router.router(server, client);
 });
-
-/*
-server.addListener("connection", function (connection) {
-  // Version check
-  var version = connection.headers['x-termkit'];
-  if (version && (parseInt(version) <= termkit.version)) {
-    // Set up processor.
-    var p = new processor(server, connection);
-    // Accept stream
-    connection.addListener("message", function (data) {
-      p.message(data);
-    });
-  }
-  else {
-    connection.close();
-  }
-});
-
-server.listen(2222);
-
-*/

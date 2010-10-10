@@ -6,21 +6,6 @@ var termkit = {};
   
 $(document).ready(function () {
 
-  function mark(object, id) {
-    $.each(object, function (index) {
-      if ($.isFunction(this)) {
-        var old = object[index];
-        object[index] = function () {
-          async($('#debug').append('<div>'+ id +'.' + index +' - ' +' '+ arguments));
-          return old.apply(this, arguments);
-        };
-      }
-    });
-  }
-
-//  mark(termkit.tokenField.token, 'tokenField.token');
-//  mark(termkit.tokenField.token.prototype, 'tokenField.token');
-
   var client = new termkit.client();
   client.onConnect = function () {
     var shell = new termkit.client.shell(client, {}, function () {
@@ -29,7 +14,6 @@ $(document).ready(function () {
       view.newCommand();
     });    
   };
-
 
 });
 
@@ -67,3 +51,6 @@ function bug(object, type) {
   });
 }
 
+function oneOrMany(object) {
+  return (object.constructor == [].constructor) ? object : [ object ];
+}

@@ -73,7 +73,7 @@ tf.autocomplete.prototype = {
     // Get list of suggestions.
     var self = this;
     if (this.handler) {
-      this.handler.call(this, tl.indexOf(token), event, tl.tokens, function (items) {
+      this.handler.call(this, tl.indexOf(token), event, tl.contents, function (items) {
         self.items = items || [];
 
         // Insert lines into box.

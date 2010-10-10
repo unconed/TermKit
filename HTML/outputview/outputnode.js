@@ -11,15 +11,13 @@ ov.outputNode = function (properties) {
   for (i in properties) this[i] = properties[i];
 
   this.$element = this.$markup();
+  this.$children = $([]);
   
   this.children = [];
   this.parent = null;
   this.root = this;
   
-  this.contents = null;
   this.index = {};
-  
-  this.updateElement();
 };
 
 ov.outputNode.prototype = {
@@ -31,6 +29,11 @@ ov.outputNode.prototype = {
     return $outputNode;
   },
   
+  // Update markup to match.
+  updateElement: function () {
+    this.$element.data('controller', this);
+  },
+  
   // Pass-through length of array
   get length() {
     return this.children.length;
@@ -38,22 +41,21 @@ ov.outputNode.prototype = {
 
   // Update children to match.
   updateChildren: function () {
-    // Detach children.
-    var $e = this.$element;
-    $e.children().detach();
+    var self = this;
 
-    // Re-attach based on contents array.
+    // Detach children.
+    this.$children.detach();
+    this.$children = $([]);
+    
+    // Re-attach based on children array.
     $.each(this.children, function () {
-      $e.append(this.$element);
+      self.$children = self.$children.add(this.$element);
+      self.$element.append(this.$element);
+      
+      this.updateElement();
     });
   },
 
-  // Update markup to match.
-  updateElement: function () {
-    this.$element.text(this.contents);
-    this.$element.data('controller', this);
-  },
-  
   // Adopt node index.
   mergeIndex: function (node) {
     for (id in node.index) {
@@ -114,14 +116,14 @@ ov.outputNode.prototype = {
     }
     var args = [ index, 0 ];
 
-    // Add elements.
-    [].splice.apply(this.children, args);
-
     // Allow both single object and array.
     $.each(oneOrMany(collection), function () {
       self.adopt(this);
       args.push(this);
     });
+
+    // Add elements.
+    [].splice.apply(this.children, args);
   },
 
   // Remove node at index.

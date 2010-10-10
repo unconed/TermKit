@@ -22,7 +22,7 @@ tc.shell.prototype = {
   // Hook into the given set of handlers.
   hook: function (handlers) {
     var self = this;
-    handlers = handlers || [];
+    handlers = handlers || {};
     handlers['shell'] = function (m,a) { self.shellHandler(m, a); };
     return handlers;
   },

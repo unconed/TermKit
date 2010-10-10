@@ -7,7 +7,8 @@ var ov = termkit.outputView = function () {
   var self = this;
 
   this.$element = this.$markup();
-
+  
+  this.factory = new ov.outputFactory();
 };
 
 ov.prototype = {
@@ -25,24 +26,27 @@ ov.prototype = {
 
   // Update the element's markup in response to internal changes.
   updateElement: function () {
-    
+    this.root.updateChildren();
   },
   
   // Hook into the given set of handlers.
   hook: function (handlers) {
     var self = this;
-    handlers = handlers || [];
+    handlers = handlers || {};
     handlers['view'] = function (m,a) { self.viewHandler(m, a); };
     return handlers;
   },
   
   // Handler for view.* invocations.
   viewHandler: function (method, args) {
+    var self = this;
+
     switch (method) {
       case 'view.add':
         var target = this.root.getNode(args.target);
-        var nodes = oneOrMany(args.contents).map(function (node) { return new ov.outputNode(node); });
+        var nodes = oneOrMany(args.objects).map(function (node) { return self.factory.construct(node); });
         target.add(nodes, args.offset);
+        this.updateElement();
         break;
 
       case 'view.remove':
@@ -53,6 +57,7 @@ ov.prototype = {
         else if (target.parent) {
           target.parent.remove(target);
         }
+        this.updateElement();
         break;
 
       case 'view.replace':

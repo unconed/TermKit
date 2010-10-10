@@ -65,8 +65,8 @@ Prototype:
   [X] set up client handling
   [X] establish controller for stream
   [X] invoke new session
-+  [ ] view parser/tree on client side
-+  [ ] basic message output
+  [X] basic message output
+  [X] view parser/tree on client side
   [ ] list of files
 
 4) NodeKit daemon
@@ -78,7 +78,7 @@ Prototype:
     [X] refactor processor.js handler/return handling
     [X] spawn process
     [X] stream in/out json packets
-+    [ ] view proxy object on worker side
+    [X] view proxy object on worker side
     [.] make ls / cd commands
     [ ] define datastream format
     [ ] reroute stderr as viewstream. arrange pipes for command/view

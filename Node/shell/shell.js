@@ -50,7 +50,7 @@ exports.shell = function (sequence, args, exit, router) {
 
 exports.shell.prototype = {
   run: function (sequence, args) {
-    this.send([sequence, 'run', args ]);
+    this.send([ sequence, 'run', args ]);
   },
   
   close: function () {
@@ -67,7 +67,7 @@ exports.shell.prototype = {
     while (this.buffer.indexOf("\u0000") >= 0) {
       var chunk = this.buffer.split("\u0000").shift();
       var data = JSON.parse(chunk);
-      console.log('processing ', data);
+
       this.router.send(this.id, data[0], data[1], data[2]);
       this.buffer = this.buffer.substring(chunk.length + 1);
     }

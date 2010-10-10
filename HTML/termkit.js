@@ -52,5 +52,5 @@ function bug(object, type) {
 }
 
 function oneOrMany(object) {
-  return (object.constructor == [].constructor) ? object : [ object ];
+  return (typeof object == 'object' && object.constructor == [].constructor) ? object : [ object ];
 }

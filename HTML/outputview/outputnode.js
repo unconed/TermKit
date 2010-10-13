@@ -11,7 +11,7 @@ ov.outputNode = function (properties) {
   for (i in properties) this[i] = properties[i];
 
   this.$element = this.$markup();
-  this.$children = $([]);
+  this.$children = this.$element.find('.children');
   
   this.children = [];
   this.parent = null;
@@ -24,7 +24,7 @@ ov.outputNode.prototype = {
 
   // Return active markup for this widget.
   $markup: function () {
-    var $outputNode = $('<div class="termkitOutputNode"></div>').data('controller', this);
+    var $outputNode = $('<div class="termkitOutputNode"><div class="children"></div></div>').data('controller', this);
     var self = this;
     return $outputNode;
   },
@@ -37,23 +37,6 @@ ov.outputNode.prototype = {
   // Pass-through length of array
   get length() {
     return this.children.length;
-  },
-
-  // Update children to match.
-  updateChildren: function () {
-    var self = this;
-
-    // Detach children.
-    this.$children.detach();
-    this.$children = $([]);
-    
-    // Re-attach based on children array.
-    $.each(this.children, function () {
-      self.$children = self.$children.add(this.$element);
-      self.$element.append(this.$element);
-      
-      this.updateElement();
-    });
   },
 
   // Adopt node index.
@@ -89,16 +72,14 @@ ov.outputNode.prototype = {
     node.root = this.root;
     node.parent = this;
     
-    node.parent.updateChildren();
-    
     this.root.indexNode(node);
     this.root.mergeIndex(node);
+
+    node.updateElement();
   },
 
   // Detach node.
   detach: function (node) {
-    node.$element.detach();
-    
     node.root = node;
     node.parent = null;
     
@@ -121,8 +102,20 @@ ov.outputNode.prototype = {
       self.adopt(this);
     });
 
+    // Insert elements.
+    collection = collection.map(function (item) {
+      return item.$element[0];
+    });
+    //if (index >= this.children.length) {
+      this.$children.append(collection);
+//    }
+////    else {
+//      this.$children.children()[index].before($(collection));
+//    }
+
     // Add elements.
     [].splice.apply(this.children, args);
+
   },
 
   // Remove node at index.
@@ -135,6 +128,9 @@ ov.outputNode.prototype = {
       // Remove from child list.
       this.children.splice(index, 0);
       self.detach(node);
+
+      // Remove element.
+      node.$element.detach();
     }
   },
 

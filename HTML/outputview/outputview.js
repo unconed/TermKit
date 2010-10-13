@@ -19,14 +19,24 @@ ov.prototype = {
     var self = this;
     
     this.root = new ov.outputNode();
-    $outputView.find('> div.isolate').append(this.root.$element);
+    $outputView.find('.isolate').append(this.root.$element);
 
     return $outputView;
   },
 
   // Update the element's markup in response to internal changes.
   updateElement: function () {
-    this.root.updateChildren();
+
+    // Ensure the caret is in view.
+      if (this.$element) {
+        var offset = this.$element.offset();
+        var bottom = offset.top + this.$element.height() + 32 + 10;
+        var edge = $('body').scrollTop() + $('html').height();
+        if (bottom > edge) {
+          $('body').scrollTop($('body').scrollTop() + (bottom - edge));
+        }
+      }
+
   },
   
   // Hook into the given set of handlers.

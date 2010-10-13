@@ -54,3 +54,19 @@ function bug(object, type) {
 function oneOrMany(object) {
   return (typeof object == 'object' && object.constructor == [].constructor) ? object : [ object ];
 }
+
+///////////////////////////////////////////////////////////////////////////////
+
+function formatSize(bytes) {
+  var suffixes = ['B', 'KB', 'MB', 'GB', 'TB'];
+  var limit = 1, cap = 1;
+  for (i in suffixes) {
+    limit *= 1000;
+    if (bytes > limit) {
+      cap = limit;
+    }
+    else {
+      return Math.round(bytes / cap * 10) / 10 + ' ' + suffixes[i];
+    }
+  }
+}

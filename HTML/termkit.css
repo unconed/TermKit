@@ -6,7 +6,6 @@ body {
   color: #fff;
   padding: 0;
   margin: 0;
-  font-size: 100%;
   height: 100%;
 }
 
@@ -27,15 +26,12 @@ body {
 /************/
 
 .termkitOutputView {
-  font-family: "BitStream Vera Sans Mono";
-  font-size: 70%;
 }
 
 .termkitOutputView .isolate {
   overflow: hidden;
   width: 100%;
   margin: 0;
-  padding: 0;
 }
 
 .termkitOutputView .itemList {
@@ -47,34 +43,28 @@ body {
 }
 
 .termkitOutputView .widgetFile {
-  padding: 1em;
+  margin: 1em;
   clear: left;
   overflow: hidden;
 }
 
 .termkitOutputView .widgetFile .icon {
   float: left;
-  width: 48px;
-  height: 48px;
+  width: 32px;
+  height: 32px;
   background: #333;
 }
 
 .termkitOutputView .widgetFile .name, .termkitOutputView .widgetFile .meta {
-  padding-left: 64px;
-  color: #777;
+  padding-left: 42px;
 }
 
 .termkitOutputView .widgetFile .name {
-  font-weight: bold;
-  color: #fff;
 }
 
 /************/
 
 .termkitCommandView {
-  font-family: "BitStream Vera Sans Mono";
-  font-size: 70%;
-  /*  letter-spacing: 1px;*/
   padding-bottom: 32px;
 }
 

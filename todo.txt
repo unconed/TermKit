@@ -44,6 +44,8 @@ Prototype:
   [X] context bar by command
   [X] anchored scrolling
   [X] host output
+  [X] make outputnode tree changes reflect in DOM transparently
++  [ ] fix view.add mid-node insertion
   [ ] auto-expand to fill view
   [ ] command history
   [ ] alt-up/down to change focus

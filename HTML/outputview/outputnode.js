@@ -7,8 +7,7 @@ var ov = termkit.outputView;
  */
 ov.outputNode = function (properties) {
 
-  properties = properties || {};
-  for (i in properties) this[i] = properties[i];
+  this.properties = properties || {};
 
   this.$element = this.$markup();
   this.$children = this.$element.find('.children');

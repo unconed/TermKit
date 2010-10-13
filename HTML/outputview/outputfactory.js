@@ -31,7 +31,7 @@ widgets.raw = function (properties) {
   // Initialize node.
   ov.outputNode.call(this, properties);
   
-  this.$contents = this.$element.find('> div.contents');
+  this.$contents = this.$element.find('.contents');
 };
 
 widgets.raw.prototype = $.extend(new ov.outputNode(), {
@@ -45,7 +45,7 @@ widgets.raw.prototype = $.extend(new ov.outputNode(), {
 
   // Update markup to match.
   updateElement: function () {
-    this.$contents.text(this.contents);
+    this.$contents.text(this.properties.contents);
     this.$element.data('controller', this);
   },
   
@@ -80,8 +80,8 @@ widgets.file.prototype = $.extend(new ov.outputNode(), {
     this.$element.data('controller', this);
 
     this.$icon;
-    this.$name.text(this.name);
-    this.$meta.text(formatSize(this.stats.size));
+    this.$name.text(this.properties.name);
+    this.$meta.text(formatSize(this.properties.stats.size));
   },
   
 });

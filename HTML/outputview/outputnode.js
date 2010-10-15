@@ -8,6 +8,7 @@ var ov = termkit.outputView;
 ov.outputNode = function (properties) {
 
   this.properties = properties || {};
+  this.id = String(this.properties.id || '');
 
   this.$element = this.$markup();
   this.$children = this.$element.find('.children');
@@ -54,14 +55,14 @@ ov.outputNode.prototype = {
   
   // Index node.
   indexNode: function (node) {
-    if (typeof node.id == 'string' && node.id.length > 0) {
+    if (node.id.length > 0) {
       this.index[node.id] = node;
     }
   },
 
   // Unindex node.
   unindexNode: function (node) {
-    if (typeof node.id == 'string' && node.id.length > 0 && this.index[node.id]) {
+    if (node.id.length > 0 && this.index[node.id]) {
       delete this.index[node.id];
     }
   },
@@ -105,12 +106,12 @@ ov.outputNode.prototype = {
     collection = collection.map(function (item) {
       return item.$element[0];
     });
-    //if (index >= this.children.length) {
+    if (index >= this.children.length) {
       this.$children.append(collection);
-//    }
-////    else {
-//      this.$children.children()[index].before($(collection));
-//    }
+    }
+    else {
+      this.$children.children()[index].before($(collection));
+    }
 
     // Add elements.
     [].splice.apply(this.children, args);

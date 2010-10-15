@@ -35,11 +35,11 @@ body {
 }
 
 .termkitOutputView .itemList {
-  padding: 1em;
+  margin: 1em;
 }
 
 .termkitOutputView .widgetRaw {
-  padding: 1em;
+  margin: 1em;
 }
 
 .termkitOutputView .widgetFile {
@@ -65,7 +65,7 @@ body {
 /************/
 
 .termkitCommandView {
-  padding-bottom: 32px;
+  padding-bottom: 34px;
 }
 
 .termkitCommandView .context {
@@ -96,7 +96,7 @@ body {
 .termkitCommandView .command > span.sigil {
   position: absolute;
   left: 15px;
-  top: 15px;
+  top: 12px;
   color: #ccc;
 }
 
@@ -120,17 +120,19 @@ body {
   top: -1px;
 }
 
-.termkitCommandView .command.command-open .termkitTokenField {
-  background: #222;
+.termkitCommandView .command .termkitTokenField {
+  background: #000 -webkit-gradient(linear, left top, left bottom, from(#333), color-stop(0.1, #000));
+}
+
+.termkitCommandView .command.command-open {
+  background: #000 -webkit-gradient(linear, left 80%, left bottom, from(#000), color-stop(0.7, #111), to(#222));
 }
 
 /************/
 
 .termkitTokenField {
-  border: dotted #555;
-  border-width: 1px 0;
   line-height: 22px;
-  padding: 10px 10px 10px 35px;
+  padding: 8px 10px 4px 35px;
   margin-top: -1px;
   
   cursor: text;

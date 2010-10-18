@@ -36,6 +36,9 @@ body {
 
 .termkitOutputView .itemList {
   margin: 1em;
+  -webkit-column-width: 200px;
+  max-height: 400px;
+  overflow-x: auto;
 }
 
 .termkitOutputView .widgetRaw {
@@ -76,13 +79,23 @@ body {
   padding: 10px;
   z-index: 3;
   
-  color: #ccf;
+  color: #ddf;
   background: #444 -webkit-gradient(linear, left top, left bottom, from(#346), to(#124));
   -webkit-box-shadow: 0 0px 10px #000;
 }
 
 .termkitCommandView .context .path {
   float: left;
+}
+
+.termkitCommandView .context .path span {
+  padding-right: .5em;
+}
+
+.termkitCommandView .context .path span::before {
+  padding-right: .5em;
+  content: '/';
+  color: #99c;
 }
 
 .termkitCommandView .context .user {

@@ -14,6 +14,8 @@ Prototype:
   [X] autocomplete popup / edit mode
   [X] clickable mouse position
   [X] fix event bindings lost when clicking inside textfield
+  [X] Unify tokenlist and commandlist into collection class, derive from.
+  [ ] mouseclick caret is off by ~8px, but only in first token 
   [ ] fix backspacing around edges of tokens
   [ ] caret positions around allowempty tokens and ^/$
   [ ] add icon/spinner support to tokens
@@ -21,7 +23,6 @@ Prototype:
   [ ] fix wrapping of tokens
   [ ] caret.remove() shouldn't need to touch tokenList when pruning empties -> let triggers do it
     
-  [?] Unify tokenlist and commandlist into collection class, derive from.
   [?] write external bindings for tokenfield
     => tokenfield abstracts, interface for matching should be only multiregexp + callback
     . on change -> process tokens, apply multiregexps
@@ -45,7 +46,7 @@ Prototype:
   [X] anchored scrolling
   [X] host output
   [X] make outputnode tree changes reflect in DOM transparently
-+  [ ] fix view.add mid-node insertion
+  [X] fix view.add mid-node insertion
   [ ] auto-expand to fill view
   [ ] command history
   [ ] alt-up/down to change focus
@@ -57,8 +58,10 @@ Prototype:
   [X] triggers system, unify with token field triggers a bit?
   [X] autocomplete a string / command
   [X] autocomplete empties
+  [ ] autocomplete commands
   [ ] autocomplete filesystem
   [ ] autocomplete dir / file distinction
+  [ ] badge tokens with one/many/command icons
 
 3) Smart output with selectable things
   [X] research FastCGI socket protocol
@@ -69,7 +72,13 @@ Prototype:
   [X] invoke new session
   [X] basic message output
   [X] view parser/tree on client side
-  [ ] list of files
+  [X] list of files
+  [X] file icons
+  [ ] fix order/inserting of table rows asynchronously?
+  [ ] make file icons cacheable in webkit (default: always, preview: session)
+  [ ] column layout
+  [ ] intercontrol focus / caret, set up global manager
+  [ ] tab, switch between widgets -> iterate live.
 
 4) NodeKit daemon
   [X] socket.io listener
@@ -89,4 +98,8 @@ Prototype:
 
 5) Command Suite
 [ ] make a script for git (arguments, file/dir, ...)
+[ ] basic top infographs + live update
+[ ] robust unix basics
 [ ] mysql console
+[ ] ssh support
+

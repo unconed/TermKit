@@ -9,6 +9,8 @@
 #import <Cocoa/Cocoa.h>
 #import <WebKit/WebKit.h>
 
+#import "TermKitIconLoadDelegate.h"
+
 @interface TermKitWebView : WebView {
 
 }

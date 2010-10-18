@@ -12,7 +12,10 @@
 @implementation TermKitWebView
 
 - (void)awakeFromNib {
-    
+    [TermKitIconProtocol registerProtocol];
+
+    id delegate = [[TermKitIconLoadDelegate alloc] init];
+    [self setResourceLoadDelegate:delegate];
 }
 
 @end

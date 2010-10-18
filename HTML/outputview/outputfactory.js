@@ -77,9 +77,30 @@ widgets.file.prototype = $.extend(new ov.outputNode(), {
 
   // Update markup to match.
   updateElement: function () {
+    var self = this;
+
     this.$element.data('controller', this);
 
-    this.$icon;
+    // Set default icon.
+    var extension = (this.properties.stats.mode & 0x4000) ? '/' : this.properties.name.split('.').pop(),
+        defaultUrl = 'termkit-icon-default:///' + encodeURIComponent(extension);
+    this.$icon.css({
+      background: 'url('+ defaultUrl +')',
+      backgroundSize: '32px 32px',
+    });
+    
+    // Set file-specific icon.
+    var image = new Image(),
+        path = this.properties.path + '/' + this.properties.name,
+        previewUrl = 'termkit-icon-preview:///' + encodeURIComponent(path);
+    image.onload = function () {
+      self.$icon.css({
+        background: 'url('+ previewUrl +')',
+      });
+    };
+    image.src = previewUrl;
+    
+    // Set text labels.
     this.$name.text(this.properties.name);
     this.$meta.text(formatSize(this.properties.stats.size));
   },

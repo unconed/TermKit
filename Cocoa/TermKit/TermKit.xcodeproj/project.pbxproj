@@ -15,9 +15,14 @@
 		B090FFFC11E1CE7800AC604B /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B090FFFB11E1CE7800AC604B /* WebKit.framework */; };
 		B0965B7D11DB375E00350D83 /* Terminal.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0965B7B11DB375E00350D83 /* Terminal.xib */; };
 		B0965B8211DB380600350D83 /* TermKitWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = B0965B8111DB380600350D83 /* TermKitWebView.m */; };
+		B0AB0F9112437C960076C132 /* Images in Resources */ = {isa = PBXBuildFile; fileRef = B0AB0F8812437C960076C132 /* Images */; };
 		B0B02B2711E2CDA4004C960F /* TermKitTerminalController.m in Sources */ = {isa = PBXBuildFile; fileRef = B0B02B2611E2CDA4004C960F /* TermKitTerminalController.m */; };
 		B0B02B7111E31B56004C960F /* HTML in Resources */ = {isa = PBXBuildFile; fileRef = B0B02B5D11E31B55004C960F /* HTML */; };
 		B0B1899711E7C2A900C62CEC /* TermKit.icns in Resources */ = {isa = PBXBuildFile; fileRef = B0B1899611E7C2A900C62CEC /* TermKit.icns */; };
+		B0CAB03B12685FE50085604B /* NSImage+QuickLook.m in Sources */ = {isa = PBXBuildFile; fileRef = B0CAB03A12685FE50085604B /* NSImage+QuickLook.m */; };
+		B0CAB03F12686AF70085604B /* TermKitIconProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = B0CAB03E12686AF70085604B /* TermKitIconProtocol.m */; };
+		B0CAB04612686D220085604B /* TermKitIconLoadDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B0CAB04512686D220085604B /* TermKitIconLoadDelegate.m */; };
+		B0CAB063126876B80085604B /* QuickLook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0CAB062126876B80085604B /* QuickLook.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,10 +42,18 @@
 		B0965B7C11DB375E00350D83 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/Terminal.xib; sourceTree = "<group>"; };
 		B0965B8011DB380600350D83 /* TermKitWebView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TermKitWebView.h; sourceTree = "<group>"; };
 		B0965B8111DB380600350D83 /* TermKitWebView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TermKitWebView.m; sourceTree = "<group>"; };
+		B0AB0F8812437C960076C132 /* Images */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Images; path = ../../Images; sourceTree = SOURCE_ROOT; };
 		B0B02B2511E2CDA4004C960F /* TermKitTerminalController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TermKitTerminalController.h; sourceTree = "<group>"; };
 		B0B02B2611E2CDA4004C960F /* TermKitTerminalController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TermKitTerminalController.m; sourceTree = "<group>"; };
 		B0B02B5D11E31B55004C960F /* HTML */ = {isa = PBXFileReference; lastKnownFileType = folder; name = HTML; path = ../../HTML; sourceTree = SOURCE_ROOT; };
 		B0B1899611E7C2A900C62CEC /* TermKit.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = TermKit.icns; sourceTree = "<group>"; };
+		B0CAB03912685FE50085604B /* NSImage+QuickLook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSImage+QuickLook.h"; path = "NSImageQuickLook/NSImage+QuickLook.h"; sourceTree = "<group>"; };
+		B0CAB03A12685FE50085604B /* NSImage+QuickLook.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSImage+QuickLook.m"; path = "NSImageQuickLook/NSImage+QuickLook.m"; sourceTree = "<group>"; };
+		B0CAB03D12686AF70085604B /* TermKitIconProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TermKitIconProtocol.h; sourceTree = "<group>"; };
+		B0CAB03E12686AF70085604B /* TermKitIconProtocol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TermKitIconProtocol.m; sourceTree = "<group>"; };
+		B0CAB04412686D220085604B /* TermKitIconLoadDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TermKitIconLoadDelegate.h; sourceTree = "<group>"; };
+		B0CAB04512686D220085604B /* TermKitIconLoadDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TermKitIconLoadDelegate.m; sourceTree = "<group>"; };
+		B0CAB062126876B80085604B /* QuickLook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickLook.framework; path = /System/Library/Frameworks/QuickLook.framework; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -50,6 +63,7 @@
 			files = (
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
 				B090FFFC11E1CE7800AC604B /* WebKit.framework in Frameworks */,
+				B0CAB063126876B80085604B /* QuickLook.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -59,12 +73,18 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				B0CAB03912685FE50085604B /* NSImage+QuickLook.h */,
+				B0CAB03A12685FE50085604B /* NSImage+QuickLook.m */,
 				256AC3D80F4B6AC300CF3369 /* TermKitAppDelegate.h */,
 				256AC3D90F4B6AC300CF3369 /* TermKitAppDelegate.m */,
 				B0B02B2511E2CDA4004C960F /* TermKitTerminalController.h */,
 				B0B02B2611E2CDA4004C960F /* TermKitTerminalController.m */,
 				B0965B8011DB380600350D83 /* TermKitWebView.h */,
 				B0965B8111DB380600350D83 /* TermKitWebView.m */,
+				B0CAB03D12686AF70085604B /* TermKitIconProtocol.h */,
+				B0CAB03E12686AF70085604B /* TermKitIconProtocol.m */,
+				B0CAB04412686D220085604B /* TermKitIconLoadDelegate.h */,
+				B0CAB04512686D220085604B /* TermKitIconLoadDelegate.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -72,6 +92,7 @@
 		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B0CAB062126876B80085604B /* QuickLook.framework */,
 				B090FFFB11E1CE7800AC604B /* WebKit.framework */,
 				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
 			);
@@ -120,6 +141,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				B0AB0F8812437C960076C132 /* Images */,
 				B0B02B5D11E31B55004C960F /* HTML */,
 				1DDD58140DA1D0A300B32029 /* MainMenu.xib */,
 				B0965B7B11DB375E00350D83 /* Terminal.xib */,
@@ -188,6 +210,7 @@
 				B0965B7D11DB375E00350D83 /* Terminal.xib in Resources */,
 				B0B02B7111E31B56004C960F /* HTML in Resources */,
 				B0B1899711E7C2A900C62CEC /* TermKit.icns in Resources */,
+				B0AB0F9112437C960076C132 /* Images in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -218,6 +241,9 @@
 				256AC3DA0F4B6AC300CF3369 /* TermKitAppDelegate.m in Sources */,
 				B0965B8211DB380600350D83 /* TermKitWebView.m in Sources */,
 				B0B02B2711E2CDA4004C960F /* TermKitTerminalController.m in Sources */,
+				B0CAB03B12685FE50085604B /* NSImage+QuickLook.m in Sources */,
+				B0CAB03F12686AF70085604B /* TermKitIconProtocol.m in Sources */,
+				B0CAB04612686D220085604B /* TermKitIconLoadDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

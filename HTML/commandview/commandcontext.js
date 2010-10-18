@@ -28,7 +28,10 @@ cv.commandContext.prototype = {
   // Update the element's markup in response to internal changes.
   updateElement: function () {
     this.$element.data('controller', this);
-    this.$path.html(escapeText(this.path || ''));
+
+    var path = escapeText(this.path || '').split('/');
+    path.shift();
+    this.$path.html('<span>' + path.join('</span><span>') + '</span>');
     this.$user.html(escapeText(this.user || ''));
   },
   

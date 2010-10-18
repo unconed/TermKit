@@ -1,6 +1,7 @@
 var fs = require('fs'),
     view = require('view/view'),
-    composePath = require('util').composePath;
+    composePath = require('util').composePath,
+    whenDone = require('util').whenDone;
 
 exports.shellCommands = {
 
@@ -20,7 +21,7 @@ exports.shellCommands = {
       process.chdir(path);
     }
     catch (error) {
-      out.print(error);
+      out.print(error.message);
       return exit(true);
     }
 
@@ -39,32 +40,20 @@ exports.shellCommands = {
       items.push(process.cwd());
     }
     else {
-      for (i in tokens) if (i) {
+      for (i in tokens) if (i > 0) {
         items.push(tokens[i]);
       }
     }
-    
-    var units = 0, error = 0;
 
-    // Helper to check exit condition.
-    function track(callback) {
-      units++;
-      return function (a, b) {
-        callback(a, b);
-        if (--units == 0) {
-          exit(error != 0);
-        }
-      };
-    }
+    // Prepare async job tracker.
+    var errors = 0;
+    var queue = whenDone(function () { exit(errors != 0); });
 
     // Process arguments.
     for (var i in items) (function (i, path) {
 
       // Stat the requested files / directories.
-      fs.stat(path, track(function (err, stats) {
-        
-        // Count errors.
-        error += ~~err;
+      fs.stat(path, queue(function (error, stats) {
         
         // Iterate valid directories.
         if (stats && stats.isDirectory()) {
@@ -73,24 +62,32 @@ exports.shellCommands = {
           out.print(view.itemList('files' + i));
 
           // Scan contents of found directories.
-          fs.readdir(path, track(function (err, files) {
-            if (!err) {
+          fs.readdir(path, queue(function (error, files) {
+            if (!error) {
 
               var children = [];
+              files.sort(function (a, b) { return a.toLowerCase() > b.toLowerCase(); });
               for (var j in files) (function (j, child) {
 
                 // Stat each child.
-                fs.stat(composePath(child, path), track(function (err, stats) {
-                  if (!err) {
+                fs.stat(composePath(child, path), queue(function (error, stats) {
+                  if (!error) {
 
                     out.add('files' + i, j, view.file(child, path, stats));
 
                   }
                 })); // fs.stat
               })(j, files[j]); // for j in files
-            } // !err
+            } // !error
           })); // fs.readdir
         } // if isDirectory
+        else {
+          // Count errors.
+          errors += +error;
+
+          // Output message.
+          out.print(error.message);
+        }
       })); // fs.stat
     })(i, items[i]); // for i in items
 

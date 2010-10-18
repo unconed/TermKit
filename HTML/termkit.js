@@ -21,7 +21,7 @@ $(document).ready(function () {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-function async_callback(func) {
+function asyncCallback(func) {
   return function () { 
     var self = this;
     var args = arguments;

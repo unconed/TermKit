@@ -1,9 +1,9 @@
 require.paths.unshift('.');
 require.paths.unshift('shell');
 
-var builtin = require('builtin');
-var returnObject = require('util').returnObject;
-
+var builtin = require('builtin'),
+    returnObject = require('util').returnObject;
+    
 // Set up worker command processor.
 var workerProcessor = function (commandStream, returnStream) {
   // Set up stream callbacks.
@@ -106,6 +106,9 @@ var commandStream = process.openStdin(),
     returnStream = process.stdout;
 
 var p = new workerProcessor(commandStream, returnStream);
+
+
+
 
 /*
 SYNC

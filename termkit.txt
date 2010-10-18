@@ -16,6 +16,7 @@ Addresses following problems:
 Programs / commands
 * Output processor for common cli tools
 * Custom implementation of ls and friends, with support for mimicking classic shell behaviour with a 2.0 twist
+* SQL shell
 
 Cool input scenarios:
 * As you type, the command is visually tokenized and highlighted. tokens can display autocomplete suggestions, icons and indicators inline.
@@ -34,29 +35,25 @@ Good desktop citizen:
 
 +++ -
 
-0.1: UI prototype
+[0.1] UI prototype - DONE
  [X] simulated in safari/webkit.app
  [X] functional input line with tokenization, cursor keys and backspace/delete
  [X] functional autocomplete on tokens
  [X] simulated commands
-  - simulated output with collapsible sections
+ [X] simulated output with collapsible sections
  
-0.2: App prototype
+[0.2] App prototype
  [X] cocoa app
  [X] webkit in single window view (but built to scale to multiple tabs)
  [X] design back-end protocol
  [X] node JS back-end, running separately
  [X] connect socket
- [X] establish session
- [ ] passive command implementation
- [ ] JS module template, integrated both runtimes.
+ [X] run session worker
+ [X] passive command implementation
+ [X] JS module template, integrated both runtimes.
+ [ ] wrap unix executable
+ [ ] interactive output
  
- + python bash anonymizer script to collect usage patterns from local geeks
-   turns filenames.foooo.ext into random.random.ext
-   turns "quoted strings" into "xxxxx xxxxx xxxxx xxx xxxx"
-   turns url://xxxxxxx/xxxxxx
-   turns xxxx@xxxx:xxxx
-
 0.3: Command suite
  - two-tier commands
  - read man pages
@@ -64,6 +61,12 @@ Good desktop citizen:
  - implement tar gzip
  - OS X quicklook integration
  - OS X icon loading
+
+ + bash anonymizer script to collect usage patterns from local geeks
+   turns filenames.foooo.ext into random.random.ext
+   turns "quoted strings" into "xxxxx xxxxx xxxxx xxx xxxx"
+   turns url://xxxxxxx/xxxxxx
+   turns xxxx@xxxx:xxxx
 
 0.4: Modularization
  - split off command processor rules / autocomplete handlers into separable blocks
@@ -76,32 +79,34 @@ Good desktop citizen:
 
 
 Node JS daemon / 'NodeKit'.
-+ Fast enough for server work, concurrency/scaling included
-+ Advanced JavaScript
-+ Cross-platform on unix
-+ Process / io / everything integration
-+ Self-contained binary, can be included in .app
-- separate from UI / front-end
-- no mac-specific APIs or low-level C access
+ + Fast enough for server work, concurrency/scaling included
+ + New JS language features
+ + Cross-platform on unix
+ + Process / io / everything integration
+ + Self-contained binary, can be included in .app
+ - separate from UI / front-end, forced layer of indirection makes it unlike web programming
+ - no mac-specific APIs or low-level C access
 
  => back-end platform, runs locally, can run remotely, or perhaps tunnel its interaction over SSH somehow?
 
 WebKit/Cocoa front-end
-+ Rich, stylable display + jQuery
-+ Advanced JavaScript
-+ Intimate OS X access, Obj-C, bridgeable with JS
+ + Rich, stylable display + jQuery
+ + New JS language features
+ + Intimate OS X access, Obj-C, bridgeable with JS
 
 The split:
-Front-end = display, formatting, interaction. Runs in an (enhanced) browser with a websocket to back-end.
+Front-end = display, formatting, interaction. Always local. Runs in an (enhanced) webview/browser with a websocket to back-end.
 Back-end:
 
 1) Local NodeKit: Start node daemon on startup, connect using direct websocket ws://localhost:2222.
 2) Remote NodeKit SSH: Daemon is running, use ssh to set up tunnel between local rand port # and remote 2222. connect local websocket to tunnel.
 3) Remote NodeKit WSS: Daemon is running, use WSS to connect directly, must authenticate? don't want to replicate OpenSSH, but rudimentary auth could be useful.
+4) Basic remote shell: No nodekit daemon. Only literal commands supported. Enough to execute e.g. "apt-get install termkit".
 
-+++ Problems with UNIX
++++ UNIX commands
 
-Take the average unix command. How many arguments/switches actually affect the program's behaviour, rather than simply how it formats / sorts its output? Pathological example: ls.
+Take the average unix command. How many arguments/switches actually affect the program's behaviour, rather than simply how it formats / sorts its output? Pathological example: ls. Can do the same thing in two dozen subtly different ways.
+
 
 
 +++ Protocol considerations

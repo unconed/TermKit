@@ -24,3 +24,6 @@ How to use:
 
 2) Open HTML/index.html in a WebKit browser.
 
+
+
+Includes “NSImage+QuickLook” code by Matt Gemmell (http://mattgemmell.com/source).

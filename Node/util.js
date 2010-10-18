@@ -36,3 +36,27 @@ exports.composePath = function (name, path) {
   };
   return name;
 };
+
+/**
+ * Generator for decorator to track asynchronous tasks.
+ *
+ * Allows you to execute a complicated dynamic callback hierarchy and call a handler when all tasks have finished.
+ */
+exports.whenDone = function (done) {
+  // Initialize closure variable.
+  var count = 0,
+  // Store additional arguments.
+      done_args = [].slice.call(arguments, 1);
+  return function (callback) {
+    // Register new task.
+    count++;
+    // Decorate callback with exit-checker.
+    return function () {
+      callback.apply(this, arguments);
+      if (--count == 0) {
+        done.apply(this, done_args);
+      }
+    }
+  }
+}
+

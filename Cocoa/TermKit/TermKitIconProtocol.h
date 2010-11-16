@@ -3,7 +3,9 @@
 //  TermKit
 //
 //  Created by Steven Wittens on 15/10/10.
-//  Copyright 2010 __MyCompanyName__. All rights reserved.
+//  Parts copyright 2010 __MyCompanyName__. All rights reserved.
+//  
+//  Based on: SpecialPictureProtocol example by Apple
 //
 
 #import <Cocoa/Cocoa.h>

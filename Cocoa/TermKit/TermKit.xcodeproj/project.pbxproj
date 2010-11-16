@@ -12,6 +12,8 @@
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+		B041C7F6127AA36F0098469B /* Window.xib in Resources */ = {isa = PBXBuildFile; fileRef = B041C7F4127AA36F0098469B /* Window.xib */; };
+		B041C8DD127AA9AD0098469B /* TermKitWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = B041C8DC127AA9AD0098469B /* TermKitWindowController.m */; };
 		B090FFFC11E1CE7800AC604B /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B090FFFB11E1CE7800AC604B /* WebKit.framework */; };
 		B0965B7D11DB375E00350D83 /* Terminal.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0965B7B11DB375E00350D83 /* Terminal.xib */; };
 		B0965B8211DB380600350D83 /* TermKitWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = B0965B8111DB380600350D83 /* TermKitWebView.m */; };
@@ -38,6 +40,9 @@
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		8D1107310486CEB800E47090 /* TermKit-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "TermKit-Info.plist"; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* TermKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TermKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B041C7F5127AA36F0098469B /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/Window.xib; sourceTree = "<group>"; };
+		B041C8DB127AA9AD0098469B /* TermKitWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TermKitWindowController.h; sourceTree = "<group>"; };
+		B041C8DC127AA9AD0098469B /* TermKitWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TermKitWindowController.m; sourceTree = "<group>"; };
 		B090FFFB11E1CE7800AC604B /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = /System/Library/Frameworks/WebKit.framework; sourceTree = "<absolute>"; };
 		B0965B7C11DB375E00350D83 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/Terminal.xib; sourceTree = "<group>"; };
 		B0965B8011DB380600350D83 /* TermKitWebView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TermKitWebView.h; sourceTree = "<group>"; };
@@ -77,14 +82,16 @@
 				B0CAB03A12685FE50085604B /* NSImage+QuickLook.m */,
 				256AC3D80F4B6AC300CF3369 /* TermKitAppDelegate.h */,
 				256AC3D90F4B6AC300CF3369 /* TermKitAppDelegate.m */,
-				B0B02B2511E2CDA4004C960F /* TermKitTerminalController.h */,
-				B0B02B2611E2CDA4004C960F /* TermKitTerminalController.m */,
-				B0965B8011DB380600350D83 /* TermKitWebView.h */,
-				B0965B8111DB380600350D83 /* TermKitWebView.m */,
 				B0CAB03D12686AF70085604B /* TermKitIconProtocol.h */,
 				B0CAB03E12686AF70085604B /* TermKitIconProtocol.m */,
 				B0CAB04412686D220085604B /* TermKitIconLoadDelegate.h */,
 				B0CAB04512686D220085604B /* TermKitIconLoadDelegate.m */,
+				B0B02B2511E2CDA4004C960F /* TermKitTerminalController.h */,
+				B0B02B2611E2CDA4004C960F /* TermKitTerminalController.m */,
+				B0965B8011DB380600350D83 /* TermKitWebView.h */,
+				B0965B8111DB380600350D83 /* TermKitWebView.m */,
+				B041C8DB127AA9AD0098469B /* TermKitWindowController.h */,
+				B041C8DC127AA9AD0098469B /* TermKitWindowController.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -145,6 +152,7 @@
 				B0B02B5D11E31B55004C960F /* HTML */,
 				1DDD58140DA1D0A300B32029 /* MainMenu.xib */,
 				B0965B7B11DB375E00350D83 /* Terminal.xib */,
+				B041C7F4127AA36F0098469B /* Window.xib */,
 				8D1107310486CEB800E47090 /* TermKit-Info.plist */,
 				B0B1899611E7C2A900C62CEC /* TermKit.icns */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
@@ -190,7 +198,14 @@
 			isa = PBXProject;
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "TermKit" */;
 			compatibilityVersion = "Xcode 3.1";
+			developmentRegion = English;
 			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* TermKit */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -208,9 +223,10 @@
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
 				1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */,
 				B0965B7D11DB375E00350D83 /* Terminal.xib in Resources */,
+				B041C7F6127AA36F0098469B /* Window.xib in Resources */,
 				B0B02B7111E31B56004C960F /* HTML in Resources */,
-				B0B1899711E7C2A900C62CEC /* TermKit.icns in Resources */,
 				B0AB0F9112437C960076C132 /* Images in Resources */,
+				B0B1899711E7C2A900C62CEC /* TermKit.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -244,6 +260,7 @@
 				B0CAB03B12685FE50085604B /* NSImage+QuickLook.m in Sources */,
 				B0CAB03F12686AF70085604B /* TermKitIconProtocol.m in Sources */,
 				B0CAB04612686D220085604B /* TermKitIconLoadDelegate.m in Sources */,
+				B041C8DD127AA9AD0098469B /* TermKitWindowController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -264,6 +281,14 @@
 				1DDD58150DA1D0A300B32029 /* English */,
 			);
 			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+		B041C7F4127AA36F0098469B /* Window.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B041C7F5127AA36F0098469B /* English */,
+			);
+			name = Window.xib;
 			sourceTree = "<group>";
 		};
 		B0965B7B11DB375E00350D83 /* Terminal.xib */ = {

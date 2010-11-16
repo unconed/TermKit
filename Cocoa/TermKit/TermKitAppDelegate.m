@@ -7,7 +7,7 @@
 //
 
 #import "TermKitAppDelegate.h"
-#import "TermKitTerminalController.h"
+#import "TermKitWindowController.h"
 
 @implementation TermKitAppDelegate
 
@@ -20,10 +20,9 @@
     [window setTitle:title];
 }
 
-- (IBAction) newTerminal: sender {
-    id viewController = [[TermKitTerminalController alloc] initWithNibName:@"Terminal.nib" bundle:nil];
-    id view = [viewController view];
-    [[window contentView] addSubview:view];
+- (IBAction) newWindow: sender {
+    id windowController = [[TermKitWindowController alloc] initWithWindowNibName:@"Window"]; 
+    [windowController showWindow:self];
 }
 
 @end

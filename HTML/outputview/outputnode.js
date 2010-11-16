@@ -3,7 +3,7 @@
 var ov = termkit.outputView;
 
 /**
- * Manages the list of executed commands.
+ * Represents a piece of output in an output view.
  */
 ov.outputNode = function (properties) {
 

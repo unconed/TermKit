@@ -3,9 +3,11 @@ body {
 }
 
 
-
-.termkitOutputView, .termkitCommandView {
+.termkitCommandView {
   font-family: "BitStream Vera Sans Mono";
+}
+
+.termkitOutputView, .termkitTokenField {
   font-size: 70%;
 }
 

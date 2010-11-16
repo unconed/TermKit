@@ -13,6 +13,7 @@
 }
 
 - (IBAction) newTerminal: sender;
+- (IBAction) newWindow: sender;
 
 @property (assign) IBOutlet NSWindow *window;
 

@@ -3,8 +3,9 @@
 //  TermKit
 //
 //  Created by Steven Wittens on 15/10/10.
-//  Copyright 2010 __MyCompanyName__. All rights reserved.
-//
+//  Parts copyright 2010 __MyCompanyName__. All rights reserved.
+//  
+//  Based on: SpecialPictureProtocol example by Apple
 
 #import <Foundation/NSError.h>
 
@@ -109,8 +110,7 @@
 }
 
 /* our main loading routine.  This is where we do most of our processing
- for our class.  In this case, all we are doing is taking the path part
- of the url and rendering it in 36 point system font as a jpeg file.  The
+ for our class.  The
  interesting part is that we create the jpeg entirely in memory and return
  it back for rendering in the webView.  */
 - (void)startLoading {
@@ -129,9 +129,6 @@
             [theCaller callbackFromIconRequest: request];
         }
     }
-    /* Since the scheme is free to encode the url in any way it chooses, here
-    we are using the url text to identify files names in our resources folder
-    that we would like to display. */
     
     /* get the path component from the url */
     NSString* iconPath = [[[[request URL] path] substringFromIndex:1] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
@@ -236,7 +233,7 @@
 
 @implementation NSImage (TIFFConversionUtils)
 
-/* returns jpeg file interchange format encoded data for an NSImage regardless of the
+/* returns tiff format encoded data for an NSImage regardless of the
  original NSImage encoding format.  compressionValue is between 0 and 1.  
  values 0.6 thru 0.7 are fine for most purposes.  */
 - (NSData *)TIFFData {

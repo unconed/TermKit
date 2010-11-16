@@ -74,6 +74,8 @@ Prototype:
   [X] view parser/tree on client side
   [X] list of files
   [X] file icons
+  [ ] auto-layout mechanism w/ padded max-height on view
+  [ ] auto-layout column width (preferred size from widgets + widget variant/style)
   [ ] fix order/inserting of table rows asynchronously?
   [ ] make file icons cacheable in webkit (default: always, preview: session)
   [ ] column layout
@@ -91,10 +93,12 @@ Prototype:
     [X] stream in/out json packets
     [X] view proxy object on worker side
     [X] make ls / cd commands
++    [ ] reroute stderr as viewstream. arrange pipes for command/view
+      [ ] hackability of core node, custom process.js-alt binding?
+    [ ] Invoke a new process, capture output
     [ ] define datastream format
-    [ ] reroute stderr as viewstream. arrange pipes for command/view
+  [ ] rewrite worker and router to unify sender/receiver. use in framework for nodekit shell app/script. w/ 0-delimited 
   [ ] sudo support (askpass env?)
-  [ ] Invoke a new process, capture output
 
 5) Command Suite
 [ ] make a script for git (arguments, file/dir, ...)

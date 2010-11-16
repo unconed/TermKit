@@ -1,3 +1,31 @@
+Current questions:
+
+1) Data stream, content type:
+ application/json; dtd=termkit.filesystem
+ 
+ dtd, doc, format, type
+ 
+2) Split output into view updates/appends, or output listing as huge block
+
+ -> single block is simplest, allows comparison between short lists and long lists
+ -> can split into batches... vs event model = too small granularity causes inefficiency
+ -> remember: process should be generic regardless of screen size: agnostic
+
+3) Default formatters by mime type / subtype => provides easy pretty output
+
+4) Make grep
+
+5) Make LS work with grep.
+
+Note:
+
+TermKit offers two levels of abstraction for making better Unix UI:
+
+1) Formatters: by mime type and subtype, turn structured data (xml, gif, json, ini, ...) into richer output
+2) View events: build a DOM asynchronously and update real-time. from basic logging to rich, dynamic, interactive widgets.
+
++++ --- 
+
 TermKit
 +++ -
 Goal: next gen terminal / command application
@@ -55,14 +83,14 @@ Good desktop citizen:
  [ ] interactive output
  
 0.3: Command suite
+ [X] OS X icon loading
  - two-tier commands
  - read man pages
  - implement version control
  - implement tar gzip
  - OS X quicklook integration
- - OS X icon loading
 
- + bash anonymizer script to collect usage patterns from local geeks
+ + bash anonymizer script to collect usage patterns from test users
    turns filenames.foooo.ext into random.random.ext
    turns "quoted strings" into "xxxxx xxxxx xxxxx xxx xxxx"
    turns url://xxxxxxx/xxxxxx
@@ -147,9 +175,16 @@ problem: if front-end is agnostic, then how to make commands smarter?
  
  Worker invokes process chain:
  
+ 
+  pipe in - commandstream
+  pipe out - viewstream
+  stdin - data in. mime formatted
+  stdout - data out. mime formatted
+  
                 | events/sigs?         ^ view stream: commandkit objects
-  stdin         v                      |                stdout
+  stdin         v                      |        "invoke" / "exit"
   ---->     [   proc1: args = command?   ]  ---->
+                                              stdout
  
  outgoing view stream is tagged with:
    * originating command = sequenceID (implied through invoke() / exit())

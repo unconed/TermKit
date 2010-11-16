@@ -1,566 +1,0 @@
-TTermKit
-v7
-r0
-t310029386.949214
-cCheck dependencies
-cProcessInfoPlistFile /Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug/TermKit.app/Contents/Info.plist TermKit-Info.plist
-cCopyStringsFile /Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug/TermKit.app/Contents/Resources/English.lproj/InfoPlist.strings English.lproj/InfoPlist.strings
-cCompileXIB /Users/steven/Projects/TermKit/Cocoa/TermKit/English.lproj/MainMenu.xib
-cCompileXIB /Users/steven/Projects/TermKit/Cocoa/TermKit/English.lproj/Terminal.xib
-cCompileXIB /Users/steven/Projects/TermKit/Cocoa/TermKit/English.lproj/Window.xib
-cCpResource build/Debug/TermKit.app/Contents/Resources/HTML ../../HTML
-cCpResource build/Debug/TermKit.app/Contents/Resources/Images ../../Images
-cCpResource build/Debug/TermKit.app/Contents/Resources/TermKit.icns TermKit.icns
-cPhaseScriptExecution "Run Script" /Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/Script-B0494B22124369A600867892.sh
-cProcessPCH /var/folders/Gz/Gz5zMClPHP8JRw2dizDx7k+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/TermKit_Prefix-fsnorblptnbfkwdskxvrezkvjqwn/TermKit_Prefix.pch.gch TermKit_Prefix.pch normal x86_64 objective-c com.apple.compilers.gcc.4_2
-cCompileC build/TermKit.build/Debug/TermKit.build/Objects-normal/x86_64/main.o /Users/steven/Projects/TermKit/Cocoa/TermKit/main.m normal x86_64 objective-c com.apple.compilers.gcc.4_2
-cCompileC build/TermKit.build/Debug/TermKit.build/Objects-normal/x86_64/TermKitAppDelegate.o /Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitAppDelegate.m normal x86_64 objective-c com.apple.compilers.gcc.4_2
-cCompileC build/TermKit.build/Debug/TermKit.build/Objects-normal/x86_64/TermKitWebView.o /Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitWebView.m normal x86_64 objective-c com.apple.compilers.gcc.4_2
-cCompileC build/TermKit.build/Debug/TermKit.build/Objects-normal/x86_64/TermKitTerminalController.o /Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitTerminalController.m normal x86_64 objective-c com.apple.compilers.gcc.4_2
-cCompileC build/TermKit.build/Debug/TermKit.build/Objects-normal/x86_64/NSImage+QuickLook.o /Users/steven/Projects/TermKit/Cocoa/TermKit/NSImageQuickLook/NSImage+QuickLook.m normal x86_64 objective-c com.apple.compilers.gcc.4_2
-cCompileC build/TermKit.build/Debug/TermKit.build/Objects-normal/x86_64/TermKitIconProtocol.o /Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitIconProtocol.m normal x86_64 objective-c com.apple.compilers.gcc.4_2
-cCompileC build/TermKit.build/Debug/TermKit.build/Objects-normal/x86_64/TermKitIconLoadDelegate.o /Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitIconLoadDelegate.m normal x86_64 objective-c com.apple.compilers.gcc.4_2
-cCompileC build/TermKit.build/Debug/TermKit.build/Objects-normal/x86_64/TermKitWindowController.o /Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitWindowController.m normal x86_64 objective-c com.apple.compilers.gcc.4_2
-cLd /Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug/TermKit.app/Contents/MacOS/TermKit normal x86_64
-cTouch /Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug/TermKit.app
-
-N/Developer/SDKs/MacOSX10.6.sdk
-c000000004A769DAB00000000000000EE
-t1249287595
-s238
-
-N/Developer/SDKs/MacOSX10.6.sdk/System/Library/Frameworks/Cocoa.framework/Headers/Cocoa.h
-c0000000040C4AA6800000000000001E5
-t1086630504
-s485
-
-N/Developer/SDKs/MacOSX10.6.sdk/System/Library/Frameworks/Foundation.framework/Headers/Foundation.h
-c000000004A600B8400000000000013E6
-t1247808388
-s5094
-
-N/Developer/SDKs/MacOSX10.6.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSError.h
-c000000004A600B850000000000001E48
-t1247808389
-s7752
-
-N/Developer/SDKs/MacOSX10.6.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSURLProtocol.h
-c000000004A600B86000000000000385F
-t1247808390
-s14431
-
-N/Developer/SDKs/MacOSX10.6.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSURLRequest.h
-c000000004A600B860000000000004C9C
-t1247808390
-s19612
-
-N/Developer/SDKs/MacOSX10.6.sdk/System/Library/Frameworks/QuickLook.framework/Headers/QuickLook.h
-c000000004A6942E10000000000000165
-t1248412385
-s357
-
-N/Developer/SDKs/MacOSX10.6.sdk/System/Library/Frameworks/WebKit.framework/Headers/WebKit.h
-c000000004A6E9EEC0000000000000957
-t1248763628
-s2391
-
-N/System/Library/Frameworks/Cocoa.framework/Cocoa
-c000000004A1F2D63000000000000A5E0
-t1243557219
-s42464
-
-N/System/Library/Frameworks/QuickLook.framework/QuickLook
-c000000004B73BFC1000000000012F050
-t1265876929
-s1241168
-
-N/System/Library/Frameworks/WebKit.framework/WebKit
-c000000004C60C9F300000000005BFC60
-t1281411571
-s6028384
-
-N/Users/steven/Projects/TermKit/Cocoa/TermKit/../../HTML
-c000000004CBC1DA300000000000001FE
-t1287396771
-s510
-
-N/Users/steven/Projects/TermKit/Cocoa/TermKit/../../Images
-c000000004C7212570000000000000154
-t1282544215
-s340
-
-N/Users/steven/Projects/TermKit/Cocoa/TermKit/English.lproj/InfoPlist.strings
-c000000004C2AEFC8000000000000002D
-t1277882312
-s45
-
-N/Users/steven/Projects/TermKit/Cocoa/TermKit/English.lproj/MainMenu.xib
-c000000004CCA6CAC000000000002E922
-t1288334508
-s190754
-
-N/Users/steven/Projects/TermKit/Cocoa/TermKit/English.lproj/Terminal.xib
-c000000004CCA72910000000000008782
-t1288336017
-s34690
-
-N/Users/steven/Projects/TermKit/Cocoa/TermKit/English.lproj/Window.xib
-c000000004CCA729C00000000000072DE
-t1288336028
-s29406
-
-N/Users/steven/Projects/TermKit/Cocoa/TermKit/NSImageQuickLook/NSImage+QuickLook.h
-c000000004CBC17FB000000000000012E
-t1287395323
-s302
-i<Cocoa/Cocoa.h>
-
-N/Users/steven/Projects/TermKit/Cocoa/TermKit/NSImageQuickLook/NSImage+QuickLook.m
-c000000004CBC180900000000000007FC
-t1287395337
-s2044
-i"NSImage+QuickLook.h"
-i<QuickLook/QuickLook.h>
-
-N/Users/steven/Projects/TermKit/Cocoa/TermKit/TermKit.icns
-c000000004C37A3CF0000000000021305
-t1278714831
-s135941
-
-N/Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitAppDelegate.h
-c000000004CCA6BAC0000000000000181
-t1288334252
-s385
-i<Cocoa/Cocoa.h>
-
-N/Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitAppDelegate.m
-c000000004CCA72DE00000000000002F2
-t1288336094
-s754
-i"TermKitAppDelegate.h"
-i"TermKitWindowController.h"
-
-N/Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitIconLoadDelegate.h
-c000000004CCA5FD000000000000001DE
-t1288331216
-s478
-i<Cocoa/Cocoa.h>
-i<WebKit/WebKit.h>
-i"TermKitIconProtocol.h"
-
-N/Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitIconLoadDelegate.m
-c000000004CCA5FCD0000000000000A21
-t1288331213
-s2593
-i"TermKitIconLoadDelegate.h"
-i"TermKitIconProtocol.h"
-
-N/Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitIconProtocol.h
-c000000004CCA5FD50000000000000452
-t1288331221
-s1106
-i<Cocoa/Cocoa.h>
-i<Foundation/Foundation.h>
-i<Foundation/NSURLRequest.h>
-i<Foundation/NSURLProtocol.h>
-
-N/Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitIconProtocol.m
-c000000004CCA62070000000000002009
-t1288331783
-s8201
-i<Foundation/NSError.h>
-i"TermKitIconProtocol.h"
-i"TermKitIconLoadDelegate.h"
-i"NSImage+QuickLook.h"
-
-N/Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitTerminalController.h
-c000000004C32E85C0000000000000124
-t1278404700
-s292
-i<Cocoa/Cocoa.h>
-i<WebKit/WebKit.h>
-
-N/Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitTerminalController.m
-c000000004C32EC610000000000000346
-t1278405729
-s838
-i"TermKitTerminalController.h"
-
-N/Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitWebResourceLoadDelegate.h
-c000000004CB836180000000000000188
-t1287140888
-s392
-i<Cocoa/Cocoa.h>
-
-N/Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitWebResourceLoadDelegate.m
-c000000004CB838030000000000000A41
-t1287141379
-s2625
-i"TermKitWebResourceLoadDelegate.h"
-i"TermKitIconProtocol.h"
-
-N/Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitWebView.h
-c000000004CB83E1B000000000000012F
-t1287142939
-s303
-i<Cocoa/Cocoa.h>
-i<WebKit/WebKit.h>
-i"TermKitIconLoadDelegate.h"
-
-N/Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitWebView.m
-c000000004CB844BF0000000000000181
-t1287144639
-s385
-i"TermKitWebView.h"
-
-N/Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitWindowController.h
-c000000004CCA72C5000000000000011A
-t1288336069
-s282
-i<Cocoa/Cocoa.h>
-
-N/Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitWindowController.m
-c000000004CCA74C700000000000001FE
-t1288336583
-s510
-i"TermKitWindowController.h"
-i"TermKitTerminalController.h"
-
-N/Users/steven/Projects/TermKit/Cocoa/TermKit/TermKit_Prefix.pch
-c000000004C2AEFC80000000000000091
-t1277882312
-s145
-i<Cocoa/Cocoa.h>
-
-N/Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug/TermKit.app
-t1288336586
-s102
-
-N/Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug/TermKit.app/Contents/Info.plist
-t1288334824
-s947
-
-N/Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug/TermKit.app/Contents/MacOS/TermKit
-t1288336586
-s37328
-
-N/Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug/TermKit.app/Contents/PkgInfo
-t1288334824
-s8
-
-N/Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug/TermKit.app/Contents/Resources/English.lproj/InfoPlist.strings
-t1288334824
-s92
-
-N/Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug/TermKit.app/Contents/Resources/English.lproj/MainMenu.nib
-t1288334825
-s33953
-
-N/Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug/TermKit.app/Contents/Resources/English.lproj/Terminal.nib
-t1288336071
-s3141
-
-N/Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug/TermKit.app/Contents/Resources/English.lproj/Window.nib
-t1288336071
-s2028
-
-N/Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug/TermKit.app/Contents/Resources/HTML
-t1288336585
-s476
-
-N/Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug/TermKit.app/Contents/Resources/Images
-t1288334825
-s306
-
-N/Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug/TermKit.app/Contents/Resources/TermKit.icns
-t1288334825
-s135941
-
-N/Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/Objects-normal/x86_64/NSImage+QuickLook.o
-t1288334831
-s14088
-
-N/Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/Objects-normal/x86_64/TermKit.LinkFileList
-c000000004CCA72C500000000000003FF
-t1288336069
-s1023
-
-N/Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/Objects-normal/x86_64/TermKitAppDelegate.o
-t1288336095
-s26276
-
-N/Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/Objects-normal/x86_64/TermKitIconLoadDelegate.o
-t1288334831
-s17908
-
-N/Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/Objects-normal/x86_64/TermKitIconProtocol.o
-t1288334831
-s40400
-
-N/Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/Objects-normal/x86_64/TermKitTerminalController.o
-t1288334831
-s17032
-
-N/Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/Objects-normal/x86_64/TermKitWebResourceLoadDelegate.o
-t2
-s0
-
-N/Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/Objects-normal/x86_64/TermKitWebView.o
-t1288334831
-s14528
-
-N/Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/Objects-normal/x86_64/TermKitWindowController.o
-t1288336585
-s17248
-
-N/Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/Objects-normal/x86_64/main.o
-t1288334831
-s5000
-
-N/Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/Script-B0494B22124369A600867892.sh
-c000000004CCA6DE800000000000000C9
-t1288334824
-s201
-
-N/Users/steven/Projects/TermKit/Cocoa/TermKit/main.m
-c000000004C2AEFC80000000000000100
-t1277882312
-s256
-i<Cocoa/Cocoa.h>
-
-N/var/folders/Gz/Gz5zMClPHP8JRw2dizDx7k+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/TermKit_Prefix-fsnorblptnbfkwdskxvrezkvjqwn/TermKit_Prefix.pch.gch
-t1288334831
-s54265616
-
-NTermKit-Info.plist
-c000000004C378B3500000000000003F7
-t1278708533
-s1015
-
-CCheck dependencies
-r0
-lSLF07#2@18"Check dependencies310029384#310029384#0(0"0(0#1#0"8615824512#0"0#
-
-CCompileC build/TermKit.build/Debug/TermKit.build/Objects-normal/x86_64/NSImage+QuickLook.o /Users/steven/Projects/TermKit/Cocoa/TermKit/NSImageQuickLook/NSImage+QuickLook.m normal x86_64 objective-c com.apple.compilers.gcc.4_2
-s310027631.473127
-e310027631.713140
-r1
-xCompileC
-xbuild/TermKit.build/Debug/TermKit.build/Objects-normal/x86_64/NSImage+QuickLook.o
-x/Users/steven/Projects/TermKit/Cocoa/TermKit/NSImageQuickLook/NSImage+QuickLook.m
-xnormal
-xx86_64
-xobjective-c
-xcom.apple.compilers.gcc.4_2
-lSLF07#2@89"Compile /Users/steven/Projects/TermKit/Cocoa/TermKit/NSImageQuickLook/NSImage+QuickLook.m310027631#310027631#0(0"0(0#0#81"/Users/steven/Projects/TermKit/Cocoa/TermKit/NSImageQuickLook/NSImage+QuickLook.m8620030528#1559"    cd /Users/steven/Projects/TermKit/Cocoa/TermKit    setenv LANG en_US.US-ASCII    /Developer/usr/bin/gcc-4.2 -x objective-c -arch x86_64 -fmessage-length=0 -pipe -std=gnu99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -isysroot /Developer/SDKs/MacOSX10.6.sdk -mfix-and-continue -mmacosx-version-min=10.6 -gdwarf-2 -iquote /Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/TermKit-generated-files.hmap -I/Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/TermKit-own-target-headers.hmap -I/Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/TermKit-all-target-headers.hmap -iquote /Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/TermKit-project-headers.hmap -F/Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug -I/Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug/include -I/Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/DerivedSources/x86_64 -I/Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/DerivedSources -include /var/folders/Gz/Gz5zMClPHP8JRw2dizDx7k+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/TermKit_Prefix-fsnorblptnbfkwdskxvrezkvjqwn/TermKit_Prefix.pch -c /Users/steven/Projects/TermKit/Cocoa/TermKit/NSImageQuickLook/NSImage+QuickLook.m -o /Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/Objects-normal/x86_64/NSImage+QuickLook.o0#
-
-CCompileC build/TermKit.build/Debug/TermKit.build/Objects-normal/x86_64/TermKitAppDelegate.o /Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitAppDelegate.m normal x86_64 objective-c com.apple.compilers.gcc.4_2
-s310028894.912400
-e310028895.248497
-r1
-xCompileC
-xbuild/TermKit.build/Debug/TermKit.build/Objects-normal/x86_64/TermKitAppDelegate.o
-x/Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitAppDelegate.m
-xnormal
-xx86_64
-xobjective-c
-xcom.apple.compilers.gcc.4_2
-o/Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitAppDelegate.m:28: warning: incomplete implementation of class 'TermKitAppDelegate'
-o/Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitAppDelegate.m:28: warning: method definition for '-newTerminal:' not found
-lSLF07#2@73"Compile /Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitAppDelegate.m310028894#310028895#0(262"/Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitAppDelegate.m:28: warning: incomplete implementation of class 'TermKitAppDelegate'/Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitAppDelegate.m:28: warning: method definition for '-newTerminal:' not found2(22@55"Incomplete implementation of class 'TermKitAppDelegate'310028895#0#135#0(6@65"/Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitAppDelegate.m310028894#28#0#28#0#38"incomplete implementation of class '*'0(22@47"Method definition for '-newTerminal:' not found310028895#135#127#0(6@65"/Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitAppDelegate.m310028894#28#0#28#0#35"method definition for '*' not found0(0#0#65"/Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitAppDelegate.m8618966112#1544"    cd /Users/steven/Projects/TermKit/Cocoa/TermKit    setenv LANG en_US.US-ASCII    /Developer/usr/bin/gcc-4.2 -x objective-c -arch x86_64 -fmessage-length=0 -pipe -std=gnu99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -isysroot /Developer/SDKs/MacOSX10.6.sdk -mfix-and-continue -mmacosx-version-min=10.6 -gdwarf-2 -iquote /Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/TermKit-generated-files.hmap -I/Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/TermKit-own-target-headers.hmap -I/Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/TermKit-all-target-headers.hmap -iquote /Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/TermKit-project-headers.hmap -F/Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug -I/Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug/include -I/Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/DerivedSources/x86_64 -I/Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/DerivedSources -include /var/folders/Gz/Gz5zMClPHP8JRw2dizDx7k+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/TermKit_Prefix-fsnorblptnbfkwdskxvrezkvjqwn/TermKit_Prefix.pch -c /Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitAppDelegate.m -o /Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/Objects-normal/x86_64/TermKitAppDelegate.o0#
-
-CCompileC build/TermKit.build/Debug/TermKit.build/Objects-normal/x86_64/TermKitIconLoadDelegate.o /Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitIconLoadDelegate.m normal x86_64 objective-c com.apple.compilers.gcc.4_2
-s310027631.713226
-e310027631.886534
-r1
-xCompileC
-xbuild/TermKit.build/Debug/TermKit.build/Objects-normal/x86_64/TermKitIconLoadDelegate.o
-x/Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitIconLoadDelegate.m
-xnormal
-xx86_64
-xobjective-c
-xcom.apple.compilers.gcc.4_2
-lSLF07#2@78"Compile /Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitIconLoadDelegate.m310027631#310027631#0(0"0(0#0#70"/Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitIconLoadDelegate.m8618334592#1554"    cd /Users/steven/Projects/TermKit/Cocoa/TermKit    setenv LANG en_US.US-ASCII    /Developer/usr/bin/gcc-4.2 -x objective-c -arch x86_64 -fmessage-length=0 -pipe -std=gnu99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -isysroot /Developer/SDKs/MacOSX10.6.sdk -mfix-and-continue -mmacosx-version-min=10.6 -gdwarf-2 -iquote /Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/TermKit-generated-files.hmap -I/Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/TermKit-own-target-headers.hmap -I/Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/TermKit-all-target-headers.hmap -iquote /Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/TermKit-project-headers.hmap -F/Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug -I/Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug/include -I/Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/DerivedSources/x86_64 -I/Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/DerivedSources -include /var/folders/Gz/Gz5zMClPHP8JRw2dizDx7k+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/TermKit_Prefix-fsnorblptnbfkwdskxvrezkvjqwn/TermKit_Prefix.pch -c /Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitIconLoadDelegate.m -o /Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/Objects-normal/x86_64/TermKitIconLoadDelegate.o0#
-
-CCompileC build/TermKit.build/Debug/TermKit.build/Objects-normal/x86_64/TermKitIconProtocol.o /Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitIconProtocol.m normal x86_64 objective-c com.apple.compilers.gcc.4_2
-s310027631.524345
-e310027631.781467
-r1
-xCompileC
-xbuild/TermKit.build/Debug/TermKit.build/Objects-normal/x86_64/TermKitIconProtocol.o
-x/Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitIconProtocol.m
-xnormal
-xx86_64
-xobjective-c
-xcom.apple.compilers.gcc.4_2
-o/Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitIconProtocol.m: In function '-[NSImage(TIFFConversionUtils) TIFFData]':
-o/Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitIconProtocol.m:258: warning: 'NSImageRep' may not respond to '-TIFFRepresentation'
-o/Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitIconProtocol.m:258: warning: (Messages without a matching method signature
-o/Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitIconProtocol.m:258: warning: will be assumed to return 'id' and accept
-o/Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitIconProtocol.m:258: warning: '...' as arguments.)
-lSLF07#2@74"Compile /Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitIconProtocol.m310027631#310027631#0(611"/Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitIconProtocol.m: In function '-[NSImage(TIFFConversionUtils) TIFFData]':/Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitIconProtocol.m:258: warning: 'NSImageRep' may not respond to '-TIFFRepresentation'/Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitIconProtocol.m:258: warning: (Messages without a matching method signature/Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitIconProtocol.m:258: warning: will be assumed to return 'id' and accept/Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitIconProtocol.m:258: warning: '...' as arguments.)2(22@53"'NSImageRep' may not respond to '-TIFFRepresentation'310027631#124#135#0(6@66"/Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitIconProtocol.m310024583#258#0#258#0#26"'*' may not respond to '*'0(13@108"(Messages without a matching method signature will be assumed to return 'id' and accept '...' as arguments.)310027631#259#127#0(6@66"/Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitIconProtocol.m310024583#258#0#258#0#0"0(0#0#66"/Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitIconProtocol.m8618785504#1546"    cd /Users/steven/Projects/TermKit/Cocoa/TermKit    setenv LANG en_US.US-ASCII    /Developer/usr/bin/gcc-4.2 -x objective-c -arch x86_64 -fmessage-length=0 -pipe -std=gnu99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -isysroot /Developer/SDKs/MacOSX10.6.sdk -mfix-and-continue -mmacosx-version-min=10.6 -gdwarf-2 -iquote /Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/TermKit-generated-files.hmap -I/Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/TermKit-own-target-headers.hmap -I/Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/TermKit-all-target-headers.hmap -iquote /Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/TermKit-project-headers.hmap -F/Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug -I/Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug/include -I/Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/DerivedSources/x86_64 -I/Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/DerivedSources -include /var/folders/Gz/Gz5zMClPHP8JRw2dizDx7k+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/TermKit_Prefix-fsnorblptnbfkwdskxvrezkvjqwn/TermKit_Prefix.pch -c /Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitIconProtocol.m -o /Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/Objects-normal/x86_64/TermKitIconProtocol.o0#
-
-CCompileC build/TermKit.build/Debug/TermKit.build/Objects-normal/x86_64/TermKitTerminalController.o /Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitTerminalController.m normal x86_64 objective-c com.apple.compilers.gcc.4_2
-s310027631.332086
-e310027631.524237
-r1
-xCompileC
-xbuild/TermKit.build/Debug/TermKit.build/Objects-normal/x86_64/TermKitTerminalController.o
-x/Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitTerminalController.m
-xnormal
-xx86_64
-xobjective-c
-xcom.apple.compilers.gcc.4_2
-lSLF07#2@80"Compile /Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitTerminalController.m310027631#310027631#0(0"0(0#0#72"/Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitTerminalController.m8618496800#1558"    cd /Users/steven/Projects/TermKit/Cocoa/TermKit    setenv LANG en_US.US-ASCII    /Developer/usr/bin/gcc-4.2 -x objective-c -arch x86_64 -fmessage-length=0 -pipe -std=gnu99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -isysroot /Developer/SDKs/MacOSX10.6.sdk -mfix-and-continue -mmacosx-version-min=10.6 -gdwarf-2 -iquote /Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/TermKit-generated-files.hmap -I/Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/TermKit-own-target-headers.hmap -I/Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/TermKit-all-target-headers.hmap -iquote /Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/TermKit-project-headers.hmap -F/Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug -I/Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug/include -I/Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/DerivedSources/x86_64 -I/Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/DerivedSources -include /var/folders/Gz/Gz5zMClPHP8JRw2dizDx7k+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/TermKit_Prefix-fsnorblptnbfkwdskxvrezkvjqwn/TermKit_Prefix.pch -c /Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitTerminalController.m -o /Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/Objects-normal/x86_64/TermKitTerminalController.o0#
-
-CCompileC build/TermKit.build/Debug/TermKit.build/Objects-normal/x86_64/TermKitWebResourceLoadDelegate.o /Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitWebResourceLoadDelegate.m normal x86_64 objective-c com.apple.compilers.gcc.4_2
-r0
-
-CCompileC build/TermKit.build/Debug/TermKit.build/Objects-normal/x86_64/TermKitWebView.o /Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitWebView.m normal x86_64 objective-c com.apple.compilers.gcc.4_2
-s310027631.255712
-e310027631.473037
-r1
-xCompileC
-xbuild/TermKit.build/Debug/TermKit.build/Objects-normal/x86_64/TermKitWebView.o
-x/Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitWebView.m
-xnormal
-xx86_64
-xobjective-c
-xcom.apple.compilers.gcc.4_2
-lSLF07#2@69"Compile /Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitWebView.m310027631#310027631#0(0"0(0#0#61"/Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitWebView.m8618823072#1536"    cd /Users/steven/Projects/TermKit/Cocoa/TermKit    setenv LANG en_US.US-ASCII    /Developer/usr/bin/gcc-4.2 -x objective-c -arch x86_64 -fmessage-length=0 -pipe -std=gnu99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -isysroot /Developer/SDKs/MacOSX10.6.sdk -mfix-and-continue -mmacosx-version-min=10.6 -gdwarf-2 -iquote /Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/TermKit-generated-files.hmap -I/Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/TermKit-own-target-headers.hmap -I/Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/TermKit-all-target-headers.hmap -iquote /Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/TermKit-project-headers.hmap -F/Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug -I/Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug/include -I/Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/DerivedSources/x86_64 -I/Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/DerivedSources -include /var/folders/Gz/Gz5zMClPHP8JRw2dizDx7k+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/TermKit_Prefix-fsnorblptnbfkwdskxvrezkvjqwn/TermKit_Prefix.pch -c /Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitWebView.m -o /Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/Objects-normal/x86_64/TermKitWebView.o0#
-
-CCompileC build/TermKit.build/Debug/TermKit.build/Objects-normal/x86_64/TermKitWindowController.o /Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitWindowController.m normal x86_64 objective-c com.apple.compilers.gcc.4_2
-s310029385.302038
-e310029386.010525
-r1
-xCompileC
-xbuild/TermKit.build/Debug/TermKit.build/Objects-normal/x86_64/TermKitWindowController.o
-x/Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitWindowController.m
-xnormal
-xx86_64
-xobjective-c
-xcom.apple.compilers.gcc.4_2
-lSLF07#2@78"Compile /Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitWindowController.m310029385#310029386#0(0"0(0#0#70"/Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitWindowController.m8597224320#1554"    cd /Users/steven/Projects/TermKit/Cocoa/TermKit    setenv LANG en_US.US-ASCII    /Developer/usr/bin/gcc-4.2 -x objective-c -arch x86_64 -fmessage-length=0 -pipe -std=gnu99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -isysroot /Developer/SDKs/MacOSX10.6.sdk -mfix-and-continue -mmacosx-version-min=10.6 -gdwarf-2 -iquote /Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/TermKit-generated-files.hmap -I/Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/TermKit-own-target-headers.hmap -I/Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/TermKit-all-target-headers.hmap -iquote /Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/TermKit-project-headers.hmap -F/Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug -I/Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug/include -I/Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/DerivedSources/x86_64 -I/Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/DerivedSources -include /var/folders/Gz/Gz5zMClPHP8JRw2dizDx7k+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/TermKit_Prefix-fsnorblptnbfkwdskxvrezkvjqwn/TermKit_Prefix.pch -c /Users/steven/Projects/TermKit/Cocoa/TermKit/TermKitWindowController.m -o /Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/Objects-normal/x86_64/TermKitWindowController.o0#
-
-CCompileC build/TermKit.build/Debug/TermKit.build/Objects-normal/x86_64/main.o /Users/steven/Projects/TermKit/Cocoa/TermKit/main.m normal x86_64 objective-c com.apple.compilers.gcc.4_2
-s310027631.081509
-e310027631.255620
-r1
-xCompileC
-xbuild/TermKit.build/Debug/TermKit.build/Objects-normal/x86_64/main.o
-x/Users/steven/Projects/TermKit/Cocoa/TermKit/main.m
-xnormal
-xx86_64
-xobjective-c
-xcom.apple.compilers.gcc.4_2
-lSLF07#2@59"Compile /Users/steven/Projects/TermKit/Cocoa/TermKit/main.m310027631#310027631#0(0"0(0#0#51"/Users/steven/Projects/TermKit/Cocoa/TermKit/main.m8618545952#1516"    cd /Users/steven/Projects/TermKit/Cocoa/TermKit    setenv LANG en_US.US-ASCII    /Developer/usr/bin/gcc-4.2 -x objective-c -arch x86_64 -fmessage-length=0 -pipe -std=gnu99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -isysroot /Developer/SDKs/MacOSX10.6.sdk -mfix-and-continue -mmacosx-version-min=10.6 -gdwarf-2 -iquote /Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/TermKit-generated-files.hmap -I/Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/TermKit-own-target-headers.hmap -I/Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/TermKit-all-target-headers.hmap -iquote /Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/TermKit-project-headers.hmap -F/Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug -I/Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug/include -I/Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/DerivedSources/x86_64 -I/Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/DerivedSources -include /var/folders/Gz/Gz5zMClPHP8JRw2dizDx7k+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/TermKit_Prefix-fsnorblptnbfkwdskxvrezkvjqwn/TermKit_Prefix.pch -c /Users/steven/Projects/TermKit/Cocoa/TermKit/main.m -o /Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/Objects-normal/x86_64/main.o0#
-
-CCompileXIB /Users/steven/Projects/TermKit/Cocoa/TermKit/English.lproj/MainMenu.xib
-s310027624.230475
-e310027625.718783
-r1
-xCompileXIB
-x/Users/steven/Projects/TermKit/Cocoa/TermKit/English.lproj/MainMenu.xib
-lSLF07#2@37"CompileXIB English.lproj/MainMenu.xib310027624#310027625#0(0"0(0#0#71"/Users/steven/Projects/TermKit/Cocoa/TermKit/English.lproj/MainMenu.xib8618520768#382"    cd /Users/steven/Projects/TermKit/Cocoa/TermKit    /Developer/usr/bin/ibtool --errors --warnings --notices --output-format human-readable-text --compile /Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug/TermKit.app/Contents/Resources/English.lproj/MainMenu.nib /Users/steven/Projects/TermKit/Cocoa/TermKit/English.lproj/MainMenu.xib --sdk /Developer/SDKs/MacOSX10.6.sdk0#
-
-CCompileXIB /Users/steven/Projects/TermKit/Cocoa/TermKit/English.lproj/Terminal.xib
-s310028869.612429
-e310028871.248930
-r1
-xCompileXIB
-x/Users/steven/Projects/TermKit/Cocoa/TermKit/English.lproj/Terminal.xib
-lSLF07#2@37"CompileXIB English.lproj/Terminal.xib310028869#310028871#0(0"0(0#0#71"/Users/steven/Projects/TermKit/Cocoa/TermKit/English.lproj/Terminal.xib8617420448#382"    cd /Users/steven/Projects/TermKit/Cocoa/TermKit    /Developer/usr/bin/ibtool --errors --warnings --notices --output-format human-readable-text --compile /Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug/TermKit.app/Contents/Resources/English.lproj/Terminal.nib /Users/steven/Projects/TermKit/Cocoa/TermKit/English.lproj/Terminal.xib --sdk /Developer/SDKs/MacOSX10.6.sdk0#
-
-CCompileXIB /Users/steven/Projects/TermKit/Cocoa/TermKit/English.lproj/Window.xib
-s310028869.615043
-e310028871.202748
-r1
-xCompileXIB
-x/Users/steven/Projects/TermKit/Cocoa/TermKit/English.lproj/Window.xib
-lSLF07#2@35"CompileXIB English.lproj/Window.xib310028869#310028871#0(0"0(0#0#69"/Users/steven/Projects/TermKit/Cocoa/TermKit/English.lproj/Window.xib8613220928#378"    cd /Users/steven/Projects/TermKit/Cocoa/TermKit    /Developer/usr/bin/ibtool --errors --warnings --notices --output-format human-readable-text --compile /Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug/TermKit.app/Contents/Resources/English.lproj/Window.nib /Users/steven/Projects/TermKit/Cocoa/TermKit/English.lproj/Window.xib --sdk /Developer/SDKs/MacOSX10.6.sdk0#
-
-CCopyStringsFile /Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug/TermKit.app/Contents/Resources/English.lproj/InfoPlist.strings English.lproj/InfoPlist.strings
-s310027624.229687
-e310027624.921941
-r1
-xCopyStringsFile
-x/Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug/TermKit.app/Contents/Resources/English.lproj/InfoPlist.strings
-xEnglish.lproj/InfoPlist.strings
-lSLF07#2@36"Copy English.lproj/InfoPlist.strings310027624#310027624#0(0"0(0#0#76"/Users/steven/Projects/TermKit/Cocoa/TermKit/English.lproj/InfoPlist.strings8618756192#377"    cd /Users/steven/Projects/TermKit/Cocoa/TermKit    setenv ICONV /usr/bin/iconv    /Developer/Library/Xcode/Plug-ins/CoreBuildTasks.xcplugin/Contents/Resources/copystrings --validate --inputencoding utf-8 --outputencoding UTF-16 English.lproj/InfoPlist.strings --outdir /Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug/TermKit.app/Contents/Resources/English.lproj0#
-
-CCpResource build/Debug/TermKit.app/Contents/Resources/HTML ../../HTML
-s310027625.782901
-e310027625.924553
-r1
-xCpResource
-xbuild/Debug/TermKit.app/Contents/Resources/HTML
-x../../HTML
-lSLF07#2@15"Copy ../../HTML310027625#310027625#0(0"0(0#0#55"/Users/steven/Projects/TermKit/Cocoa/TermKit/../../HTML8602834976#344"    cd /Users/steven/Projects/TermKit/Cocoa/TermKit    /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -resolve-src-symlinks /Users/steven/Projects/TermKit/Cocoa/TermKit/../../HTML /Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug/TermKit.app/Contents/Resources0#
-
-CCpResource build/Debug/TermKit.app/Contents/Resources/Images ../../Images
-s310027625.783700
-e310027625.863071
-r1
-xCpResource
-xbuild/Debug/TermKit.app/Contents/Resources/Images
-x../../Images
-lSLF07#2@17"Copy ../../Images310027625#310027625#0(0"0(0#0#57"/Users/steven/Projects/TermKit/Cocoa/TermKit/../../Images8617809024#346"    cd /Users/steven/Projects/TermKit/Cocoa/TermKit    /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -resolve-src-symlinks /Users/steven/Projects/TermKit/Cocoa/TermKit/../../Images /Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug/TermKit.app/Contents/Resources0#
-
-CCpResource build/Debug/TermKit.app/Contents/Resources/TermKit.icns TermKit.icns
-s310027625.787296
-e310027625.838545
-r1
-xCpResource
-xbuild/Debug/TermKit.app/Contents/Resources/TermKit.icns
-xTermKit.icns
-lSLF07#2@17"Copy TermKit.icns310027625#310027625#0(0"0(0#0#57"/Users/steven/Projects/TermKit/Cocoa/TermKit/TermKit.icns8618787264#346"    cd /Users/steven/Projects/TermKit/Cocoa/TermKit    /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -resolve-src-symlinks /Users/steven/Projects/TermKit/Cocoa/TermKit/TermKit.icns /Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug/TermKit.app/Contents/Resources0#
-
-CLd /Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug/TermKit.app/Contents/MacOS/TermKit normal x86_64
-s310029386.010638
-e310029386.821569
-r1
-xLd
-x/Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug/TermKit.app/Contents/MacOS/TermKit
-xnormal
-xx86_64
-lSLF07#2@96"Link /Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug/TermKit.app/Contents/MacOS/TermKit310029386#310029386#0(0"0(0#0#0"8615446240#611"    cd /Users/steven/Projects/TermKit/Cocoa/TermKit    setenv MACOSX_DEPLOYMENT_TARGET 10.6    /Developer/usr/bin/gcc-4.2 -arch x86_64 -isysroot /Developer/SDKs/MacOSX10.6.sdk -L/Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug -F/Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug -filelist /Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/Objects-normal/x86_64/TermKit.LinkFileList -mmacosx-version-min=10.6 -framework Cocoa -framework WebKit -framework QuickLook -o /Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug/TermKit.app/Contents/MacOS/TermKit0#
-
-CPhaseScriptExecution "Run Script" /Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/Script-B0494B22124369A600867892.sh
-s310029384.520160
-e310029385.301110
-r1
-xPhaseScriptExecution
-xRun Script
-x/Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/Script-B0494B22124369A600867892.sh
-lSLF07#2@36"Run custom shell script 'Run Script'310029384#310029385#0(0"0(0#0#0"8617726464#16148"    cd /Users/steven/Projects/TermKit/Cocoa/TermKit    setenv ACTION build    setenv ALTERNATE_GROUP staff    setenv ALTERNATE_MODE u+w,go-w,a+rX    setenv ALTERNATE_OWNER steven    setenv ALWAYS_SEARCH_USER_PATHS NO    setenv APPLE_INTERNAL_DEVELOPER_DIR /AppleInternal/Developer    setenv APPLE_INTERNAL_DIR /AppleInternal    setenv APPLE_INTERNAL_DOCUMENTATION_DIR /AppleInternal/Documentation    setenv APPLE_INTERNAL_LIBRARY_DIR /AppleInternal/Library    setenv APPLE_INTERNAL_TOOLS /AppleInternal/Developer/Tools    setenv APPLY_RULES_IN_COPY_FILES NO    setenv ARCHS x86_64    setenv ARCHS_STANDARD_32_64_BIT "x86_64 i386 ppc"    setenv ARCHS_STANDARD_32_BIT "i386 ppc"    setenv ARCHS_STANDARD_64_BIT x86_64    setenv BUILD_COMPONENTS "headers build"    setenv BUILD_DIR /Users/steven/Projects/TermKit/Cocoa/TermKit/build    setenv BUILD_ROOT /Users/steven/Projects/TermKit/Cocoa/TermKit/build    setenv BUILD_STYLE Debug    setenv BUILD_VARIANTS normal    setenv BUILT_PRODUCTS_DIR /Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug    setenv CACHE_ROOT /var/folders/Gz/Gz5zMClPHP8JRw2dizDx7k+++TI/-Caches-/com.apple.Xcode.501    setenv CCHROOT /var/folders/Gz/Gz5zMClPHP8JRw2dizDx7k+++TI/-Caches-/com.apple.Xcode.501    setenv CHMOD /bin/chmod    setenv CHOWN /usr/sbin/chown    setenv CLASS_FILE_DIR /Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/JavaClasses    setenv CLEAN_PRECOMPS YES    setenv CLONE_HEADERS NO    setenv CODESIGNING_FOLDER_PATH /Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug/TermKit.app    setenv CODE_SIGNING_ALLOWED YES    setenv COMMAND_MODE legacy    setenv COMPOSITE_SDK_DIRS /var/folders/Gz/Gz5zMClPHP8JRw2dizDx7k+++TI/-Caches-/com.apple.Xcode.501/CompositeSDKs    setenv CONFIGURATION Debug    setenv CONFIGURATION_BUILD_DIR /Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug    setenv CONFIGURATION_TEMP_DIR /Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug    setenv CONTENTS_FOLDER_PATH TermKit.app/Contents    setenv COPYING_PRESERVES_HFS_DATA NO    setenv COPY_PHASE_STRIP NO    setenv COPY_RESOURCES_FROM_STATIC_FRAMEWORKS YES    setenv CP /bin/cp    setenv CURRENT_ARCH x86_64    setenv CURRENT_VARIANT normal    setenv DEAD_CODE_STRIPPING NO    setenv DEBUGGING_SYMBOLS YES    setenv DEBUG_INFORMATION_FORMAT dwarf    setenv DEPLOYMENT_LOCATION NO    setenv DEPLOYMENT_POSTPROCESSING NO    setenv DERIVED_FILES_DIR /Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/DerivedSources    setenv DERIVED_FILE_DIR /Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/DerivedSources    setenv DERIVED_SOURCES_DIR /Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/DerivedSources    setenv DEVELOPER_APPLICATIONS_DIR /Developer/Applications    setenv DEVELOPER_BIN_DIR /Developer/usr/bin    setenv DEVELOPER_DIR /Developer    setenv DEVELOPER_FRAMEWORKS_DIR /Developer/Library/Frameworks    setenv DEVELOPER_FRAMEWORKS_DIR_QUOTED "\"/Developer/Library/Frameworks\""    setenv DEVELOPER_LIBRARY_DIR /Developer/Library    setenv DEVELOPER_SDK_DIR /Developer/SDKs    setenv DEVELOPER_TOOLS_DIR /Developer/Tools    setenv DEVELOPER_USR_DIR /Developer/usr    setenv DEVELOPMENT_LANGUAGE English    setenv DOCUMENTATION_FOLDER_PATH TermKit.app/Contents/Resources/English.lproj/Documentation    setenv DO_HEADER_SCANNING_IN_JAM NO    setenv DSTROOT /tmp/TermKit.dst    setenv DWARF_DSYM_FILE_NAME TermKit.app.dSYM    setenv DWARF_DSYM_FOLDER_PATH /Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug    setenv ENABLE_HEADER_DEPENDENCIES YES    setenv ENABLE_OPENMP_SUPPORT NO    setenv EXCLUDED_INSTALLSRC_SUBDIRECTORY_PATTERNS ".svn CVS"    setenv EXCLUDED_RECURSIVE_SEARCH_PATH_SUBDIRECTORIES "*.nib *.lproj *.framework *.gch (*) CVS .svn *.xcodeproj *.xcode *.pbproj *.pbxproj"    setenv EXECUTABLES_FOLDER_PATH TermKit.app/Contents/Executables    setenv EXECUTABLE_FOLDER_PATH TermKit.app/Contents/MacOS    setenv EXECUTABLE_NAME TermKit    setenv EXECUTABLE_PATH TermKit.app/Contents/MacOS/TermKit    setenv FILE_LIST /Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/Objects/LinkFileList    setenv FIXED_FILES_DIR /Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/FixedFiles    setenv FRAMEWORKS_FOLDER_PATH TermKit.app/Contents/Frameworks    setenv FRAMEWORK_FLAG_PREFIX -framework    setenv FRAMEWORK_SEARCH_PATHS "\"/Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug\" "    setenv FRAMEWORK_VERSION A    setenv FULL_PRODUCT_NAME TermKit.app    setenv GCC3_VERSION 3.3    setenv GCC_C_LANGUAGE_STANDARD gnu99    setenv GCC_DYNAMIC_NO_PIC NO    setenv GCC_ENABLE_FIX_AND_CONTINUE YES    setenv GCC_INLINES_ARE_PRIVATE_EXTERN YES    setenv GCC_MODEL_TUNING G5    setenv GCC_OPTIMIZATION_LEVEL 0    setenv GCC_PFE_FILE_C_DIALECTS "c objective-c c++ objective-c++"    setenv GCC_PRECOMPILE_PREFIX_HEADER YES    setenv GCC_PREFIX_HEADER TermKit_Prefix.pch    setenv GCC_SYMBOLS_PRIVATE_EXTERN YES    setenv GCC_TREAT_WARNINGS_AS_ERRORS NO    setenv GCC_VERSION 4.2    setenv GCC_WARN_ABOUT_RETURN_TYPE YES    setenv GCC_WARN_UNUSED_VARIABLE YES    setenv GENERATE_MASTER_OBJECT_FILE NO    setenv GENERATE_PKGINFO_FILE YES    setenv GENERATE_PROFILING_CODE NO    setenv GID 20    setenv GROUP staff    setenv HEADERMAP_INCLUDES_FLAT_ENTRIES_FOR_TARGET_BEING_BUILT YES    setenv HEADERMAP_INCLUDES_FRAMEWORK_ENTRIES_FOR_ALL_PRODUCT_TYPES YES    setenv HEADERMAP_INCLUDES_NONPUBLIC_NONPRIVATE_HEADERS YES    setenv HEADERMAP_INCLUDES_PROJECT_HEADERS YES    setenv HEADER_SEARCH_PATHS "\"/Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug/include\" "    setenv ICONV /usr/bin/iconv    setenv INFOPLIST_EXPAND_BUILD_SETTINGS YES    setenv INFOPLIST_FILE TermKit-Info.plist    setenv INFOPLIST_OUTPUT_FORMAT same-as-input    setenv INFOPLIST_PATH TermKit.app/Contents/Info.plist    setenv INFOPLIST_PREPROCESS NO    setenv INFOSTRINGS_PATH TermKit.app/Contents/Resources/English.lproj/InfoPlist.strings    setenv INSTALL_DIR /tmp/TermKit.dst/Users/steven/Applications    setenv INSTALL_GROUP staff    setenv INSTALL_MODE_FLAG u+w,go-w,a+rX    setenv INSTALL_OWNER steven    setenv INSTALL_PATH /Users/steven/Applications    setenv INSTALL_ROOT /tmp/TermKit.dst    setenv JAVAC_DEFAULT_FLAGS "-J-Xms64m -J-XX:NewSize=4M -J-Dfile.encoding=UTF8"    setenv JAVA_APP_STUB /System/Library/Frameworks/JavaVM.framework/Resources/MacOS/JavaApplicationStub    setenv JAVA_ARCHIVE_CLASSES YES    setenv JAVA_ARCHIVE_TYPE JAR    setenv JAVA_COMPILER /usr/bin/javac    setenv JAVA_FOLDER_PATH TermKit.app/Contents/Resources/Java    setenv JAVA_FRAMEWORK_RESOURCES_DIRS Resources    setenv JAVA_JAR_FLAGS cv    setenv JAVA_SOURCE_SUBDIR .    setenv JAVA_USE_DEPENDENCIES YES    setenv JAVA_ZIP_FLAGS -urg    setenv JIKES_DEFAULT_FLAGS "+E +OLDCSO"    setenv KEEP_PRIVATE_EXTERNS NO    setenv LD_GENERATE_MAP_FILE NO    setenv LD_MAP_FILE_PATH /Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/TermKit-LinkMap-normal-x86_64.txt    setenv LD_OPENMP_FLAGS -fopenmp    setenv LEX /Developer/usr/bin/lex    setenv LIBRARY_FLAG_NOSPACE YES    setenv LIBRARY_FLAG_PREFIX -l    setenv LIBRARY_SEARCH_PATHS "\"/Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug\" "    setenv LINKER_DISPLAYS_MANGLED_NAMES NO    setenv LINK_FILE_LIST_normal_x86_64 /Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/Objects-normal/x86_64/TermKit.LinkFileList    setenv LINK_WITH_STANDARD_LIBRARIES YES    setenv LOCALIZED_RESOURCES_FOLDER_PATH TermKit.app/Contents/Resources/English.lproj    setenv LOCAL_ADMIN_APPS_DIR /Applications/Utilities    setenv LOCAL_APPS_DIR /Applications    setenv LOCAL_DEVELOPER_DIR /Library/Developer    setenv LOCAL_LIBRARY_DIR /Library    setenv MACH_O_TYPE mh_execute    setenv MACOSX_DEPLOYMENT_TARGET 10.6    setenv MAC_OS_X_VERSION_ACTUAL 1064    setenv MAC_OS_X_VERSION_MAJOR 1060    setenv MAC_OS_X_VERSION_MINOR 0604    setenv NATIVE_ARCH i386    setenv NATIVE_ARCH_32_BIT i386    setenv NATIVE_ARCH_64_BIT x86_64    setenv NATIVE_ARCH_ACTUAL x86_64    setenv NO_COMMON YES    setenv OBJECT_FILE_DIR /Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/Objects    setenv OBJECT_FILE_DIR_normal /Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/Objects-normal    setenv OBJROOT /Users/steven/Projects/TermKit/Cocoa/TermKit/build    setenv ONLY_ACTIVE_ARCH YES    setenv OPTIMIZATION_LEVEL 0    setenv OS MACOS    setenv OSAC /usr/bin/osacompile    setenv PACKAGE_TYPE com.apple.package-type.wrapper.application    setenv PASCAL_STRINGS YES    setenv PATH_PREFIXES_EXCLUDED_FROM_HEADER_DEPENDENCIES "/usr/include /usr/local/include /System/Library/Frameworks /System/Library/PrivateFrameworks /Developer/Headers /Developer/SDKs /Developer/Platforms"    setenv PBDEVELOPMENTPLIST_PATH TermKit.app/Contents/pbdevelopment.plist    setenv PFE_FILE_C_DIALECTS objective-c    setenv PKGINFO_FILE_PATH /Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/PkgInfo    setenv PKGINFO_PATH TermKit.app/Contents/PkgInfo    setenv PLATFORM_DEVELOPER_APPLICATIONS_DIR /Developer/Applications    setenv PLATFORM_DEVELOPER_BIN_DIR /Developer/usr/bin    setenv PLATFORM_DEVELOPER_LIBRARY_DIR /Developer/Library    setenv PLATFORM_DEVELOPER_SDK_DIR /Developer/SDKs    setenv PLATFORM_DEVELOPER_TOOLS_DIR /Developer/Tools    setenv PLATFORM_DEVELOPER_USR_DIR /Developer/usr    setenv PLATFORM_NAME macosx    setenv PLIST_FILE_OUTPUT_FORMAT same-as-input    setenv PLUGINS_FOLDER_PATH TermKit.app/Contents/PlugIns    setenv PREBINDING NO    setenv PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR YES    setenv PRECOMP_DESTINATION_DIR /Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/PrefixHeaders    setenv PRESERVE_DEAD_CODE_INITS_AND_TERMS NO    setenv PRIVATE_HEADERS_FOLDER_PATH TermKit.app/Contents/PrivateHeaders    setenv PRODUCT_NAME TermKit    setenv PRODUCT_SETTINGS_PATH /Users/steven/Projects/TermKit/Cocoa/TermKit/TermKit-Info.plist    setenv PRODUCT_TYPE com.apple.product-type.application    setenv PROFILING_CODE NO    setenv PROJECT TermKit    setenv PROJECT_DERIVED_FILE_DIR /Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/DerivedSources    setenv PROJECT_DIR /Users/steven/Projects/TermKit/Cocoa/TermKit    setenv PROJECT_FILE_PATH /Users/steven/Projects/TermKit/Cocoa/TermKit/TermKit.xcodeproj    setenv PROJECT_NAME TermKit    setenv PROJECT_TEMP_DIR /Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build    setenv PUBLIC_HEADERS_FOLDER_PATH TermKit.app/Contents/Headers    setenv RECURSIVE_SEARCH_PATHS_FOLLOW_SYMLINKS YES    setenv REMOVE_CVS_FROM_RESOURCES YES    setenv REMOVE_SVN_FROM_RESOURCES YES    setenv REZ_COLLECTOR_DIR /Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/ResourceManagerResources    setenv REZ_OBJECTS_DIR /Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/ResourceManagerResources/Objects    setenv REZ_SEARCH_PATHS "\"/Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug\" "    setenv RUN_CLANG_STATIC_ANALYZER NO    setenv SCAN_ALL_SOURCE_FILES_FOR_INCLUDES NO    setenv SCRIPTS_FOLDER_PATH TermKit.app/Contents/Resources/Scripts    setenv SCRIPT_INPUT_FILE_COUNT 0    setenv SCRIPT_OUTPUT_FILE_COUNT 0    setenv SDKROOT /Developer/SDKs/MacOSX10.6.sdk    setenv SDK_DIR /Developer/SDKs/MacOSX10.6.sdk    setenv SDK_NAME macosx10.6    setenv SED /usr/bin/sed    setenv SEPARATE_STRIP NO    setenv SEPARATE_SYMBOL_EDIT NO    setenv SET_DIR_MODE_OWNER_GROUP YES    setenv SET_FILE_MODE_OWNER_GROUP NO    setenv SHARED_DERIVED_FILE_DIR /Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug/DerivedSources    setenv SHARED_FRAMEWORKS_FOLDER_PATH TermKit.app/Contents/SharedFrameworks    setenv SHARED_PRECOMPS_DIR /var/folders/Gz/Gz5zMClPHP8JRw2dizDx7k+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders    setenv SHARED_SUPPORT_FOLDER_PATH TermKit.app/Contents/SharedSupport    setenv SKIP_INSTALL NO    setenv SOURCE_ROOT /Users/steven/Projects/TermKit/Cocoa/TermKit    setenv SRCROOT /Users/steven/Projects/TermKit/Cocoa/TermKit    setenv STANDARD_C_PLUS_PLUS_LIBRARY_TYPE dynamic    setenv STRINGS_FILE_OUTPUT_ENCODING UTF-16    setenv STRIP_INSTALLED_PRODUCT YES    setenv STRIP_STYLE all    setenv SYMBOL_REPOSITORY_DIR /Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/SymbolRepositories    setenv SYMROOT /Users/steven/Projects/TermKit/Cocoa/TermKit/build    setenv SYSTEM_ADMIN_APPS_DIR /Applications/Utilities    setenv SYSTEM_APPS_DIR /Applications    setenv SYSTEM_CORE_SERVICES_DIR /System/Library/CoreServices    setenv SYSTEM_DEMOS_DIR /Applications/Extras    setenv SYSTEM_DEVELOPER_APPS_DIR /Developer/Applications    setenv SYSTEM_DEVELOPER_BIN_DIR /Developer/usr/bin    setenv SYSTEM_DEVELOPER_DEMOS_DIR "/Developer/Applications/Utilities/Built Examples"    setenv SYSTEM_DEVELOPER_DIR /Developer    setenv SYSTEM_DEVELOPER_DOC_DIR "/Developer/ADC Reference Library"    setenv SYSTEM_DEVELOPER_GRAPHICS_TOOLS_DIR "/Developer/Applications/Graphics Tools"    setenv SYSTEM_DEVELOPER_JAVA_TOOLS_DIR "/Developer/Applications/Java Tools"    setenv SYSTEM_DEVELOPER_PERFORMANCE_TOOLS_DIR "/Developer/Applications/Performance Tools"    setenv SYSTEM_DEVELOPER_RELEASENOTES_DIR "/Developer/ADC Reference Library/releasenotes"    setenv SYSTEM_DEVELOPER_TOOLS /Developer/Tools    setenv SYSTEM_DEVELOPER_TOOLS_DOC_DIR "/Developer/ADC Reference Library/documentation/DeveloperTools"    setenv SYSTEM_DEVELOPER_TOOLS_RELEASENOTES_DIR "/Developer/ADC Reference Library/releasenotes/DeveloperTools"    setenv SYSTEM_DEVELOPER_USR_DIR /Developer/usr    setenv SYSTEM_DEVELOPER_UTILITIES_DIR /Developer/Applications/Utilities    setenv SYSTEM_DOCUMENTATION_DIR /Library/Documentation    setenv SYSTEM_LIBRARY_DIR /System/Library    setenv TARGETNAME TermKit    setenv TARGET_BUILD_DIR /Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug    setenv TARGET_NAME TermKit    setenv TARGET_TEMP_DIR /Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build    setenv TEMP_DIR /Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build    setenv TEMP_FILES_DIR /Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build    setenv TEMP_FILE_DIR /Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build    setenv TEMP_ROOT /Users/steven/Projects/TermKit/Cocoa/TermKit/build    setenv UID 501    setenv UNLOCALIZED_RESOURCES_FOLDER_PATH TermKit.app/Contents/Resources    setenv UNSTRIPPED_PRODUCT NO    setenv USER steven    setenv USER_APPS_DIR /Users/steven/Applications    setenv USER_LIBRARY_DIR /Users/steven/Library    setenv USE_DYNAMIC_NO_PIC YES    setenv USE_HEADERMAP YES    setenv USE_HEADER_SYMLINKS NO    setenv VALIDATE_PRODUCT NO    setenv VALID_ARCHS "i386 ppc ppc64 ppc7400 ppc970 x86_64"    setenv VERBOSE_PBXCP NO    setenv VERSIONPLIST_PATH TermKit.app/Contents/version.plist    setenv VERSION_INFO_BUILDER steven    setenv VERSION_INFO_FILE TermKit_vers.c    setenv VERSION_INFO_STRING "\"@(#)PROGRAM:TermKit  PROJECT:TermKit-\""    setenv WRAPPER_EXTENSION app    setenv WRAPPER_NAME TermKit.app    setenv WRAPPER_SUFFIX .app    setenv XCODE_APP_SUPPORT_DIR /Developer/Library/Xcode    setenv XCODE_VERSION_ACTUAL 0324    setenv XCODE_VERSION_MAJOR 0300    setenv XCODE_VERSION_MINOR 0320    setenv YACC /Developer/usr/bin/yacc    /bin/sh -c /Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/Script-B0494B22124369A600867892.sh0#
-
-CProcessInfoPlistFile /Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug/TermKit.app/Contents/Info.plist TermKit-Info.plist
-s310027624.209673
-e310027624.229611
-r1
-xProcessInfoPlistFile
-x/Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug/TermKit.app/Contents/Info.plist
-xTermKit-Info.plist
-lSLF07#2@26"Process TermKit-Info.plist310027624#310027624#0(0"0(0#0#63"/Users/steven/Projects/TermKit/Cocoa/TermKit/TermKit-Info.plist8613717568#328"    cd /Users/steven/Projects/TermKit/Cocoa/TermKit    builtin-infoPlistUtility TermKit-Info.plist -genpkginfo /Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug/TermKit.app/Contents/PkgInfo -expandbuildsettings -platform macosx -o /Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug/TermKit.app/Contents/Info.plist0#
-
-CProcessPCH /var/folders/Gz/Gz5zMClPHP8JRw2dizDx7k+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/TermKit_Prefix-fsnorblptnbfkwdskxvrezkvjqwn/TermKit_Prefix.pch.gch TermKit_Prefix.pch normal x86_64 objective-c com.apple.compilers.gcc.4_2
-s310027626.226418
-e310027631.081336
-r1
-xProcessPCH
-x/var/folders/Gz/Gz5zMClPHP8JRw2dizDx7k+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/TermKit_Prefix-fsnorblptnbfkwdskxvrezkvjqwn/TermKit_Prefix.pch.gch
-xTermKit_Prefix.pch
-xnormal
-xx86_64
-xobjective-c
-xcom.apple.compilers.gcc.4_2
-lSLF07#2@29"Precompile TermKit_Prefix.pch310027626#310027631#0(0"0(0#0#63"/Users/steven/Projects/TermKit/Cocoa/TermKit/TermKit_Prefix.pch8620235264#1416"    cd /Users/steven/Projects/TermKit/Cocoa/TermKit    setenv LANG en_US.US-ASCII    /Developer/usr/bin/gcc-4.2 -x objective-c-header -arch x86_64 -fmessage-length=0 -pipe -std=gnu99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -isysroot /Developer/SDKs/MacOSX10.6.sdk -mfix-and-continue -mmacosx-version-min=10.6 -gdwarf-2 -iquote /Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/TermKit-generated-files.hmap -I/Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/TermKit-own-target-headers.hmap -I/Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/TermKit-all-target-headers.hmap -iquote /Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/TermKit-project-headers.hmap -F/Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug -I/Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug/include -I/Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/DerivedSources/x86_64 -I/Users/steven/Projects/TermKit/Cocoa/TermKit/build/TermKit.build/Debug/TermKit.build/DerivedSources -c /Users/steven/Projects/TermKit/Cocoa/TermKit/TermKit_Prefix.pch -o /var/folders/Gz/Gz5zMClPHP8JRw2dizDx7k+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/TermKit_Prefix-fsnorblptnbfkwdskxvrezkvjqwn/TermKit_Prefix.pch.gch0#
-
-CTouch /Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug/TermKit.app
-s310029386.821783
-e310029386.948426
-r1
-xTouch
-x/Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug/TermKit.app
-lSLF07#2@74"Touch /Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug/TermKit.app310029386#310029386#0(0"0(0#0#0"8617936000#143"    cd /Users/steven/Projects/TermKit/Cocoa/TermKit    /usr/bin/touch -c /Users/steven/Projects/TermKit/Cocoa/TermKit/build/Debug/TermKit.app0#
-

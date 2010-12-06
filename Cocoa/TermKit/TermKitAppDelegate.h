@@ -9,12 +9,8 @@
 #import <Cocoa/Cocoa.h>
 
 @interface TermKitAppDelegate : NSObject <NSApplicationDelegate> {
-    NSWindow *window;
 }
 
-- (IBAction) newTerminal: sender;
 - (IBAction) newWindow: sender;
-
-@property (assign) IBOutlet NSWindow *window;
 
 @end

@@ -13,10 +13,28 @@
 @implementation TermKitWindowController {
 }
 
+- (id) init {
+    self = [super initWithWindowNibName:@"Window"];
+    if (self != nil) {
+        NSString* title = [[NSString alloc] initWithFormat:@"TermKit (%@)",
+                           [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]
+                           ];
+        [[self window] setTitle:title];
+
+        [self newTerminal:self];
+    }
+    return self;
+}
+
 - (IBAction) newTerminal: sender {
-    id viewController = [[TermKitTerminalController alloc] initWithNibName:@"Terminal.nib" bundle:nil];
-    id view = [viewController view];
-    [[[self window] contentView] addSubview:view];
+    id contentView = [[self window] contentView];
+    NSRect contentRect = [contentView frame];
+    
+    id terminalController = [[TermKitTerminalController alloc] init];
+    id terminalView = [terminalController view];
+    [terminalView setFrame:contentRect];
+    
+    [contentView addSubview:terminalView];
 }
 
 @end

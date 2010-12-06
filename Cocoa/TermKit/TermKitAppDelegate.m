@@ -11,17 +11,12 @@
 
 @implementation TermKitAppDelegate
 
-@synthesize window;
-
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-    NSString* title = [[NSString alloc] initWithFormat:@"TermKit (%@)",
-                       [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]
-                      ];
-    [window setTitle:title];
+    [self newWindow:self];
 }
 
 - (IBAction) newWindow: sender {
-    id windowController = [[TermKitWindowController alloc] initWithWindowNibName:@"Window"]; 
+    id windowController = [[TermKitWindowController alloc] init]; 
     [windowController showWindow:self];
 }
 

@@ -12,6 +12,7 @@
 @interface TermKitTerminalController : NSViewController {
 }
 
+- (id)init;
 - (void)loadView;
 
 @end

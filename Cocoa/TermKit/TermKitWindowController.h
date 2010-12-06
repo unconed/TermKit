@@ -13,6 +13,7 @@
 
 }
 
+- (id) init;
 - (IBAction) newTerminal: sender;
 
 @end

@@ -229,6 +229,7 @@ tf.caret.prototype = {
   },
 
   reset: function () {
+    // TODO:
     // find caret offset inside textfield
     // calculate length of prefix
     // remove caret

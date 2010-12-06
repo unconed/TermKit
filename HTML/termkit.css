@@ -102,42 +102,42 @@ body {
   float: right;
 }
 
-.termkitCommandView .command {
+.termkitCommand {
   position: relative;
 }
 
-.termkitCommandView .command > span.sigil {
+.termkitCommand > span.sigil {
   position: absolute;
   left: 15px;
   top: 12px;
   color: #ccc;
 }
 
-.termkitCommandView .command > span.sigil-ok {
+.termkitCommand > span.sigil-ok {
   color: #9f7;
   text-shadow: 0 0 5px rgba(0, 255, 0, 1), 0 0 10px rgba(0, 255, 0, 1), 0 0 20px rgba(0, 255, 0, 1);
 }
 
-.termkitCommandView .command > span.sigil-warning {
+.termkitCommand > span.sigil-warning {
   color: #ff9;
 }
 
-.termkitCommandView .command > span.sigil-error {
+.termkitCommand > span.sigil-error {
   color: #f77;
   text-shadow: 0 0 5px rgba(255, 0 , 0, 1), 0 0 10px rgba(255, 0 , 0, 1), 0 0 20px rgba(255, 0 , 0, 1);
 }
 
-.termkitCommandView .command .termkitProgressIndicator {
+.termkitCommand .termkitProgressIndicator {
   position: absolute;
   left: -2px;
   top: -1px;
 }
 
-.termkitCommandView .command .termkitTokenField {
+.termkitCommand .termkitTokenField {
 /*  background: #000 -webkit-gradient(linear, left top, left bottom, from(#333), color-stop(0.1, #000));*/
 }
 
-.termkitCommandView .command.command-open {
+.termkitCommand.command-open {
 /*  background: #000 -webkit-gradient(linear, left 80%, left bottom, from(#000), color-stop(0.7, #111), to(#222));*/
 }
 
@@ -326,15 +326,12 @@ body {
 }
 
 .termkitTokenField > span.token-quoted {
-  padding: .45em .75em .35em;
+  padding: .4em .5em .35em;
   -webkit-border-radius: .25em;
   margin: 0 3px 0 2px;
-  -webkit-box-shadow: 0px -1px 1px rgba(160,180,192,1);
-  background: #578 -webkit-gradient(linear, left top, left bottom, from(#579), to(#357));
-  color: #cef;
 
   -webkit-box-shadow: 0px -1px 1px rgba(192,192,192,1);
-  background: #666 -webkit-gradient(linear, left top, left bottom, from(#777), to(#444));
+  background: #777 -webkit-gradient(linear, left top, left bottom, from(#808080), to(#555));
   color: #eee;
 }
 
@@ -347,4 +344,21 @@ body {
   background: none;
   padding: 0;
   margin: 0;
+}
+
+/**************/
+::-webkit-scrollbar {
+  background: #000;
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track-piece:horizontal {
+  width: 30px;
+}
+::-webkit-scrollbar-track {
+  background: #000;
+}
+::-webkit-scrollbar-thumb {
+  background: #333 -webkit-gradient(linear, 0% 0%, 0% 100%, from(#444), to(#333));
+  border-radius: 8px;
 }

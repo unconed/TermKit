@@ -24,7 +24,7 @@ cv.command.prototype = {
   // Return active markup for this command.
   $markup: function () {
     var self = this;
-    var $command = $('<div class="command"><span class="sigil"></span>').data('controller', this);
+    var $command = $('<div class="termkitCommand"><span class="sigil"></span>').data('controller', this);
 
     // Create tokenfield for command input.
     this.tokenField = new termkit.tokenField();
@@ -64,7 +64,7 @@ cv.command.prototype = {
   // Update the element.
   updateElement: function () {
     var classes = [
-      'command',
+      'termkitCommand',
       'command-'+ this.state,
       this.collapsed ? 'command-collapsed' : 'command-open'
     ];

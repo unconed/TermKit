@@ -5,15 +5,12 @@ body {
 
 .termkitCommandView {
   font-family: "BitStream Vera Sans Mono";
-}
-
-.termkitOutputView, .termkitTokenField {
   font-size: 70%;
 }
 
 .termkitOutputView .widgetFile .name {
 /*  font-weight: bold; */
-  font-size: 1.5em;
+  font-size: 1em;
   line-height: 1.6;
   color: #fff;
 }

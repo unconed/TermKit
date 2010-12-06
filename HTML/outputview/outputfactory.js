@@ -32,6 +32,7 @@ widgets.raw = function (properties) {
   ov.outputNode.call(this, properties);
   
   this.$contents = this.$element.find('.contents');
+  this.updateElement();
 };
 
 widgets.raw.prototype = $.extend(new ov.outputNode(), {
@@ -63,7 +64,7 @@ widgets.file = function (properties) {
   this.$icon = this.$element.find('.icon');
   this.$name = this.$element.find('.name');
   this.$meta = this.$element.find('.meta');
-  
+  this.updateElement();
 };
 
 widgets.file.prototype = $.extend(new ov.outputNode(), {
@@ -95,7 +96,7 @@ widgets.file.prototype = $.extend(new ov.outputNode(), {
         previewUrl = 'termkit-icon-preview:///' + encodeURIComponent(path);
     image.onload = function () {
       self.$icon.css({
-        background: 'url('+ previewUrl +')',
+        background: 'url('+ previewUrl +')'
       });
     };
     image.src = previewUrl;
@@ -114,6 +115,8 @@ widgets.itemList = function (properties) {
   
   // Initialize node.
   ov.outputNode.call(this, properties);
+
+  this.updateElement();
 };
 
 widgets.itemList.prototype = $.extend(new ov.outputNode(), {

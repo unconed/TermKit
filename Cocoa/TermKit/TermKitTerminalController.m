@@ -14,7 +14,7 @@
 - (id)init {
     self = [super initWithNibName:@"Terminal.nib" bundle:nil];
     if (self != nil) {
-        
+        //
     }
     return self;
 };

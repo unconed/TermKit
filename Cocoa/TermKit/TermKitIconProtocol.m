@@ -150,7 +150,7 @@
         /* send data to client */
         
         [client URLProtocol:self didReceiveResponse:response
-         cacheStoragePolicy:NSURLCacheStorageNotAllowed];
+         cacheStoragePolicy:NSURLCacheStorageAllowedInMemoryOnly];
         
         [client URLProtocol:self didLoadData:data];
         
@@ -197,7 +197,7 @@
 - (NSImage*) imageForIconPath:(NSString*)iconPath {
     NSSize iconSize = NSMakeSize(32, 32);
 
-    NSImage *icon = [[NSWorkspace sharedWorkspace] iconForFileType:([iconPath isEqualToString:@"/"] ? iconPath : NSFileTypeForHFSTypeCode(kGenericFolderIcon))];
+    NSImage *icon = [[NSWorkspace sharedWorkspace] iconForFileType:([iconPath isEqualToString:@"/"] ? NSFileTypeForHFSTypeCode(kGenericFolderIcon) : iconPath)];
     if (icon) {
         [icon setSize:iconSize];
     }

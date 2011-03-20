@@ -1,3 +1,10 @@
+Tasks:
+[ ] data/view stream multipipes.
+[ ] File autocompletion
+[ ] cat/echo Piping + progress bar
+[ ] Make ls in directories snappy. e.g. /Applications
+[ ] Improve typography of directory listing
+
 Prototype:
 
 1) UI prototypes
@@ -22,6 +29,7 @@ Prototype:
   [ ] switch between inline and block tokens -> input vs textarea.
   [ ] fix wrapping of tokens
   [ ] caret.remove() shouldn't need to touch tokenList when pruning empties -> let triggers do it
+  [ ] | and >> token support
     
   [?] write external bindings for tokenfield
     => tokenfield abstracts, interface for matching should be only multiregexp + callback
@@ -29,7 +37,6 @@ Prototype:
     . register multiregexp
     . execute command
   [?] rewrite $element / $markup pattern to create new $markup on demand when doing insert/remove from DOM
-  [?] unified viewcontroller class?
 
 [X] inline autocomplete
   [X] panel overlayed on token
@@ -47,7 +54,7 @@ Prototype:
   [X] host output
   [X] make outputnode tree changes reflect in DOM transparently
   [X] fix view.add mid-node insertion
-  [ ] auto-expand to fill view
+  [X] auto-expand to fill view
   [ ] command history
   [ ] alt-up/down to change focus
   [ ] tabbing
@@ -74,11 +81,11 @@ Prototype:
   [X] view parser/tree on client side
   [X] list of files
   [X] file icons
+  [ ] limit new items to appends. make updates by index only.
   [ ] auto-layout mechanism w/ padded max-height on view
   [ ] auto-layout column width (preferred size from widgets + widget variant/style)
-  [ ] fix order/inserting of table rows asynchronously?
-  [ ] make file icons cacheable in webkit (default: always, preview: session)
-  [ ] column layout
+  [ ] make file icons cacheable long-term in webkit cache
+  [ ] stable multi-column layout
   [ ] intercontrol focus / caret, set up global manager
   [ ] tab, switch between widgets -> iterate live.
 
@@ -93,7 +100,8 @@ Prototype:
     [X] stream in/out json packets
     [X] view proxy object on worker side
     [X] make ls / cd commands
-+    [ ] reroute stderr as viewstream. arrange pipes for command/view
+    [ ] simplify message format to raw json
++   [ ] reroute stderr as viewstream. arrange pipes for command/view
       [ ] hackability of core node, custom process.js-alt binding?
     [ ] Invoke a new process, capture output
     [ ] define datastream format
@@ -102,7 +110,7 @@ Prototype:
 
 5) Command Suite
 [ ] make a script for git (arguments, file/dir, ...)
-[ ] basic top infographs + live update
+[ ] basic top/w infographs + live update
 [ ] robust unix basics
 [ ] mysql console
 [ ] ssh support

@@ -42,12 +42,12 @@ tc.prototype = {
     var sequence = this.nextId++;
     this.handlers[sequence] = handlers;
 
-    this.send(sessionId, sequence, method, args);
+    this.send({ sessionId: sessionId, sequence: sequence, method: method, args: args });
   },
   
   // Pass a message to the server.
-  send: function (sessionId, sequence, method, args) {
-    var json = JSON.stringify([ sessionId, sequence, method, args ]);
+  send: function (message) {
+    var json = JSON.stringify(message);
 //    console.log('sending '+json);
     this.socket.send(json);
   },  
@@ -56,27 +56,20 @@ tc.prototype = {
   receive: function (data) {
     // Parse incoming message.
     var message = JSON.parse(data);
-    if (message && message.length) {
-      var sessionId = message[0],
-          sequence = message[1],
-          method = message[2],
-          args = message[3];
-
-//      console.log('received '+data);
-
+    if (message && message.sessionId && message.sequence && message.method && message.args) {
       // Verify arguments.
-      if (typeof message[1] == 'number') {
+      if (typeof message.sequence == 'number') {
         // Locate handler for method and execute.
-        var handler = this.handlers[sequence];
+        var handler = this.handlers[message.sequence];
         if (handler) {
-          var prefix = method.split('.')[0];
+          var prefix = message.method.split('.')[0];
           if (prefix == 'return') {
-            handler.Return && handler.Return(args.data, args.code, args.status, sessionId);
+            handler.Return && handler.Return(message.args.data, message.args.code, message.args.status, message.sessionId);
             // Clean-up callbacks.
             delete this.handlers[sequence];
           }
           else {
-            handler[prefix] && handler[prefix](method, args);
+            handler[prefix] && handler[prefix](message.method, message.args);
           }
         }
       }

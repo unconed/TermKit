@@ -30,17 +30,14 @@ workerProcessor.prototype = {
   receive: function (data) {
     try {
       var message = JSON.parse(data);
-      if (message && message.length) {
-        var sequence = message[0],
-            method = message[1],
-            args = message[2],
-            self = this;
+      if (message && message.sequence && message.method && message.args) {
+        var self = this;
 
-        if (typeof sequence == 'number') {
-          if (workerProcessor.handlers[method]) {
+        if (typeof message.sequence == 'number') {
+          if (workerProcessor.handlers[message.method]) {
             // Define convenient invocation callback.
             var invoke = function (method, args) {
-              self.send(sequence, method, args);
+              self.send(message.sequence, method, args);
             };
             // Define convenient exit callback.
             var returned = false;
@@ -51,7 +48,7 @@ workerProcessor.prototype = {
               }
             };
             // Invoke handler.
-            workerProcessor.handlers[method].call(this, args, invoke, exit);
+            workerProcessor.handlers[message.method].call(this, message.args, invoke, exit);
           }
         }
       }
@@ -62,7 +59,7 @@ workerProcessor.prototype = {
   
   // Reply with method call.
   send: function (sequence, method, args) {
-    var data = JSON.stringify([ sequence, method, args ]);
+    var data = JSON.stringify({ sequence: sequence, method: method, args: args });
     this.returnStream.write(data + "\u0000");
   },
   

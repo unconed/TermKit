@@ -1,21 +1,23 @@
 Current questions:
 
 1) Data stream, content type:
- application/json; dtd=termkit.filesystem
+ application/json; schema=termkit.filesystem.json
  
- dtd, doc, format, type
+ json schema?
  
 2) Split output into view updates/appends, or output listing as huge block
 
  -> single block is simplest, allows comparison between short lists and long lists
  -> can split into batches... vs event model = too small granularity causes inefficiency
  -> remember: process should be generic regardless of screen size: agnostic
+ 
+ note: console output is mostly linear appends. non-linear updates can be done by dividing view into subviews and appending to those. should not support unordered inserts for simplicity.
 
 3) Default formatters by mime type / subtype => provides easy pretty output
 
 4) Make grep
 
-5) Make LS work with grep.
+5) Make LS work with grep.git 
 
 Note:
 
@@ -23,6 +25,16 @@ TermKit offers two levels of abstraction for making better Unix UI:
 
 1) Formatters: by mime type and subtype, turn structured data (xml, gif, json, ini, ...) into richer output
 2) View events: build a DOM asynchronously and update real-time. from basic logging to rich, dynamic, interactive widgets.
+
++++ --- 
+
+View events should be reserved for actual interactive applications (e.g. top).
+
+The rest should be formatter based: allows grep and such to work well.
+
+example use cases:
+
+ls + grep
 
 +++ --- 
 

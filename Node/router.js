@@ -25,19 +25,15 @@ exports.router.prototype = {
   receive: function (data) {
     // Parse incoming message.
     var message = JSON.parse(data);
-    if (message && message.length) {
-      var sessionId = message[0],
-          sequence = message[1],
-          method = message[2],
-          args = message[3],
-          self = this;
+    if (message && message.sequence && message.method && message.args) {
+      var self = this;
 
       // Verify arguments.
-      if (typeof sequence == 'number') {
+      if (typeof message.sequence == 'number') {
         // Locate handler for method and execute.
-        if (exports.handlers[method]) {
+        if (exports.handlers[message.method]) {
           // Look up session.
-          var session = sessionId && this.getSession(sessionId),
+          var session = message.sessionId && this.getSession(message.sessionId),
               returned = false;
             // Define convenient exit callback.
               exit = function (value, object) {
@@ -45,20 +41,19 @@ exports.router.prototype = {
                   if (object) {
                     value = [value, object];
                   }
-                  self.send('return', sequence, returnObject(value));
+                  self.send(message.sessionId, message.sequence, 'return', returnObject(value));
                   returned = true;
                 }
               };
           // Invoke method.
-          exports.handlers[method].call(this, session, sequence, args, exit);
+          exports.handlers[message.method].call(this, session, message.sequence, message.args, exit);
         }
       }
     }
   },
   
   send: function (sessionId, sequence, method, args) {
-    var json = JSON.stringify([ sessionId, sequence, method, args ]);
-    console.log('sending '+json);
+    var json = JSON.stringify({ sessionId: sessionId, sequence: sequence, method: method, args: args });
     this.connection.send(json);
   },
   

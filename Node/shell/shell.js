@@ -40,7 +40,7 @@ exports.shell = function (sequence, args, exit, router) {
     p && p.stdout.on('data', function (data) { self.receive(data); });
 
     // Initalize worker.
-    this.send([sequence, 'init', args ]);
+    this.send(sequence, 'init', args);
   }
   else {
     // Report error.
@@ -50,15 +50,16 @@ exports.shell = function (sequence, args, exit, router) {
 
 exports.shell.prototype = {
   run: function (sequence, args) {
-    this.send([ sequence, 'run', args ]);
+    this.send(sequence, 'run', args);
   },
   
   close: function () {
     this.process.stdin.close();
   },
   
-  send: function (data) {
-    var json = JSON.stringify(data);
+  send: function (sequence, method, args) {
+    var json = JSON.stringify({ sequence: sequence, method: method, args: args });
+    console.log('shell sending '+json);
     this.process.stdin.write(json + "\u0000");
   },
   
@@ -66,9 +67,10 @@ exports.shell.prototype = {
     this.buffer += data;
     while (this.buffer.indexOf("\u0000") >= 0) {
       var chunk = this.buffer.split("\u0000").shift();
-      var data = JSON.parse(chunk);
+      var message = JSON.parse(chunk);
 
-      this.router.send(this.id, data[0], data[1], data[2]);
+      console.log('shell receiving '+chunk);
+      this.router.send(this.id, message.sequence, message.method, message.args);
       this.buffer = this.buffer.substring(chunk.length + 1);
     }
   }

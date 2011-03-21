@@ -34,15 +34,15 @@ cv.command.prototype = {
     // Create throbber.
     this.progressIndicator = new termkit.progressIndicator();
 
-    // Create outputView for command output.
-    this.outputView = new termkit.outputView();
+    // Create outputFrame hosting outputViews for command output.
+    this.outputFrame = new termkit.outputView.outputFrame();
 
     $command.append(this.tokenField.$element);
     $command.append(this.progressIndicator.$element);
-    $command.append(this.outputView.$element);
+    $command.append(this.outputFrame.$element);
 
     this.progressIndicator.$element.hide();
-    this.outputView.$element.hide();
+    this.outputFrame.$element.hide();
 
     return $command;
   },
@@ -79,7 +79,7 @@ cv.command.prototype = {
 
     this.progressIndicator.$element[(this.state == 'running') ? 'show' : 'hide']();
 
-    this.outputView.$element[!this.collapsed ? 'show' : 'hide']();
+    this.outputFrame.$element[!this.collapsed ? 'show' : 'hide']();
   },
   
   // Execute tokenfield contents as command.
@@ -105,8 +105,8 @@ cv.command.prototype = {
           self.commandView.newCommand();
         });
       },
-      // Send all output to outputView.
-      this.outputView.hook()
+      // Send all output to outputFrame.
+      this.outputFrame.hook()
     );
   },
 

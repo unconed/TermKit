@@ -39,14 +39,6 @@ ov.prototype = {
 
   },
   
-  // Hook into the given set of handlers.
-  hook: function (handlers) {
-    var self = this;
-    handlers = handlers || {};
-    handlers['view'] = function (m,a) { self.viewHandler(m, a); };
-    return handlers;
-  },
-
   // Construct a tree of view objects.
   construct: function construct(objects) {
     var self = this;

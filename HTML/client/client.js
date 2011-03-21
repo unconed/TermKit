@@ -26,6 +26,7 @@ var tc = termkit.client = function () {
 
   // Message processing loop.
   s.on('message', function (data) {
+    console.log('receiving', data);
     self.receive(data);
   }); 
 
@@ -48,7 +49,7 @@ tc.prototype = {
   // Pass a message to the server.
   send: function (message) {
     var json = JSON.stringify(message);
-//    console.log('sending '+json);
+    console.log('sending', message);
     this.socket.send(json);
   },  
 

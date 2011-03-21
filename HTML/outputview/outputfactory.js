@@ -20,6 +20,7 @@ ov.outputFactory.prototype = {
       var nodes = node.properties.children.map(function (node) {
         return self.construct(node);
       });
+      delete node.properties.children;
       node.add(nodes);
     }
     

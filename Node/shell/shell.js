@@ -34,11 +34,13 @@ exports.shell = function (sequence, args, exit, router) {
     // Bind exit.
     p.on('exit', function (code) {
       console.log('shell worker exited with code ' + code);
-      console.log('buffer ', self.buffer);
     });
 
     // Bind receiver.
     p && p.stdout.on('data', function (data) { self.receive(data); });
+
+    // Bind receiver.
+    p && p.stderr.on('data', function (data) { self.error(data); });
 
     // Initalize worker.
     this.send(sequence, 'init', args);
@@ -62,6 +64,10 @@ exports.shell.prototype = {
     var json = JSON.stringify({ sequence: sequence, method: method, args: args });
     console.log('shell sending '+json);
     this.process.stdin.write(json + "\u0000");
+  },
+  
+  error: function (data) {
+    console.log('worker error', data.toString());
   },
   
   receive: function (data) {

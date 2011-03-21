@@ -1,5 +1,5 @@
 var shell = require("shell/shell");
-var returnObject = require('util').returnObject;
+var returnObject = require('misc').returnObject;
 
 /**
  * Processes incoming messages on a connection, routes them to active sessions.

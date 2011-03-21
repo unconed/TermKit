@@ -1,8 +1,9 @@
 require.paths.unshift('.');
+require.paths.unshift('..');
 require.paths.unshift('shell');
 
 var builtin = require('builtin'),
-    returnObject = require('util').returnObject;
+    returnObject = require('misc').returnObject;
     
 // Set up worker command processor.
 var workerProcessor = function (commandStream, returnStream) {
@@ -76,6 +77,11 @@ workerProcessor.prototype = {
       defaultShell: process.env.SHELL,
     };
     invoke('shell.environment', environment);
+  },
+
+  // Set up a process sequence.
+  prepare: function (tokens) {
+    
   },
 };
 

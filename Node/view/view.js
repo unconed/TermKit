@@ -29,29 +29,20 @@ exports.bridge.prototype = {
   },
 
   /**
-   * Add view object.
+   * Add objects to a view object.
    */
-  add: function (target, offset) {
-    var args = this.target(target, offset);
-    args.objects = exports.prepareOutput(arguments[arguments.length - 1]);
+  add: function (target, objects) {
+    var args = this.target(target);
+    args.objects = exports.prepareOutput(objects, true);
     this.invoke('view.add', args);
   },
 
   /**
    * Remove view object.
    */
-  remove: function (target, offset) {
-    var args = this.target(target, offset);
+  remove: function (target) {
+    var args = this.target(target);
     this.invoke('view.remove', args);
-  },
-
-  /**
-   * Replace view object.
-   */
-  replace: function (target, offset) {
-    var args = this.target(target, offset);
-    args.contents = exports.prepareOutput(arguments[arguments.length - 1]);
-    this.invoke('view.replace', args);
   },
 
   /**
@@ -69,7 +60,7 @@ exports.bridge.prototype = {
 /**
  * Helper: unify output, apply formatters / shortcuts.
  */
-exports.prepareOutput = function prepareOutput(object) {
+exports.prepareOutput = function prepareOutput(object, wrap) {
 
   // Allow plain text output..
   if (object.constructor == "".constructor) {
@@ -81,17 +72,20 @@ exports.prepareOutput = function prepareOutput(object) {
     for (i in object) {
       object[i] = prepareOutput(object[i]);
     }
+    return object;
+  }
+  else {
+    return wrap ? [object] : object;
   }
 
-  return object;
 }
 
 /**
  * Container: item list
  */
-exports.itemList = function (id, items) {
+exports.list = function (id, items) {
   return {
-    type: 'itemList',
+    type: 'list',
     id: id || null,
     children: items || [],
   };
@@ -100,11 +94,11 @@ exports.itemList = function (id, items) {
 /**
  * Widget: raw output
  */
-exports.raw = function (id, contents) {
+exports.raw = exports.view = function (id, contents) {
   return {
     type: 'raw',
     id: id || null,
-    contents: contents,
+    contents: contents || '',
   };
 }
 

@@ -13,7 +13,16 @@ ov.outputFactory.prototype = {
 
   construct: function (properties) {
     var type = widgets[properties.type] || ov.outputNode,
-        node = new type(properties);
+        node = new type(properties),
+        self = this;
+
+    if (node.properties.children) {
+      var nodes = node.properties.children.map(function (node) {
+        return self.construct(node);
+      });
+      node.add(nodes);
+    }
+    
     return node;
   },
 
@@ -109,9 +118,9 @@ widgets.file.prototype = $.extend(new ov.outputNode(), {
 });
 
 /**
- * Container: Item list
+ * Container: list
  */
-widgets.itemList = function (properties) {
+widgets.list = function (properties) {
   
   // Initialize node.
   ov.outputNode.call(this, properties);
@@ -119,11 +128,11 @@ widgets.itemList = function (properties) {
   this.updateElement();
 };
 
-widgets.itemList.prototype = $.extend(new ov.outputNode(), {
+widgets.list.prototype = $.extend(new ov.outputNode(), {
   
   // Return active markup for this widget.
   $markup: function () {
-    var $outputNode = $('<div class="termkitOutputNode itemList"><div class="children"></div></div>').data('controller', this);
+    var $outputNode = $('<div class="termkitOutputNode list"><div class="children"></div></div>').data('controller', this);
     var self = this;
     return $outputNode;
   },

@@ -132,7 +132,6 @@ tf.prototype = {
       this.updateElement();
 
       // Make sure caret ends up somewhere sensible.
-      var prev;
       // Does this token still exist?
       if (update.length) {
         // Inside replacement token at same offset.
@@ -140,6 +139,7 @@ tf.prototype = {
         this.caret.moveTo(this.selection, event);
       }
       else {
+        var prev;
         // At the end of the previous token.
         if (prev = this.tokenList.prev(index)) {
           this.selection.anchor = { token: prev, offset: prev.contents.length };

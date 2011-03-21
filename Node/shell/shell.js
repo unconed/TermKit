@@ -34,6 +34,7 @@ exports.shell = function (sequence, args, exit, router) {
     // Bind exit.
     p.on('exit', function (code) {
       console.log('shell worker exited with code ' + code);
+      console.log('buffer ', self.buffer);
     });
 
     // Bind receiver.

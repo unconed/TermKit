@@ -2,6 +2,7 @@ Tasks:
 [ ] data/view stream multipipes.
 [ ] File autocompletion
 [ ] cat/echo Piping + progress bar
+[ ] refactor/standardize view bridge onto standard DOM
 [ ] Make ls in directories snappy. e.g. /Applications
 [ ] Improve typography of directory listing
 

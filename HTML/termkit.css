@@ -34,7 +34,7 @@ body {
   margin: 0;
 }
 
-.termkitOutputView .itemList {
+.termkitOutputView .list {
   padding: .5em 1em;
   -webkit-column-width: 150px;
   max-height: 400px;

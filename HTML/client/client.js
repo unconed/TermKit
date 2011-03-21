@@ -66,7 +66,7 @@ tc.prototype = {
           if (prefix == 'return') {
             handler.Return && handler.Return(message.args.data, message.args.code, message.args.status, message.sessionId);
             // Clean-up callbacks.
-            delete this.handlers[sequence];
+            delete this.handlers[message.sequence];
           }
           else {
             handler[prefix] && handler[prefix](message.method, message.args);

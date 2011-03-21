@@ -47,19 +47,25 @@ exports.shellCommands = {
 
     // Prepare async job tracker.
     var errors = 0;
-    var track = whenDone(function () { exit(errors != 0); });
+    var output = [];
+    var track = whenDone(function () {
+      for (i in output) {
+        // Prepare output.
+        out.print(view.list(i, output[i]));
+      }
+      exit(errors != 0);
+    });
 
     // Process arguments.
     for (var i in items) (function (i, path) {
+
+      output[i] = [];
 
       // Stat the requested files / directories.
       fs.stat(path, track(function (error, stats) {
         
         // Iterate valid directories.
         if (stats && stats.isDirectory()) {
-
-          // Prepare output.
-          out.print(view.itemList(i));
 
           // Scan contents of found directories.
           fs.readdir(path, track(function (error, files) {
@@ -72,9 +78,7 @@ exports.shellCommands = {
                 // Stat each child.
                 fs.stat(composePath(child, path), track(function (error, stats) {
                   if (!error) {
-
-                    out.add(i, j, view.file(child, path, stats));
-
+                    output[i][j] = view.file(child, path, stats);
                   }
                 })); // fs.stat
               })(j, files[j]); // for j in files

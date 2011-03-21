@@ -28,14 +28,14 @@ ov.prototype = {
   updateElement: function () {
 
     // Ensure the caret is in view.
-      if (this.$element) {
-        var offset = this.$element.offset();
-        var bottom = offset.top + this.$element.height() + 32 + 10;
-        var edge = $('body').scrollTop() + $('html').height();
-        if (bottom > edge) {
-          $('body').scrollTop($('body').scrollTop() + (bottom - edge));
-        }
+    if (this.$element) {
+      var offset = this.$element.offset();
+      var bottom = offset.top + this.$element.height() + 32 + 10;
+      var edge = $('body').scrollTop() + $('html').height();
+      if (bottom > edge) {
+        $('body').scrollTop($('body').scrollTop() + (bottom - edge));
       }
+    }
 
   },
   
@@ -46,25 +46,26 @@ ov.prototype = {
     handlers['view'] = function (m,a) { self.viewHandler(m, a); };
     return handlers;
   },
+
+  // Construct a tree of view objects.
+  construct: function construct(objects) {
+    var self = this;
+    return oneOrMany(objects).map(function (node) { return self.factory.construct(node); });
+  },
   
   // Handler for view.* invocations.
   viewHandler: function (method, args) {
-    var self = this;
-
     switch (method) {
       case 'view.add':
         var target = this.root.getNode(args.target);
-        var nodes = oneOrMany(args.objects).map(function (node) { return self.factory.construct(node); });
-        target.add(nodes, args.offset);
+        var nodes = this.construct(args.objects);
+        target.add(nodes);
         this.updateElement();
         break;
 
       case 'view.remove':
         var target = this.root.getNode(args.target);
-        if (args.offset) {
-          target.remove(offset);
-        }
-        else if (target.parent) {
+        if (target.parent) {
           target.parent.remove(target);
         }
         this.updateElement();

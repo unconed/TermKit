@@ -115,7 +115,7 @@ ov.outputNode.prototype = {
 
     // Add elements.
     [].splice.apply(this.children, args);
-
+    console.log(this.children);
   },
 
   // Remove node at index.

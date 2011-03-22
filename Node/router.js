@@ -11,10 +11,10 @@ exports.router = function (server, connection) {
   
   console.log('router running');
 
-  var self = this;
+  var that = this;
   connection.on('message', function (data) {
     console.log('router message '+ data);
-    self.receive(data);
+    that.receive(data);
   });
   connection.on('disconnect', function () {
     console.log('router disconnected');
@@ -26,7 +26,7 @@ exports.router.prototype = {
     // Parse incoming message.
     var message = JSON.parse(data);
     if (message && message.sequence && message.method && message.args) {
-      var self = this;
+      var that = this;
 
       // Verify arguments.
       if (typeof message.sequence == 'number') {
@@ -41,7 +41,7 @@ exports.router.prototype = {
                   if (object) {
                     value = [value, object];
                   }
-                  self.send(message.sessionId, message.sequence, 'return', returnObject(value));
+                  that.send(message.sessionId, message.sequence, 'return', returnObject(value));
                   returned = true;
                 }
               };

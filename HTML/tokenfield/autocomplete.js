@@ -18,11 +18,11 @@ tf.autocomplete = function (caret) {
 tf.autocomplete.prototype = {
   $markup: function () {
     var $popup = $('<span class="autocomplete"><span class="stretch"><span class="fill"></span><span class="lines"></span></span>').data('controller', this);
-    var self = this;
+    var that = this;
     $popup;/*.find('input')
-      .keydown(function (e) { self.onKeyDown(e); })
-      .keypress(function (e) { self.onKeyPress(e); })
-      .blur(function (e) { self.onBlur(); });*/
+      .keydown(function (e) { that.onKeyDown(e); })
+      .keypress(function (e) { that.onKeyPress(e); })
+      .blur(function (e) { that.onBlur(); });*/
     return $popup;
   },
 
@@ -71,28 +71,28 @@ tf.autocomplete.prototype = {
     $e.hide();
 
     // Get list of suggestions.
-    var self = this;
+    var that = this;
     if (this.handler) {
       this.handler.call(this, tl.indexOf(token), event, tl.contents, function (items) {
-        self.items = items || [];
+        that.items = items || [];
 
         // Insert lines into box.
-        var prefix = self.prefix;
+        var prefix = that.prefix;
         $e.empty();
-        $.each(self.items, function () {
+        $.each(that.items, function () {
           $e.append($('<span>').addClass("line").html('<span class="prefix">' + escapeText(prefix) +'</span><span>'+ escapeText(this) +'</span>'));
         });
         $e.show();
 
         // Highlight active line, if any,
-        if (self.items.length) {
-          self.selected = (self.selected + self.items.length) % self.items.length;
-          var $line = $($e.find('.line')[self.selected]);
+        if (that.items.length) {
+          that.selected = (that.selected + that.items.length) % that.items.length;
+          var $line = $($e.find('.line')[that.selected]);
 
           // Move caret element to active line.
           var offsetY = $line.addClass('active').position().top;
           //this.caret.$element.find('input').css('marginTop', offsetY);
-          self.$element.animate({ 'marginTop': -offsetY }, { duration: 50 });
+          that.$element.animate({ 'marginTop': -offsetY }, { duration: 50 });
         }
       });
     }

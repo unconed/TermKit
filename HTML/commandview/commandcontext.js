@@ -20,7 +20,7 @@ cv.commandContext = function (shell) {
 cv.commandContext.prototype = {
   // Return active markup for this command.
   $markup: function () {
-    var self = this;
+    var that = this;
     var $command = $('<div class="termkitCommandContext"><div class="path"></div><div class="user"></div></div>').data('controller', this);
     return $command;
   },

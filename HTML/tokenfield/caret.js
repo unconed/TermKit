@@ -29,11 +29,11 @@ tf.caret.prototype = {
   // Return active markup for implementing the caret.
   $markup: function() {
     var $caret = $('<span id="caret"><input /><span class="measure"></span></span>').data('controller', this);
-    var self = this;
+    var that = this;
     $caret.find('input')
-      .keydown(function (e) { self.onKeyDown(e); })
-      .keypress(function (e) { self.onKeyPress(e); })
-      .blur(function (e) { self.onBlur(); });
+      .keydown(function (e) { that.onKeyDown(e); })
+      .keypress(function (e) { that.onKeyPress(e); })
+      .blur(function (e) { that.onBlur(); });
     return $caret;
   },
 
@@ -162,9 +162,9 @@ tf.caret.prototype = {
         // TODO: replace with real autocomplete
         this.autocomplete.attach();
         /*
-        var self = this;
+        var that = this;
         this.autocompleteTimer && clearTimeout(this.autocompleteTimer);
-        this.autocompleteTimer = setTimeout(function () { this.autocompleteTimer = null; self.autocomplete.attach(); }, 1000);*/
+        this.autocompleteTimer = setTimeout(function () { this.autocompleteTimer = null; that.autocomplete.attach(); }, 1000);*/
       });
     }
 

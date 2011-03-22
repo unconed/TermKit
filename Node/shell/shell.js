@@ -9,7 +9,7 @@ exports.shell = function (sequence, args, exit, router) {
   this.buffer = "";
 
   var user = args.user || process.env.USER;
-  var self = this;
+  var that = this;
   
   // Extract location of source.
   var p, path = process.argv[1].split('/');
@@ -37,10 +37,10 @@ exports.shell = function (sequence, args, exit, router) {
     });
 
     // Bind receiver.
-    p && p.stdout.on('data', function (data) { self.receive(data); });
+    p && p.stdout.on('data', function (data) { that.receive(data); });
 
     // Bind receiver.
-    p && p.stderr.on('data', function (data) { self.error(data); });
+    p && p.stderr.on('data', function (data) { that.error(data); });
 
     // Initalize worker.
     this.send(sequence, 'init', args);

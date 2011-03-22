@@ -21,7 +21,7 @@ cc.prototype = {
   
   // Add a new object at the given index (optional).
   add: function (collection, index) {
-    var self = this;
+    var that = this;
 
     // Prepare splice call.
     if (arguments.length < 2 || index == -1) {
@@ -31,7 +31,7 @@ cc.prototype = {
 
     // Allow both single object and array.
     $.each(oneOrMany(collection), function () {
-      this.container = self;
+      this.container = that;
     });
     
     // Add elements.
@@ -40,17 +40,17 @@ cc.prototype = {
 
   // Remove the given object.
   remove: function (collection) {
-    var self = this;
+    var that = this;
 
     // Allow both single object and array.
     $.each(oneOrMany(collection), function () {
-      var index = self.indexOf(this);
+      var index = that.indexOf(this);
       if (index < 0) return;
       
-      var object = self.collection[index];
+      var object = that.collection[index];
       object.container = null;
       
-      self.collection.splice(index, 1);
+      that.collection.splice(index, 1);
     });
   },
 

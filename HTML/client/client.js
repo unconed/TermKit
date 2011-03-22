@@ -4,7 +4,7 @@
  * NodeKit client.
  */
 var tc = termkit.client = function () {
-  var self = this;
+  var that = this;
   
   // Prepare callback map.
   this.handlers = {};
@@ -18,16 +18,16 @@ var tc = termkit.client = function () {
   var s = this.socket = new io.Socket('localhost', { port: 2222 }); 
   s.on('connect', function () {
     // TODO: Handshake
-    self.onConnect();
+    that.onConnect();
   }); 
   s.on('disconnect', function() {
-    self.onDisconnect();
+    that.onDisconnect();
   }); 
 
   // Message processing loop.
   s.on('message', function (data) {
     console.log('receiving', data);
-    self.receive(data);
+    that.receive(data);
   }); 
 
   // Open connection.

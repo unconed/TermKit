@@ -24,7 +24,7 @@ tf.token.prototype = {
   // Return active markup for this token.
   $markup: function () {
     var $token = $('<span>').data('controller', this);
-    var self = this;
+    var that = this;
     return $token;
   },
 

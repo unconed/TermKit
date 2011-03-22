@@ -6,13 +6,13 @@ var tc = termkit.client;
  * NodeKit shell representation.
  */
 tc.shell = function (client, environment, exit) {
-  var self = this;
+  var that = this;
   
   this.client = client;
   this.environment = environment;
 
   this.client.invoke('session.open.shell', { }, function (data, code, status, sessionId) {
-    self.sessionId = sessionId;
+    that.sessionId = sessionId;
     exit();
   }, this.hook());
 };
@@ -21,9 +21,9 @@ tc.shell.prototype = {
   
   // Hook into the given set of handlers.
   hook: function (handlers) {
-    var self = this;
+    var that = this;
     handlers = handlers || {};
-    handlers['shell'] = function (m,a) { self.shellHandler(m, a); };
+    handlers['shell'] = function (m,a) { that.shellHandler(m, a); };
     return handlers;
   },
   

@@ -23,13 +23,13 @@ cv.command = function (commandView, context) {
 cv.command.prototype = {
   // Return active markup for this command.
   $markup: function () {
-    var self = this;
+    var that = this;
     var $command = $('<div class="termkitCommand"><span class="sigil"></span>').data('controller', this);
 
     // Create tokenfield for command input.
     this.tokenField = new termkit.tokenField();
-    this.tokenField.onChange = function (e, t) { self.checkTriggers(e, t); }
-    this.tokenField.onSubmit = function (e, t) { self.submitCommand(e, t); }
+    this.tokenField.onChange = function (e, t) { that.checkTriggers(e, t); }
+    this.tokenField.onSubmit = function (e, t) { that.submitCommand(e, t); }
     
     // Create throbber.
     this.progressIndicator = new termkit.progressIndicator();
@@ -84,7 +84,7 @@ cv.command.prototype = {
   
   // Execute tokenfield contents as command.
   submitCommand: function (event, tokens) {
-    var self = this;
+    var that = this;
     this.state = 'running';
     this.collapsed = false;
     
@@ -94,7 +94,7 @@ cv.command.prototype = {
     // Execute in current context.
     this.context.shell.run(command, function (data, code, status) {
         // Set appropriate return state.
-        self.state = {
+        that.state = {
           'ok': 'ok',
           'warning': 'warning',
           'error': 'error',
@@ -102,7 +102,7 @@ cv.command.prototype = {
       
         // Open new command.
         async(function () {
-          self.commandView.newCommand();
+          that.commandView.newCommand();
         });
       },
       // Send all output to outputFrame.
@@ -184,10 +184,10 @@ cv.commandExecutable = function () {
 cv.commandExecutable.triggerExecutable = function (offset, event, tokens) {
   var token = tokens[offset];
   if (!token.flags.commandExecutable) {
-    var self = this;
+    var that = this;
     token.flags.commandExecutable = true;
     token.autocomplete = function () {
-      return cv.commandExecutable.autocompleteExecutable.apply(self, arguments);
+      return cv.commandExecutable.autocompleteExecutable.apply(that, arguments);
     };
   }
 };

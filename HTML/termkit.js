@@ -23,15 +23,15 @@ $(document).ready(function () {
 
 function asyncCallback(func) {
   return function () { 
-    var self = this;
+    var that = this;
     var args = arguments;
-    setTimeout(function () { func.apply(self, args); }, 0);
+    setTimeout(function () { func.apply(that, args); }, 0);
   };
 }
 
 function async(func) {
-  var self = this;
-  setTimeout(function () { func.call(self); }, 0);
+  var that = this;
+  setTimeout(function () { func.call(that); }, 0);
 }
 
 function escapeText(text) {

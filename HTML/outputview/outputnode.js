@@ -25,7 +25,7 @@ ov.outputNode.prototype = {
   // Return active markup for this widget.
   $markup: function () {
     var $outputNode = $('<div class="termkitOutputNode"><div class="children"></div></div>').data('controller', this);
-    var self = this;
+    var that = this;
     return $outputNode;
   },
   
@@ -89,7 +89,7 @@ ov.outputNode.prototype = {
   
   // Insert node(s) inside this one.
   add: function (collection, index) {
-    var self = this;
+    var that = this;
 
     // Prepare splice call.
     if (typeof index != 'number') {
@@ -99,7 +99,7 @@ ov.outputNode.prototype = {
 
     // Allow both single object and array.
     $.each(oneOrMany(collection), function () {
-      self.adopt(this);
+      that.adopt(this);
     });
 
     // Insert elements.
@@ -127,7 +127,7 @@ ov.outputNode.prototype = {
     if (node) {
       // Remove from child list.
       this.children.splice(index, 0);
-      self.detach(node);
+      that.detach(node);
 
       // Remove element.
       node.$element.detach();

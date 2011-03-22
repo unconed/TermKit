@@ -4,7 +4,7 @@
  * Controller for output view.
  */
 var ov = termkit.outputView = function () {
-  var self = this;
+  var that = this;
 
   this.$element = this.$markup();
   
@@ -16,7 +16,7 @@ ov.prototype = {
   // Return active markup for this widget.
   $markup: function () {
     var $outputView = $('<div class="termkitOutputView"><div class="isolate"></div></div>').data('controller', this);
-    var self = this;
+    var that = this;
     
     this.root = new ov.outputNode();
     $outputView.find('.isolate').append(this.root.$element);
@@ -41,8 +41,8 @@ ov.prototype = {
   
   // Construct a tree of view objects.
   construct: function construct(objects) {
-    var self = this;
-    return oneOrMany(objects).map(function (node) { return self.factory.construct(node); });
+    var that = this;
+    return oneOrMany(objects).map(function (node) { return that.factory.construct(node); });
   },
   
   // Handler for view.* invocations.

@@ -4,7 +4,7 @@
  * Controller for command view.
  */
 var cv = termkit.commandView = function (shell) {
-  var self = this;
+  var that = this;
 
   this.shell = shell;
 
@@ -26,7 +26,7 @@ cv.prototype = {
   // Return active markup for this widget.
   $markup: function () {
     var $commandView = $('<div class="termkitCommandView"><div class="commands"></div><div class="context"></div>').data('controller', this);
-    var self = this;
+    var that = this;
     return $commandView;
   },
 

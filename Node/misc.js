@@ -69,3 +69,10 @@ exports.whenDone = function (done) {
   }
 }
 
+/**
+ * Execute a function asynchronously.
+ */
+exports.async = function (func) {
+  var that = this;
+  setTimeout(function () { func.call(that); }, 0);
+}

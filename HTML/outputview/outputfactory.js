@@ -14,11 +14,11 @@ ov.outputFactory.prototype = {
   construct: function (properties) {
     var type = widgets[properties.type] || ov.outputNode,
         node = new type(properties),
-        self = this;
+        that = this;
 
     if (node.properties.children) {
       var nodes = node.properties.children.map(function (node) {
-        return self.construct(node);
+        return that.construct(node);
       });
       delete node.properties.children;
       node.add(nodes);
@@ -50,7 +50,7 @@ widgets.raw.prototype = $.extend(new ov.outputNode(), {
   // Return active markup for this widget.
   $markup: function () {
     var $outputNode = $('<div class="termkitOutputNode widgetRaw"><div class="contents"></div></div>').data('controller', this);
-    var self = this;
+    var that = this;
     return $outputNode;
   },
 
@@ -82,13 +82,13 @@ widgets.file.prototype = $.extend(new ov.outputNode(), {
   // Return active markup for this widget.
   $markup: function () {
     var $outputNode = $('<div class="termkitOutputNode widgetFile"><div class="icon"></div><div class="name"></div><div class="meta"></div></div>').data('controller', this);
-    var self = this;
+    var that = this;
     return $outputNode;
   },
 
   // Update markup to match.
   updateElement: function () {
-    var self = this;
+    var that = this;
 
     this.$element.data('controller', this);
 
@@ -105,7 +105,7 @@ widgets.file.prototype = $.extend(new ov.outputNode(), {
         path = this.properties.path + '/' + this.properties.name,
         previewUrl = 'termkit-icon-preview:///' + encodeURIComponent(path);
     image.onload = function () {
-      self.$icon.css({
+      that.$icon.css({
         background: 'url('+ previewUrl +')'
       });
     };
@@ -134,7 +134,7 @@ widgets.list.prototype = $.extend(new ov.outputNode(), {
   // Return active markup for this widget.
   $markup: function () {
     var $outputNode = $('<div class="termkitOutputNode list"><div class="children"></div></div>').data('controller', this);
-    var self = this;
+    var that = this;
     return $outputNode;
   },
 

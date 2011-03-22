@@ -4,7 +4,7 @@
  * Controller for token-based field.
  */
 var tf = termkit.tokenField = function () {
-  var self = this;
+  var that = this;
 
   this.$element = this.$markup();  
   
@@ -13,15 +13,15 @@ var tf = termkit.tokenField = function () {
   this.selection = new tf.selection(this.tokenList);
   
   // Track editing inside tokens using the caret.
-  this.caret.onChange = function (token, event) { self.updateToken(token, event); };
-  this.caret.onSubmit = function (token, event) { self.submitToken(token, event); };
+  this.caret.onChange = function (token, event) { that.updateToken(token, event); };
+  this.caret.onSubmit = function (token, event) { that.submitToken(token, event); };
   
   // Provide external events.
   this.onChange = function () {};
   this.onSubmit = function () {};
   
   // Set field event handlers.
-  this.$element.mousedown(function (event) { self.fieldMouseDown(event); });
+  this.$element.mousedown(function (event) { that.fieldMouseDown(event); });
   
   // Refresh markup.
   this.updateElement();
@@ -32,7 +32,7 @@ tf.prototype = {
   // Return active markup for this field.
   $markup: function () {
     var $token = $('<div class="termkitTokenField">').data('controller', this);
-    var self = this;
+    var that = this;
     return $token;
   },
 
@@ -148,9 +148,9 @@ tf.prototype = {
       } 
 
       // Recurse processing rules to newly created tokens, if any.
-      var self = this;
+      var that = this;
       $.each(update, function () {
-        self.updateToken(this, event);
+        that.updateToken(this, event);
       });
     }
 

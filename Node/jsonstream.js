@@ -28,8 +28,8 @@ js.jsonReader = function (input, callback) {
   this.phase = 0;
   this.parseJSON = ($ && $.parseJSON);
   
-  var self = this;
-  this.input.addListener("output", function (data) { self.data(data); });
+  var that = this;
+  this.input.addListener("output", function (data) { that.data(data); });
 };
 
 js.jsonReader.prototype = {

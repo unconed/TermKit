@@ -4,7 +4,7 @@
  * Controller for output frame.
  */
 var of = termkit.outputView.outputFrame = function () {
-  var self = this;
+  var that = this;
 
   this.$element = this.$markup();
   this.views = [];
@@ -15,16 +15,16 @@ of.prototype = {
   // Return active markup for this widget.
   $markup: function () {
     var $outputFrame = $('<div class="termkitOutputFrame"></div>').data('controller', this);
-    var self = this;
+    var that = this;
     
     return $outputFrame;
   },
 
   // Hook into the given set of handlers.
   hook: function (handlers) {
-    var self = this;
+    var that = this;
     handlers = handlers || {};
-    handlers['view'] = function (m,a) { self.viewHandler(m, a); };
+    handlers['view'] = function (m,a) { that.viewHandler(m, a); };
     return handlers;
   },
 

@@ -1,10 +1,12 @@
 var fs = require('fs'),
     view = require('view/view'),
     composePath = require('misc').composePath,
-    whenDone = require('misc').whenDone;
+    whenDone = require('misc').whenDone,
+    EventEmitter = require('events').EventEmitter,
+    async = require('misc').async;
 
 exports.shellCommands = {
-
+/*
   'cat': function (tokens, invoke, exit) {
 
     // "cat <file> [file ...]" syntax.
@@ -12,15 +14,9 @@ exports.shellCommands = {
       out.print('Usage: cat <file> ...');
       return exit(true);
     }
-/*
-    0 stdin -> data in
-    1 stdout -> data out
-    2 stderr -> stderr
-    3 in pipe -> view in
-    4 out pipe -> view out
-  */  
     
   },
+*/
 
   'cd': function (tokens, invoke, exit) {
 
@@ -67,13 +63,13 @@ exports.shellCommands = {
     var output = [];
     var track = whenDone(function () {
       for (i in output) {
-        // Prepare output.
+        // Output one directory listing at a time.
         out.print(view.list(i, output[i]));
       }
       exit(errors != 0);
     });
 
-    // Process arguments.
+    // Process arguments (list of paths).
     for (var i in items) (function (i, path) {
 
       output[i] = [];
@@ -101,7 +97,7 @@ exports.shellCommands = {
               })(j, files[j]); // for j in files
             } // !error
           })); // fs.readdir
-        } // if isDirectory
+        } // isDirectory
         else {
           // Count errors.
           errors += +error;

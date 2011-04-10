@@ -10,24 +10,25 @@
  *  
  * 
  */
-exports.returnObject = function (code, data) {
-  var object = { status: 'ok', code: 0 };
+exports.returnMeta = function (status, meta) {
+  var code = 0;
+  meta = meta || {};
+
+  if (typeof status == 'number') {
+    status = number > 0;
+    code = number;
+  }
+  else if (typeof status == 'boolean') {
+    code = +status;
+  }
+  else {
+    status = false;
+  }
   
-  if (code === false || code === null || code === undefined) {
-    object = { status: 'ok', code: 0 };
-  }
-  else if (code === true) {
-    object = { status: 'error', code: 1 };
-  }
-  else if (typeof code == 'number') {
-    object = { status: !code ? 'ok' : 'error', code: code };
-  }
+  meta.status = status;
+  meta.code = code;
 
-  if (data !== undefined) {
-    object[data] = data;
-  }
-
-  return object;
+  return meta;
 };
 
 exports.composePath = function (name, path) {
@@ -75,4 +76,22 @@ exports.whenDone = function (done) {
 exports.async = function (func) {
   var that = this;
   setTimeout(function () { func.call(that); }, 0);
+}
+
+/**
+ * Extend object with getter/setter support.
+ */
+exports.extend = function (a,b) {
+    for ( var i in b ) {
+        var g = b.__lookupGetter__(i), s = b.__lookupSetter__(i);
+       
+        if ( g || s ) {
+            if ( g )
+                a.__defineGetter__(i, g);
+            if ( s )
+                a.__defineSetter__(i, s);
+         } else
+             a[i] = b[i];
+    }
+    return a;
 }

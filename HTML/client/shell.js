@@ -5,43 +5,63 @@ var tc = termkit.client;
 /**
  * NodeKit shell representation.
  */
-tc.shell = function (client, environment, exit) {
+tc.shell = function (client, environment, success) {
   var that = this;
   
   this.client = client;
   this.environment = environment;
+  this.session = null;
+  
+  this.counter = 1;
 
-  this.client.invoke('session.open.shell', { }, function (data, code, status, sessionId) {
-    that.sessionId = sessionId;
-    exit();
-  }, this.hook());
+  this.query('session.open.shell', { }, function (message) {
+    that.session = message.args.session;
+
+    console.log('session', that);
+    that.query('shell.environment', { }, function (message) {
+      that.environment = message.args;
+      success();
+    });
+    
+  });
+
+  this.client.register(that, function (message) { that.callback(message); });
+
 };
 
 tc.shell.prototype = {
-  
-  // Hook into the given set of handlers.
-  hook: function (handlers) {
-    var that = this;
-    handlers = handlers || {};
-    handlers['shell'] = function (m,a) { that.shellHandler(m, a); };
-    return handlers;
+
+  query: function (method, args, callback) {
+    this.client.protocol.query(method, args, { session: this.session }, callback);
+  },
+
+  notify: function (method, args) {
+    this.client.protocol.notify(method, args, { session: this.session });
   },
   
   // Handler for view.* invocations.
-  shellHandler: function (method, args) {
+  callback: function (method, args) {
+    console.log('viewstream', method, args);
     switch (method) {
-      case 'shell.environment':
-        for (i in args) {
-          this.environment[i] = args[i];
-        }
+      case 'view.allocate':
         break;
     }
   },
   
-  run: function (tokens, exit, handlers) {
-    this.client.invoke('shell.run', {
+  run: function (tokens, exit) {
+    var that = this,
+        ref = this.counter++,
+        callback = function (message) {
+          if (message.environment) {
+            that.environment = message.environment;
+          }
+          exit(message.success, message.args, message);
+        };
+
+    this.query('shell.run', {
       tokens: tokens,
-    }, exit, this.hook(handlers), this.sessionId);
+      ref: ref,
+    }, callback);
   },
 };
 

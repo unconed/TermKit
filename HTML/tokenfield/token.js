@@ -177,6 +177,26 @@ tf.tokenQuoted = function (contents) {
   this.allowEmpty = true;
 };
 
+tf.tokenQuoted.prototype = $.extend(new tf.token(), {
+
+  checkSelf: function (selection, event) {
+  },
+
+});
+
+tf.tokenQuoted.resetEscape = function () {
+  console.log('resetEscape');
+  tf.tokenQuoted.timer && clearTimeout(tf.tokenQuoted.timer);
+  tf.tokenQuoted.timer = setTimeout(function () {
+    console.log('resetEscape ping');
+    tf.tokenQuoted.escapeWaiting = false;
+  }, 1500);
+};
+
+tf.tokenQuoted.setEscape = function () {
+  tf.tokenQuoted.escapeWaiting = true;
+};
+
 tf.tokenQuoted.triggerQuote = function (offset, event) {
   
   var out = [],
@@ -188,21 +208,12 @@ tf.tokenQuoted.triggerQuote = function (offset, event) {
   }
   out.push(new tf.tokenQuoted(after));
 
+  console.log('wtf', this);
+
+  tf.tokenQuoted.setEscape();
+
   return out;
 };
-
-tf.tokenQuoted.triggerRequote = function (offset, event) {
-  if (offset == 1 && tf.tokenQuoted.requoteWaiting) {
-    var prev = this.container.prev(this);
-    prev.contents = prev.contents + this.contents;
-    tf.tokenQuoted.requoteWaiting = false;
-    return [];
-  }
-}
-
-tf.tokenQuoted.triggerResetQuote = function (offset, event) {
-  tf.tokenQuoted.requoteWaiting = false;
-}
 
 tf.tokenQuoted.triggerUnquote = function (offset, event) {
   
@@ -220,12 +231,98 @@ tf.tokenQuoted.triggerUnquote = function (offset, event) {
     out.push(new tf.tokenEmpty());
   }
   
-  tf.tokenQuoted.requoteWaiting = true;
+  tf.tokenQuoted.setEscape();
 
   return out;
 };
 
-tf.tokenQuoted.prototype = $.extend(new tf.token(), {
+tf.tokenQuoted.triggerEscape = function (offset, event) {
+  if (offset == 1 && tf.tokenQuoted.escapeWaiting) {
+    var prev = this.container.prev(this);
+    prev.contents = prev.contents + this.contents;
+    tf.tokenQuoted.resetEscape();
+    return [];
+  }
+}
+
+tf.tokenQuoted.triggerResetEscape = function (offset, event) {
+  tf.tokenQuoted.resetEscape();
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Token containing a regex.
+ */
+tf.tokenRegex = function (contents) {
+  tf.token.call(this, 'regex', contents);
+  this.allowEmpty = true;
+};
+
+tf.tokenRegex.resetEscape = function () {
+  tf.tokenRegex.timer && clearTimeout(tf.tokenRegex.timer);
+  tf.tokenRegex.timer = setTimeout(function () {
+    tf.tokenRegex.escapeWaiting = false;
+  }, 1000);
+};
+
+tf.tokenRegex.setEscape = function () {
+  tf.tokenRegex.escapeWaiting = true;
+  tf.tokenRegex.resetEscape();
+};
+
+tf.tokenRegex.triggerRegex = function (offset, event) {
+  
+  var out = [],
+      before = this.contents.substring(0, offset - 1),
+      after = this.contents.substring(offset);
+
+  if (before != '') {
+    out.push(new tf.tokenPlain(before));
+  }
+  out.push(new tf.tokenRegex(after));
+
+  tf.tokenRegex.setEscape();
+
+  return out;
+};
+
+tf.tokenRegex.triggerUnregex = function (offset, event) {
+  
+  var out = [],
+      before = this.contents.substring(0, offset - 1),
+      after = this.contents.substring(offset);
+
+  if (before != '' || after == '') {
+    out.push(new tf.tokenRegex(before));
+  }
+  if (after != '') {
+    out.push(new tf.tokenRegex(after));
+  }
+  else {
+    out.push(new tf.tokenEmpty());
+  }
+  
+  tf.tokenRegex.setEscape();
+  
+  return out;
+};
+
+
+tf.tokenRegex.triggerEscape = function (offset, event) {
+  if (offset == 1 && tf.tokenRegex.escapeWaiting) {
+    var prev = this.container.prev(this);
+    prev.contents = prev.contents + this.contents;
+    tf.tokenRegex.resetEscape();
+    return [];
+  }
+}
+
+tf.tokenRegex.triggerResetEscape = function (offset, event) {
+  tf.tokenRegex.resetEscape();
+}
+
+tf.tokenRegex.prototype = $.extend(new tf.token(), {
 
   checkSelf: function (selection, event) {
   },
@@ -236,22 +333,30 @@ tf.tokenQuoted.prototype = $.extend(new tf.token(), {
 
 tf.token.triggers = {
   '*': [
-    { changes: /./, callback: tf.tokenQuoted.triggerResetQuote },
+    { changes: /./, callback: tf.tokenQuoted.triggerResetEscape },
+    { changes: /./, callback: tf.tokenRegex.triggerResetEscape },
   ],
   'empty': [
-    { contents: /^["']/, callback: tf.tokenQuoted.triggerRequote },
+    { contents: /^["']/, callback: tf.tokenQuoted.triggerEscape },
     { contents: /["']/,  callback: tf.tokenQuoted.triggerQuote },
+    { contents: /^[\/]/, callback: tf.tokenRegex.triggerEscape },
+    { contents: /[\/]/,  callback: tf.tokenRegex.triggerRegex },
     { contents: /./,     callback: tf.tokenPlain.triggerCharacter },
     { contents: / /,     callback: tf.tokenPlain.triggerEmpty },
   ],
   'plain': [
-    { contents: /^ ?$/,   callback: tf.tokenEmpty.triggerEmpty },
-    { changes: / /,    callback: tf.tokenPlain.splitSpace },
-    { changes: /["']/, callback: tf.tokenQuoted.triggerQuote },
+    { contents: /^ ?$/,  callback: tf.tokenEmpty.triggerEmpty },
+    { changes: / /,      callback: tf.tokenPlain.splitSpace },
+    { changes: /["']/,   callback: tf.tokenQuoted.triggerQuote },
+    { changes: /[\/]/,   callback: tf.tokenRegex.triggerRegex },
   ],
   'quoted': [
-    { changes: /["']/, callback: tf.tokenQuoted.triggerRequote },
-    { changes: /["']/, callback: tf.tokenQuoted.triggerUnquote },
+    { changes: /["']/,   callback: tf.tokenQuoted.triggerEscape },
+    { changes: /["']/,   callback: tf.tokenQuoted.triggerUnquote },
+  ],
+  'regex': [
+    { changes: /[\/]/,   callback: tf.tokenRegex.triggerEscape },
+    { changes: /[\/]/,   callback: tf.tokenRegex.triggerUnregex },
   ],
 };
 

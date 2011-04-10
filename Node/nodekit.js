@@ -3,6 +3,7 @@ var termkit = {
 };
 require.paths.unshift('./socket.io-node/lib');
 require.paths.unshift('.');
+require.paths.unshift('../Shared/');
 
 // Load requirements.
 var http = require('http'),  
@@ -21,5 +22,5 @@ server.listen(2222);
 // Set up WebSocket and handlers.
 var socket = io.listen(server); 
 socket.on('connection', function (client) {
-  var p = new router.router(server, client);
+  var p = new router.router(client);
 });

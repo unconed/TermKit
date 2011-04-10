@@ -92,13 +92,13 @@ cv.command.prototype = {
     var command = tokens.map(function (t) { return t.toCommand(); });
 
     // Execute in current context.
-    this.context.shell.run(command, function (data, code, status) {
+    this.context.shell.run(command, function (success, object, meta) {
         // Set appropriate return state.
         that.state = {
-          'ok': 'ok',
-          'warning': 'warning',
-          'error': 'error',
-        }[status] || 'ok';
+          '1': 'ok',
+          '0': 'error',
+          '-1': 'warning',
+        }[+success] || 'ok';
       
         // Open new command.
         async(function () {

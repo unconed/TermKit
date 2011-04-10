@@ -1,9 +1,38 @@
+Redesigned message flow.
+
 Tasks:
-[ ] data/view stream multipipes.
+[ ] Viewstream integration
+  [X] outputview splittable into multiple isolated trees w/ subviews
+  [X] command pipeline generator (list, units, pipes)
+  [X] write universal server/client router 
+   [X] update router format
+   [X] update worker
+   [X] update handlers for builtins + manual view alloc
+   [X] implement pipeline view alloc
+   [X] update client format
+   [X] update client callbacks
+   [ ] update view/frame DOM handling
+   [ ] do test run with CD
+   [ ] do test run with LS
+   [ ] run pipeline test
+  [.] output formatter
+  [X] run built-in
+  [ ] run unix
+  [ ] output formatter: http get. txt, png/jpg. include headers option
+[ ] 5-pipe command execution
+[ ] unix command execution
+[ ] filesystem autocomplete
+[ ] command decoration
+[ ] interactive execution
+[ ] inline man-pages tips
+[ ] version control
+[ ] interactive quicklook
+
+[.] data/view stream multipipes.
 [ ] File autocompletion
 [ ] cat/echo Piping + progress bar
 [ ] refactor/standardize view bridge onto standard DOM
-[ ] Make ls in directories snappy. e.g. /Applications
+[ ] file < input piping, use node-mime to detect type?
 [ ] Improve typography of directory listing
 
 Prototype:
@@ -58,7 +87,7 @@ Prototype:
   [X] auto-expand to fill view
   [ ] command history
   [ ] alt-up/down to change focus
-  [ ] tabbing
+  [ ] tabbed views
   [ ] add forking the view with tabs and hosted/nested sessions
 
 2) Command/token autocomplete
@@ -82,13 +111,14 @@ Prototype:
   [X] view parser/tree on client side
   [X] list of files
   [X] file icons
-  [ ] limit new items to appends. make updates by index only.
+  [ ] implement view DOM v2 with path targeting
   [ ] auto-layout mechanism w/ padded max-height on view
   [ ] auto-layout column width (preferred size from widgets + widget variant/style)
   [ ] make file icons cacheable long-term in webkit cache
   [ ] stable multi-column layout
   [ ] intercontrol focus / caret, set up global manager
-  [ ] tab, switch between widgets -> iterate live.
+  [ ] tab, switch between widgets.
+  [ ] smart tab-tabling layout for plain-text
 
 4) NodeKit daemon
   [X] socket.io listener
@@ -101,12 +131,10 @@ Prototype:
     [X] stream in/out json packets
     [X] view proxy object on worker side
     [X] make ls / cd commands
-    [ ] simplify message format to raw json
-+   [ ] reroute stderr as viewstream. arrange pipes for command/view
-      [ ] hackability of core node, custom process.js-alt binding?
-    [ ] Invoke a new process, capture output
-    [ ] define datastream format
-  [ ] rewrite worker and router to unify sender/receiver. use in framework for nodekit shell app/script. w/ 0-delimited 
+    [X] simplify message format to raw json
+    [ ] viewstream integration
++   [ ] arrange pipes for command/view
+
   [ ] sudo support (askpass env?)
 
 5) Command Suite
@@ -115,4 +143,3 @@ Prototype:
 [ ] robust unix basics
 [ ] mysql console
 [ ] ssh support
-

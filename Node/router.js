@@ -1,62 +1,63 @@
 var shell = require("shell/shell");
-var returnObject = require('misc').returnObject;
+var returnMeta = require('misc').returnMeta;
+var protocol = require('protocol');
 
 /**
  * Processes incoming messages on a connection, routes them to active sessions.
  */
-exports.router = function (server, connection) {
-  this.connection = connection;
-  this.sessions = {};
-  this.nextId = 1;
-  
-  console.log('router running');
-
+exports.router = function (connection) {
   var that = this;
-  connection.on('message', function (data) {
-    console.log('router message '+ data);
-    that.receive(data);
-  });
-  connection.on('disconnect', function () {
-    console.log('router disconnected');
-  });
+
+  this.protocol = new protocol.protocol(connection, this, true);
+
+  this.sessions = {};
+  this.counter = 1;
 };
 
 exports.router.prototype = {
-  receive: function (data) {
-    // Parse incoming message.
-    var message = JSON.parse(data);
-    if (message && message.sequence && message.method && message.args) {
-      var that = this;
+  
+  dispatch: function (message) {
+    // Look up session.
+    var that = this,
+        session = message.session && this.getSession(message.session);
+        returned = false,
+    
+      // Define convenient answer callback.
+        exit = function (success, object, meta) {
+          if (!returned) {
+            meta = meta || {};
+            meta.session = message.session;
+            meta.success = success;
+            
+            that.protocol.answer(message.query, object, meta);
+            returned = true;
+          }
+        };
 
-      // Verify arguments.
-      if (typeof message.sequence == 'number') {
-        // Locate handler for method and execute.
-        if (exports.handlers[message.method]) {
-          // Look up session.
-          var session = message.sessionId && this.getSession(message.sessionId),
-              returned = false;
-            // Define convenient exit callback.
-              exit = function (value, object) {
-                if (!returned) {
-                  if (object) {
-                    value = [value, object];
-                  }
-                  that.send(message.sessionId, message.sequence, 'return', returnObject(value));
-                  returned = true;
-                }
-              };
-          // Invoke method.
-          exports.handlers[message.method].call(this, session, message.sequence, message.args, exit);
-        }
-      }
+    // Find handler.
+    var handler = exports.handlers[message.method];
+    if (handler) {
+      handler.call(this, session, message.query, message.args || {}, exit);
+      return;
     }
+    
+    // Else forward to session.
+    session.dispatch(message.query, message.method, message.args || {}, exit);
+    
   },
   
-  send: function (sessionId, sequence, method, args) {
-    var json = JSON.stringify({ sessionId: sessionId, sequence: sequence, method: method, args: args });
-    this.connection.send(json);
+  forward: function (message) {
+    this.protocol.notify(null, null, message);
   },
-  
+
+  disconnect: function () {
+    for (i in this.sessions) {
+      this.sessions[i].close();
+    }
+    this.sessions = {};
+    this.protocol = null;
+  },
+
   getSession: function (id) {
     for (i in this.sessions) {
       if (i == id) return this.sessions[id];
@@ -64,7 +65,7 @@ exports.router.prototype = {
   },
   
   addSession: function (session) {
-    var id = session.id = this.nextId++;
+    var id = session.id = this.counter++;
     this.sessions[id] = session;
   },
 
@@ -77,24 +78,25 @@ exports.router.prototype = {
  * Method handlers.
  */
 exports.handlers = {
-  'session.open.shell': function (session, sequence, args, exit) {
-    var session = new shell.shell(sequence, args, exit, this);
-    this.addSession(session);
+  'session.open.shell': function (session, query, args, exit) {
+    try {
+      var session = new shell.shell(args, this);
+      this.addSession(session);
+      exit(true, { session: session.id });
+    }
+    catch (e) {
+      exit(false);
+    }
   },
   
-  'session.close': function (session, sequence, args, exit) {
+  'session.close': function (session, query, args, exit) {
     if (session) {
       session.close();
       this.removeSession(session);
-      exit(false);
-    }
-    else {
       exit(true);
     }
-  },
-  
-  'shell.run': function (session, sequence, args, exit) {
-    session.run(sequence, args, exit);
-    // async exit
+    else {
+      exit(false);
+    }
   },
 };

@@ -6,17 +6,25 @@ var fs = require('fs'),
     async = require('misc').async;
 
 exports.shellCommands = {
-/*
+
   'cat': function (tokens, invoke, exit) {
 
     // "cat <file> [file ...]" syntax.
-    if (tokens.length < 2) {
+    if (true || tokens.length < 2) {
       out.print('Usage: cat <file> ...');
       return exit(true);
     }
     
   },
-*/
+
+  'pwd': function (tokens, invoke, exit) {
+    var out = new view.bridge(invoke);
+
+    var cwd = process.cwd();
+    out.print('Working Directory: ' + cwd);
+    
+    exit(true);
+  },
 
   'cd': function (tokens, invoke, exit) {
 
@@ -35,12 +43,10 @@ exports.shellCommands = {
     }
     catch (error) {
       out.print(error.message);
-      return exit(true);
+      return exit(false);
     }
 
-    // Sync up environment variables.
-    this.sync(invoke);
-    exit(false);
+    exit(true);
   },
 
   'ls': function (tokens, invoke, exit) {
@@ -66,7 +72,7 @@ exports.shellCommands = {
         // Output one directory listing at a time.
         out.print(view.list(i, output[i]));
       }
-      exit(errors != 0);
+      exit(errors == 0);
     });
 
     // Process arguments (list of paths).

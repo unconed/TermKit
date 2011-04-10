@@ -1,43 +1,3 @@
-Current questions:
-
-1) Data stream, content type:
- application/json; schema=termkit.filesystem.json
- 
- json schema?
- 
-2) Split output into view updates/appends, or output listing as huge block
-
- -> single block is simplest, allows comparison between short lists and long lists
- -> can split into batches... vs event model = too small granularity causes inefficiency
- -> remember: process should be generic regardless of screen size: agnostic
- 
- note: console output is mostly linear appends. non-linear updates can be done by dividing view into subviews and appending to those. should not support unordered inserts for simplicity.
-
-3) Default formatters by mime type / subtype => provides easy pretty output
-
-4) Make grep
-
-5) Make LS work with grep.git 
-
-Note:
-
-TermKit offers two levels of abstraction for making better Unix UI:
-
-1) Formatters: by mime type and subtype, turn structured data (xml, gif, json, ini, ...) into richer output
-2) View events: build a DOM asynchronously and update real-time. from basic logging to rich, dynamic, interactive widgets.
-
-+++ --- 
-
-View events should be reserved for actual interactive applications (e.g. top).
-
-The rest should be formatter based: allows grep and such to work well.
-
-example use cases:
-
-ls + grep
-
-+++ --- 
-
 TermKit
 +++ -
 Goal: next gen terminal / command application
@@ -73,52 +33,63 @@ Good desktop citizen:
 * Can drag files, snippets, JSON/CSV off the terminal
 * Tear-off tabs/windows
 
-+++ -
++++ - Roadmap
 
 [0.1] UI prototype - DONE
- [X] simulated in safari/webkit.app
- [X] functional input line with tokenization, cursor keys and backspace/delete
- [X] functional autocomplete on tokens
- [X] simulated commands
- [X] simulated output with collapsible sections
+  [X] simulated in safari/webkit.app
+  [X] functional input line with tokenization, cursor keys and backspace/delete
+  [X] functional autocomplete on tokens
+  [X] simulated commands
+  [X] simulated output with collapsible sections
  
-[0.2] App prototype
- [X] cocoa app
- [X] webkit in single window view (but built to scale to multiple tabs)
- [X] design back-end protocol
- [X] node JS back-end, running separately
- [X] connect socket
- [X] run session worker
- [X] passive command implementation
- [X] JS module template, integrated both runtimes.
- [ ] wrap unix executable
- [ ] interactive output
+[0.2] App prototype - DONE
+  [X] cocoa app
+  [X] webkit in single window view
+  [X] design back-end protocol
+  [X] node JS back-end, running separately
+  [X] connect socket
+  [X] run session worker
+  [X] passive command implementation
+  [X] JS module template, integrated both runtimes.
+  [X] wrap unix executable
+  [X] interactive output
  
 0.3: Command suite
- [X] OS X icon loading
- - two-tier commands
- - read man pages
- - implement version control
- - implement tar gzip
- - OS X quicklook integration
+  [X] Redesign message protocol
+  [ ] Viewstream integration
+  [ ] 5-pipe command execution
+  [ ] unix command execution
+  [ ] filesystem autocomplete
+  [ ] command decoration
+  [ ] interactive execution
+  [ ] inline man-pages tips
+  [ ] version control
+  [ ] interactive quicklook
+  [X] OS X icon loading
 
- + bash anonymizer script to collect usage patterns from test users
-   turns filenames.foooo.ext into random.random.ext
-   turns "quoted strings" into "xxxxx xxxxx xxxxx xxx xxxx"
-   turns url://xxxxxxx/xxxxxx
-   turns xxxx@xxxx:xxxx
+0.4: Network & Modularity
+  [ ] SSH tunneling
+  [ ] Stand-alone daemon
+  [ ] network preview / local edit
+  [ ] tabs
+  [ ] split off command processor rules / autocomplete handlers into separable blocks
+  [ ] server-side hook system
+  [ ] add plug-in mechanism with drop-in functionality
 
-0.4: Modularization
- - split off command processor rules / autocomplete handlers into separable blocks
- - server-side hook system
- - add plug-in mechanism with drop-in functionality
+0.5: Interactive & Unix Upgrades
+  [ ] widget system
+  [ ] graphing suite
+  [ ] alt view for LS with usable permissions, dates, etc
+  [ ] active 'top' monitor
+  [ ] gnu parallel integration/clone
 
-0.5: Theming
- - polished UI
- - allow loading of command/theme stylesheets
+0.6: Theming
+  [ ] server-side push css/js / integrated web
+  [ ] themes / stylesheets
 
++++ Components
 
-Node JS daemon / 'NodeKit'.
+Node JS daemon = 'NodeKit'.
  + Fast enough for server work, concurrency/scaling included
  + New JS language features
  + Cross-platform on unix
@@ -127,7 +98,7 @@ Node JS daemon / 'NodeKit'.
  - separate from UI / front-end, forced layer of indirection makes it unlike web programming
  - no mac-specific APIs or low-level C access
 
- => back-end platform, runs locally, can run remotely, or perhaps tunnel its interaction over SSH somehow?
+ => back-end platform, runs locally, can run remotely, or perhaps tunnel its interaction over SSH
 
 WebKit/Cocoa front-end
  + Rich, stylable display + jQuery
@@ -143,9 +114,93 @@ Back-end:
 3) Remote NodeKit WSS: Daemon is running, use WSS to connect directly, must authenticate? don't want to replicate OpenSSH, but rudimentary auth could be useful.
 4) Basic remote shell: No nodekit daemon. Only literal commands supported. Enough to execute e.g. "apt-get install termkit".
 
-+++ UNIX commands
++++ UNIX execution model
 
-Take the average unix command. How many arguments/switches actually affect the program's behaviour, rather than simply how it formats / sorts its output? Pathological example: ls. Can do the same thing in two dozen subtly different ways.
+In the traditional model of computing, a program has an input, an output and does some processing in between. A standard UNIX program follows this model closely, with the following pipes: standard in, out and error. Data flows in through standard in, and output flows either through the out or error pipes. This simple model allows us to chain programs together, redirect specific portions of output into log files and run commands in batch.
+
+<img>
+
+But however powerful, this model ignores an important factor in how programs are used, namely whether there is a person involved.
+
+When run directly by a person, standard in is mainly hooked up to the keyboard while standard out will go directly to the display. The input will be irregular and error prone. The program will be interactive. Output will be unpredictable and formatted mainly for display purposes.
+
+But if the program is part of a processing chain, hooked up to a data source and/or sink, the situation changes dramatically. The data is now structured, the operation of each step is predictable and certain guarantees have to be made about the formatting of the output. Programs might run for a long time, chugging away at invisible streams and passing around massive amounts of data.
+
+These two contexts are radically different, but both are forced through the same standard pipes. Oddly enough, this multiplexing seems universally accepted and is woven throughout computing. And yet, it has some noticeable effects.
+
+For instance, programs don't communicate anything about the data they're sending through: it's just an anonymous, binary stream. As a result, many programs have options to toggle their input/output between various formats, some for people, some for programs. Tools like git examine their environment and disable interactive mode if nobody's there to answer. Machine-friendly data may be requested in several formats. As a result, scripting together a command chain is a careful dance of matching impedances at each step.
+
+However, because most tools are launched by people for people, the default interchange format of choice is still "somewhat parseable text". As a result, we still have to be careful with things like spaces or Unicode in filenames, in case someone puts text where it doesn't belong. It still matters sometimes whether there is a newline at the end of a file. A misplaced keystroke, easily missed in the cryptic bash wash, can wreak havoc. Relying on text makes us prone to errors, and has lead to a culture where new recruits have to pass a constant trial by fire—to not destroy their system at one of the many opportunities it gives them.
+
+In fact, where it seems to matter most is the interaction. Text has literally locked down our abililty to evolve the UI, by forcing us to use the same monospace character terminals the previous generations used. Even worse, we are still limited to a headache inducing, fluorescent EGA color palette from 1984. A terminal can show you the load on your system, but it can't show you a historic graph. It can make little progress bars out of ASCII characters, but it can't show LaTeX math inline. Even the command-line itself with its clunky tab-complete, lack of text selection and standard copy/paste bears little resemblence to the standard text field widget we use every day in modern UIs.
+
+In the past decade, user interaction has made astounding leaps. We consume and produce vast quantities of information daily. The web has changed from blobs of markup into full apps, with rich typography, complex infographics, inline interactivity, dynamic layout, etc. UIs like OS X have raised the bar on how we can present and interact with information naturally. Sure, fancy icons and smooth animations are great in iLife, but they can also be used in technical applications. You are almost certainly sitting in front of a display with more than a million pixels. Why are you telling it to draw a dinky character terminal from the 80s?
+
+<h2>A new model</h2>
+
+Criticism is easy of course, but what can we do about it? Well, after giving it some thought, I think we need to rebuild the model from the ground up.
+
+First of all, we need a way to separate out the data between people and programs. The easiest is to split our pipes into 5:
+ * Data In, Data Out
+ * View In, View Out
+ * Error Out
+
+When chaining together programs, we make a chain out of the Data pipes like usual. The View pipes however are hooked up to a global controller which proxies to the user's terminal.
+
+Processing of data proceeds normally, but with the additional property that meta-data is explicitly attached to the data pipes, indicating content type, format, name, etc. as available.
+
+Next, we need a way for programs to output a rich and dynamic UI through the View pipes and receive callback events. This is where things get tricky, because it essentially comes down to network-transparency of UI. This is a complex problem and has only worked for a couple of things, i.e. X11 and the Web, and each comes with a huge set of baggage. We need something simpler, that can be implemented as a thin library in a hundred lines of code. It should still feel like a command-line terminal, but be flexible enough to allow all the things we expect from modern applications.
+
+Finally, we need a better way to enter commands. We need a modern textfield widget that is aware of strings, regular expressions, pipes, and can do tricks like inline icons, visual tokens, autocomplete dropdowns, etc.
+
+After all this pontificating, it should be no surprise I'm building something to try and solve this problem. I call it TermKit, a next-gen Terminal and systems tool platform. There's even a shiny icon:
+
+<img>
+
+It consists of a desktop WebKit app acting as the front-end, with the entire UI built out of HTML/CSS and JavaScript. OS services like QuickLook are integrated through Cocoa.
+
+On the flip side is a Node.js daemon, connected through Socket.IO, which maintains shells, runs programs and streams the visible output back to the front-end.
+
+The front-end and back-end exchange messages, which are routed to views on the front, and to worker processes on the back.
+
+Combining the oil and water of command-line Unix and web isn't an easy job, but it's better than trying to make WebKit sing Unix, or making a rich front-end from scratch. After working on this on and off for a couple of months, I managed to get a prototype of the UI and daemon working, with QuickLook icons as icing on the cake:
+
+<img>
+
+It actually works, and the platform is pretty compelling. With Node.js you get a fast, asynchronous, scriptable back-end with excellent Unix libraries and modules. And using WebKit means you can display anything you can make in HTML5/CSS3, and millions know how to do it already.
+
+However, despite the clear power of HTML5, it would be a mistake to make HTML the defacto output format of Unix: we'd be swapping one parseable text soup for a much bigger one.
+
+<h2>Smart views</h2>
+
+Instead, I wrote a View layer that acts like a simplified DOM. Using simple building blocks, like "item list", "table", "image" or "file with icon", the display is built. The idea is to have a wide range of UNIX concepts easily expressed, so it's easier to make nice UIs quickly. On the back end, a bridge makes it easy to interface by instantiating objects and streaming them to the front-end.
+
+At the same time, you have access to HTML/CSS if you need it, or you can skip it altogether and just print plain text as well.
+
+But what about the actual data? While it may sometimes be piped into a file, usually the data has to be displayed at the end. In the new model, data doesn't go to the terminal anymore, which complicates matters.
+
+Imagine the case of "ls | grep": we're filtering items in a directory, which is displayed as a listing of files and icons. When the listing is output by "ls", sending it on the View out would send it directly to the terminal, preventing grep from filtering the items. If we instead pipe the items through grep, we lose the ability to view the data at all since it will remain in its raw form.
+
+To solve this, I annotate each data pipe with meta-data, using another unholy web ingredient: MIME. This allows me to keep the data pure, and identify it through its Content-Type and other values. In the case of "ls", we keep piping around plain-text filenames separated by newlines like before, but we annotate it so we can format it at the end of the command chain.
+
+The formatter reads the final data and turns it into a View graph, and can be extended to display files, images, JSON, source code, diffs, etc. This can be enabled for existing tools by deriving the Content-Type based on the command. It also makes TermKit web-transparent: you can hook up the data pipes to HTTP GET and POST, and the header information will be passed on.
+
+<h2>Possibilities</h2>
+
+In practice, the Data/View split has been there all along. It comes down to people vs programs, and the line is not hard to draw. "Wget" outputs a progressbar while streaming data into a file. "Top" displays an interactive dashboard that updates continuously. We often view changesets side by side, but still copy and pipe diffs around. In my model, each application can do both interactive tasks and data processing tasks at the same time, and do each in the most natural format for the job.
+
+In addition, routing view commands this ways allows parallel or background processes to update the view independently in the scrollback, instead of colliding with each other and the prompt.
+
+The separation between front-end and back-end also brings other benefits: the back-end can be run remotely, tunneling the websocket over SSH to a local front-end. You get latency-free interaction for remote operations. Even more, we can replace the consoles-within-terminals of SQL and SFTP, and elevate them to first-class shells with all the benefits of the new interaction model.
+
+Doesn't this mean rewriting all our tools? No. Traditional Unix tools can be slotted in transparently, they just don't get the benefits of asynchronous output. Wrapper scripts can add additional functionality, e.g. to give GIT colored, side-by-side diffs or show version control status in an 'ls' listing.
+
+<h2>Status</h2>
+I've been slowly working on TermKit for about a year now, but it's still mostly vaporware. When I started, I didn't know what the right solution would look like, I just knew I wanted something more modern and usable. There's been a lot of writing and rewriting of code just to get to this stage. It also doesn't help that I'm a code perfectionist in unfamiliar territory.
+
+The reason I wanted to blog about it is because all of the above is starting to sound like a really compelling argument to me. The idea is to create a flexible platform for making better tools, built out of cross-platform parts and with enough useful assumptions built-in to really make a difference.
+
+I'd love to hear feedback from Unix gurus to see if this is something you would use, or if there is something obvious I'm missing.
 
 
 
@@ -234,11 +289,11 @@ e.g.
 
    get | grep
    Data Stream:  .txt|html|... > .txt|html|...
-   View Stream: text obj (size, lines) > preformattedtext view / html tree view
+   View Stream: file metadata, download progress, grep stats (# hits)
   
    get | ungzip | untar
    Data Stream:  .gz  > .tar  >   nothing
-   View Stream:  gzip obj (size)  > tar archive (files) > list of file refs (extracted)
+   View Stream:  file metadata, download progress, unzip progress (# files)
     
     Need generic default formatter for data-in. Takes mime blob and turns into static display.
      - Binary stream (blob, image, zip, csv, ...)
@@ -246,11 +301,89 @@ e.g.
      - HTML/XML
      - 
     
-    
- 
- serverside has hook system / listener system for manipulating references. this lets e.g. SVN output revision control flags on files transparently. this would apply across the entire shell view automatically.
- 
-+++ UI stream structure
++++ stream structure
+
+><{
+  termkit: '1'
+}
+
+>{
+  query: 1
+  method: session.open
+  args:
+}
+<{
+  answer: 1
+  success: true
+  args: { 
+    session: 1
+  }
+}
+>{
+  query: 2
+  method: shell.environment
+  session: 1
+}
+<{
+  answer: 2,
+  success: true
+  args: { ... }
+}
+>{
+  query: 3
+  method: shell.run
+  session: 1
+  args: {
+    command: ...
+    id: 0
+  }
+}
+<{
+  method: view.allocate,
+  session: 1
+  args: {
+    id: 0
+    views: [0, 1]
+  }
+}
+<{
+  method: view.add,
+  session: 1  
+  args: {
+    view: 0
+    target: null
+    objects: [ ... ]
+  }
+}
+<{
+  method: view.add,
+  session: 1  
+  args: {
+    view: 0
+    target: [ 0 ]
+    objects: [ ... ]
+  }
+}
+>{
+  method: view.callback,
+  session: 1  
+  args: {
+    view: 0,
+    message: { .. }
+  }
+}
+<{
+  method: view.update
+  args: { ... }
+}
+<{
+  answer: 3,
+  success: true,
+  args: {
+    code: 0,
+  }
+}
+
 
 viewstream:
 
@@ -266,108 +399,6 @@ method: view.*
  tableview / listcontainer -> generic, scales form simple list to tabled headers w/ simple syntax
  object references for files and other things. are multi-typed and annotated on server-side.
  
- view out:
- 
- view.task('task')
- view.progress('task', 50, 0, 100)
- view.table('table')
- view.append('table', []) <- generic method, adapts to target type
- 
- View Object Model:
- simple reference by named IDs
- arrays of objects
- objects can have children
- 
- main structure = presentation
- secondary structure = data
- 
- e.g. view boxes divided
- create widgets
- insert into widgets, <values>
-
- view objects:
-
- {
-   type: 'raw',
-   value: '<p>Hello world</p>',
- }
-
- {
-   id: 'table',
-   type: 'table',
-   children: [
-    { type: 'row', children: "text label" },
-    { type: 'row', children: { .. other objs ... } },
-   ]
- }
-
- {
-   id: 'directory',
-   type: 'blocklist',
-   children: [
-    { type: 'file', path: '/foo/bar', attribs: { ... } },
-    { type: 'task', value: {.....} },
-   ]
- }
- 
- view.insert({
-   id: 'download',
-   type: 'task',
-   progress: '50%',
-   label: "downloading wtf.gz",
- });
- view.update({
-   id: 'download',
-   progress: '60%',
- });
- 
- -> instead of "id = ..", use jquery/css-esque selector?
- 
- values are either literal string, or object type
- 
- ['shell.run', 'ls']
- {
-   id: 'listing',
-   type: 'table'
- }
-
-+++ --
-
-
-session.open.shell
-session.open.mysql
-session.open.git
-
-command.run
-
-direct embedding in websocket frame:
-
-stream := 
-[sessionId, sequence, method, args]
- -> not just a straight up dict because i don't want to hog the 'type' or 'sequence' keys in {data}.
-
->
-['path.autocomplete', 5, {
-  sessionId: 1,
-  
-}]
->
-['command.run', 3, { // shell session
-  'session': 1,
-  'id': 1,
-  'commands': [
-    ['svn', 'up'],
-  ],
-}]
-<
-['return', 3, {
-  status: 'ok',
-}]
-<
-['task', {
-  tasks: []
-}]
-
 +++ -- UI guidelines
 
 * Never ask Yes/No questions. Always use action verbs ('Delete', 'Don't Delete', 'Save and Quit', etc.)
@@ -382,8 +413,10 @@ http://blog.macromates.com/2005/html-output-for-commands/
 
 bcat: browser cat tool
 
-protocol:
+terminator: java-based terminal++
 
+protocol:
+ fastcgi
 
 command output:
 * has to be rich

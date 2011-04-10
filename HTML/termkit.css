@@ -335,6 +335,18 @@ body {
   color: #eee;
 }
 
+.termkitTokenField > span.token-regex {
+  padding: .4em 1em .35em;
+  -webkit-border-radius: .25em;
+  -webkit-border-top-left-radius: 2em;
+  -webkit-border-bottom-right-radius: 2em;
+  margin: 0 3px 0 2px;
+
+  -webkit-box-shadow: 0px -1px 1px rgba(192,192,192,1);
+  background: #57a -webkit-gradient(linear, left top, left bottom, from(#5090c0), to(#269));
+  color: #eef;
+}
+
 .termkitTokenField > span.token-empty span#caret input {
   width: 1px !important;
   margin-top: -2px;

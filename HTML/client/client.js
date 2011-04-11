@@ -32,12 +32,12 @@ var tc = termkit.client = function () {
 
 tc.prototype = {
   
-  register: function (session, handler) {
-    this.sessions[session.session] = handler;
+  add: function (session) {
+    this.sessions[session.id] = session;
   },
   
   deregister: function (session) {
-    delete this.sessions[session.session];
+    delete this.sessions[session.id];
   },
 
   dispatch: function (message) {
@@ -49,9 +49,9 @@ tc.prototype = {
   
     // must be regular viewstream message.
     if (message.session) {
-      var handler = this.sessions[message.session];
-      if (handler) {
-        handler(message);
+      var session = this.sessions[message.session];
+      if (session) {
+        session.dispatch(message.method, message.args);
       }
     }
   },

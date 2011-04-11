@@ -1,4 +1,4 @@
-TermKit
+ TermKit
 +++ -
 Goal: next gen terminal / command application
 
@@ -56,7 +56,7 @@ Good desktop citizen:
  
 0.3: Command suite
   [X] Redesign message protocol
-  [ ] Viewstream integration
+  [X] Viewstream integration
   [ ] 5-pipe command execution
   [ ] unix command execution
   [ ] filesystem autocomplete
@@ -132,9 +132,9 @@ For instance, programs don't communicate anything about the data they're sending
 
 However, because most tools are launched by people for people, the default interchange format of choice is still "somewhat parseable text". As a result, we still have to be careful with things like spaces or Unicode in filenames, in case someone puts text where it doesn't belong. It still matters sometimes whether there is a newline at the end of a file. A misplaced keystroke, easily missed in the cryptic bash wash, can wreak havoc. Relying on text makes us prone to errors, and has lead to a culture where new recruits have to pass a constant trial by fire—to not destroy their system at one of the many opportunities it gives them.
 
-In fact, where it seems to matter most is the interaction. Text has literally locked down our abililty to evolve the UI, by forcing us to use the same monospace character terminals the previous generations used. Even worse, we are still limited to a headache inducing, fluorescent EGA color palette from 1984. A terminal can show you the load on your system, but it can't show you a historic graph. It can make little progress bars out of ASCII characters, but it can't show LaTeX math inline. Even the command-line itself with its clunky tab-complete, lack of text selection and standard copy/paste bears little resemblence to the standard text field widget we use every day in modern UIs.
+In fact, where it seems to matter most is the interaction. Text has literally locked down our abililty to evolve the UI, by forcing us to use the same monospace character terminals the previous generations used. Even worse, we are still often limited to a headache inducing, fluorescent EGA color palette from 1984. A terminal can show you the load on your system, but it can't show you a historic graph. It can make little progress bars out of ASCII characters, but it can't show LaTeX math inline. Even the command-line itself with its clunky tab-complete, lack of text selection and standard copy/paste bears little resemblence to the standard text field widget we use every day in modern UIs.
 
-In the past decade, user interaction has made astounding leaps. We consume and produce vast quantities of information daily. The web has changed from blobs of markup into full apps, with rich typography, complex infographics, inline interactivity, dynamic layout, etc. UIs like OS X have raised the bar on how we can present and interact with information naturally. Sure, fancy icons and smooth animations are great in iLife, but they can also be used in technical applications. You are almost certainly sitting in front of a display with more than a million pixels. Why are you telling it to draw a dinky character terminal from the 80s?
+In the past decade, user interaction has made astounding leaps. We consume and produce vast quantities of information daily. The web has changed from blobs of markup into full apps, with rich typography, complex infographics, inline interactivity, dynamic layout, etc. UIs like OS X have raised the bar on how we can present and interact with information naturally. Sure, fancy icons and smooth graphs are great in iLife, but they can also be used in technical applications. You are almost certainly sitting in front of a display with more than a million pixels. Why are you telling it to draw a dinky character terminal from the 80s?
 
 <h2>A new model</h2>
 
@@ -157,7 +157,7 @@ After all this pontificating, it should be no surprise I'm building something to
 
 <img>
 
-It consists of a desktop WebKit app acting as the front-end, with the entire UI built out of HTML/CSS and JavaScript. OS services like QuickLook are integrated through Cocoa.
+It consists of a desktop WebKit app acting as the front-end, with the UI built out of HTML/CSS and JavaScript. OS services like QuickLook are integrated through Cocoa.
 
 On the flip side is a Node.js daemon, connected through Socket.IO, which maintains shells, runs programs and streams the visible output back to the front-end.
 
@@ -173,7 +173,9 @@ However, despite the clear power of HTML5, it would be a mistake to make HTML th
 
 <h2>Smart views</h2>
 
-Instead, I wrote a View layer that acts like a simplified DOM. Using simple building blocks, like "item list", "table", "image" or "file with icon", the display is built. The idea is to have a wide range of UNIX concepts easily expressed, so it's easier to make nice UIs quickly. On the back end, a bridge makes it easy to interface by instantiating objects and streaming them to the front-end.
+Instead, I wrote a custom View layer. Using simple building blocks, like "item list", "sortable table", "image", "line graph" or "file with icon", the display is built. The idea is to have a wide range of UNIX concepts easily expressed, so it's easier to make nice UIs quickly. The View is interactive and can be updated asynchronously. Making a streaming dashboard is child's play for example.
+
+On the back end, a bridge makes it easy to interface by instantiating objects and streaming them to the front-end.
 
 At the same time, you have access to HTML/CSS if you need it, or you can skip it altogether and just print plain text as well.
 
@@ -181,27 +183,26 @@ But what about the actual data? While it may sometimes be piped into a file, usu
 
 Imagine the case of "ls | grep": we're filtering items in a directory, which is displayed as a listing of files and icons. When the listing is output by "ls", sending it on the View out would send it directly to the terminal, preventing grep from filtering the items. If we instead pipe the items through grep, we lose the ability to view the data at all since it will remain in its raw form.
 
-To solve this, I annotate each data pipe with meta-data, using another unholy web ingredient: MIME. This allows me to keep the data pure, and identify it through its Content-Type and other values. In the case of "ls", we keep piping around plain-text filenames separated by newlines like before, but we annotate it so we can format it at the end of the command chain.
+To solve this, I use the meta-data added to each data pipe, with another unholy web ingredient: MIME. This allows me to keep the data pure, and identify it through its Content-Type and other values. In the case of "ls", we keep piping around plain-text filenames separated by newlines like before, but we annotate it so we can format it at the end of the command chain.
 
-The formatter reads the final data and turns it into a View graph, and can be extended to display files, images, JSON, source code, diffs, etc. This can be enabled for existing tools by deriving the Content-Type based on the command. It also makes TermKit web-transparent: you can hook up the data pipes to HTTP GET and POST, and the header information will be passed on.
+The formatter reads the final data and turns it into a View graph, and can be extended to display files, images, JSON, source code, diffs, etc. This can be enabled for existing tools by deriving the Content-Type based on the command. It also makes TermKit web-transparent: you can hook up the data pipes to HTTP GET and POST, and the header information will be correctly interpreted.
 
 <h2>Possibilities</h2>
 
-In practice, the Data/View split has been there all along. It comes down to people vs programs, and the line is not hard to draw. "Wget" outputs a progressbar while streaming data into a file. "Top" displays an interactive dashboard that updates continuously. We often view changesets side by side, but still copy and pipe diffs around. In my model, each application can do both interactive tasks and data processing tasks at the same time, and do each in the most natural format for the job.
+In practice, the Data/View split has been there all along. It comes down to people vs programs, and the line is not hard to draw. "Wget" outputs a progressbar while streaming data into a file. "Top" displays an interactive dashboard that updates continuously. In this model, each application can do both interactive tasks and data processing tasks at the same time, and do each in the most natural format for the job.
 
-In addition, routing view commands this ways allows parallel or background processes to update the view independently in the scrollback, instead of colliding with each other and the prompt.
+Additionally, routing view commands this way allows parallel or background processes to update the view independently in the scrollback, instead of colliding with each other and the prompt.
 
 The separation between front-end and back-end also brings other benefits: the back-end can be run remotely, tunneling the websocket over SSH to a local front-end. You get latency-free interaction for remote operations. Even more, we can replace the consoles-within-terminals of SQL and SFTP, and elevate them to first-class shells with all the benefits of the new interaction model.
 
-Doesn't this mean rewriting all our tools? No. Traditional Unix tools can be slotted in transparently, they just don't get the benefits of asynchronous output. Wrapper scripts can add additional functionality, e.g. to give GIT colored, side-by-side diffs or show version control status in an 'ls' listing.
+Doesn't this mean rewriting all our tools? Not necessarily. Traditional Unix tools can be slotted in transparently, they just don't get the benefits of asynchronous output. Wrapper scripts can add additional functionality, e.g. to give GIT colored, side-by-side diffs or show version control status in an 'ls' listing.
 
 <h2>Status</h2>
 I've been slowly working on TermKit for about a year now, but it's still mostly vaporware. When I started, I didn't know what the right solution would look like, I just knew I wanted something more modern and usable. There's been a lot of writing and rewriting of code just to get to this stage. It also doesn't help that I'm a code perfectionist in unfamiliar territory.
 
-The reason I wanted to blog about it is because all of the above is starting to sound like a really compelling argument to me. The idea is to create a flexible platform for making better tools, built out of cross-platform parts and with enough useful assumptions built-in to really make a difference.
+The reason I wanted to blog about it is because all of the above is starting to sound like a really compelling argument to me. The idea is to create a flexible platform for making better tools, built out of cross-platform parts and with enough useful assumptions built-in to make a difference.
 
-I'd love to hear feedback from Unix gurus to see if this is something you would use, or if there is something obvious I'm missing.
-
+Feedback is welcome, and I invite you to browse the GitHub repo which has mockups and some code diagrams.
 
 
 +++ Protocol considerations
@@ -211,8 +212,9 @@ The output of a termkit command is split into data and view. The data is the raw
 
 The view is a stream of dom-like objects and operators on them.
 
-There is an inherent assymmetry between view and 
-
+View and data are fundamentally different:
+ * Data is a raw binary stream with meta-data annotation, from one process' stdout to another's stdin
+ * View is a packetized stream of UI updates and callback events, going directly to the terminal.
 
 
 +++ Command architecture
@@ -248,13 +250,13 @@ problem: if front-end is agnostic, then how to make commands smarter?
   stdin - data in. mime formatted
   stdout - data out. mime formatted
   
-                | events/sigs?         ^ view stream: commandkit objects
-  stdin         v                      |        "invoke" / "exit"
+                | events/sigs?         ^ view stream: view updates
+  stdin         v                      |        "view.*" or return/exit
   ---->     [   proc1: args = command?   ]  ---->
                                               stdout
  
  outgoing view stream is tagged with:
-   * originating command = sequenceID (implied through invoke() / exit())
+   * originating command = query ID (wrapped through exit() helper)
    * view ID per process
  
  
@@ -284,8 +286,8 @@ e.g.
    
        native               bridge    process   autodetect
    Rich Datastream -> Typed Binary Data -> Std Out -> Typed Data -> Rich Datastream -> OUT
-   Viewstream      ->                 ---X                -------> ViewStream      -> OUT
-
+   Viewstream      v                    v                        v    ViewStream 
+         terminal..........................................................
 
    get | grep
    Data Stream:  .txt|html|... > .txt|html|...
@@ -398,12 +400,6 @@ method: view.*
 
  tableview / listcontainer -> generic, scales form simple list to tabled headers w/ simple syntax
  object references for files and other things. are multi-typed and annotated on server-side.
- 
-+++ -- UI guidelines
-
-* Never ask Yes/No questions. Always use action verbs ('Delete', 'Don't Delete', 'Save and Quit', etc.)
-* Provide different levels of detail as different view models to toggle between.
-
 
 +++ --
 references:

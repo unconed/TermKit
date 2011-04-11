@@ -20,27 +20,26 @@ of.prototype = {
     return $outputFrame;
   },
 
-  // Hook into the given set of handlers.
-  hook: function (handlers) {
-    var that = this;
-    handlers = handlers || {};
-    handlers['view'] = function (m,a) { that.viewHandler(m, a); };
-    return handlers;
+  // Get the n'th view in the frame.
+  get: function (i, callback) {
+    this.allocate(i + 1);
+    return this.views[i];
   },
-
-  viewHandler: function (method, args) {
-    var subview = args.subview || 0;
-    this.allocate(subview + 1);
-    this.views[subview].viewHandler(method, args);
+  
+  // Remove all views.
+  remove: function () {
+    this.$element.remove();
   },
 
   // Update the element's markup in response to internal changes.
-  allocate: function (subviews) {
-    if (this.views.length < subviews) {
-      subviews -= this.views.length;
-      while (subviews--) {
+  allocate: function (views) {
+    console.log('allocate from', this.views.length, ' to ', views);
+    if (this.views.length < views) {
+      views -= this.views.length;
+      while (views--) {
         this.views.push(new termkit.outputView());
         this.$element.append(this.views[this.views.length - 1].$element);
+        console.log('allocate -- ', this.views.length, views);
       };
     }
   },

@@ -18,8 +18,8 @@ ov.prototype = {
     var $outputView = $('<div class="termkitOutputView"><div class="isolate"></div></div>').data('controller', this);
     var that = this;
     
-    this.root = new ov.outputNode();
-    $outputView.find('.isolate').append(this.root.$element);
+    this.tree = new ov.outputNode({}, this);
+    $outputView.find('.isolate').append(this.tree.$element);
 
     return $outputView;
   },
@@ -39,34 +39,42 @@ ov.prototype = {
 
   },
   
-  // Construct a tree of view objects.
-  construct: function construct(objects) {
-    var that = this;
-    return oneOrMany(objects).map(function (node) { return that.factory.construct(node); });
-  },
-  
   // Handler for view.* invocations.
-  viewHandler: function (method, args) {
+  dispatch: function (method, args) {
+    var target = this.tree.getNode(args.target);
+    var nodes = args.objects && this.factory.tree(args.objects);
+
+    if (!target) return;
+
     switch (method) {
       case 'view.add':
-        var target = this.root.getNode(args.target);
-        var nodes = this.construct(args.objects);
-        target.add(nodes);
-        this.updateElement();
+        target.add(nodes, args.offset);
         break;
 
       case 'view.remove':
-        var target = this.root.getNode(args.target);
-        if (target.parent) {
-          target.parent.remove(target);
-        }
-        this.updateElement();
+        target.remove();
         break;
 
       case 'view.replace':
+        target.replace(nodes);
+        break;
+
       case 'view.update':
+        target.update(args.properties);
         break;
     }
+
+    this.updateElement();
+  },
+  
+  // Notify back-end of callback event.
+  notify: function (method, args) {
+    this._callback && this._callback(method, args);
+  },
+  
+  // Adopt new callback for sending back view events.
+  callback: function (callback) {
+    this._callback = callback;
   },
 
 };
@@ -74,38 +82,3 @@ ov.prototype = {
 ///////////////////////////////////////////////////////////////////////////////
 
 })(jQuery);
-
-
-
-/**
- * Add view object.
-add: function (target, offset) {
-  var args = this.target(target, offset);
-  args.contents = exports.prepareOutput(arguments[arguments.length - 1]);
-  this.invoke('view.add', args);
-},
-
-/**
- * Remove view object.
-remove: function (target, offset) {
-  var args = this.target(target, offset);
-  this.invoke('view.remove', args);
-},
-
-/**
- * Replace view object.
-replace: function (target, offset) {
-  var args = this.target(target, offset);
-  args.contents = exports.prepareOutput(arguments[arguments.length - 1]);
-  this.invoke('view.replace', args);
-},
-
-/**
- * Update view object.
-update: function (target, offset) {
-  var args = this.target(target, offset);
-  args.properties = arguments[arguments.length - 1];
-  this.invoke('view.update', args);
-},
-
-*/

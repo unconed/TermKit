@@ -21,18 +21,16 @@ exports.bridge.prototype = {
   target: function (target, offset) {
     var args = {
       target: target,
+      offset: offset,
     };
-    if (typeof offset == 'numeric') {
-      args.offset = offset;
-    }
     return args;
   },
 
   /**
    * Add objects to a view object.
    */
-  add: function (target, objects) {
-    var args = this.target(target);
+  add: function (target, objects, offset) {
+    var args = this.target(target, offset);
     args.objects = exports.prepareOutput(objects, true);
     this.invoke('view.add', args);
   },
@@ -46,10 +44,19 @@ exports.bridge.prototype = {
   },
 
   /**
+   * Replace an object with another view object.
+   */
+  replace: function (target, objects) {
+    var args = this.target(target);
+    args.objects = exports.prepareOutput(objects, true);
+    this.invoke('view.replace', args);
+  },
+
+  /**
    * Update view object.
    */
-  update: function (target, offset) {
-    var args = this.target(target, offset);
+  update: function (target) {
+    var args = this.target(target);
     args.properties = arguments[arguments.length - 1];
     this.invoke('view.update', args);
   },

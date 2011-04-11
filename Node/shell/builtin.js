@@ -7,7 +7,7 @@ var fs = require('fs'),
 
 exports.shellCommands = {
 
-  'cat': function (tokens, invoke, exit) {
+  'cat': function (tokens, emitter, invoke, exit) {
 
     // "cat <file> [file ...]" syntax.
     if (true || tokens.length < 2) {
@@ -17,7 +17,7 @@ exports.shellCommands = {
     
   },
 
-  'pwd': function (tokens, invoke, exit) {
+  'pwd': function (tokens, emitter, invoke, exit) {
     var out = new view.bridge(invoke);
 
     var cwd = process.cwd();
@@ -26,7 +26,7 @@ exports.shellCommands = {
     exit(true);
   },
 
-  'cd': function (tokens, invoke, exit) {
+  'cd': function (tokens, emitter, invoke, exit) {
 
     var out = new view.bridge(invoke);
     
@@ -49,7 +49,7 @@ exports.shellCommands = {
     exit(true);
   },
 
-  'ls': function (tokens, invoke, exit) {
+  'ls': function (tokens, emitter, invoke, exit) {
     
     var out = new view.bridge(invoke);
 

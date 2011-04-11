@@ -10,9 +10,7 @@ var workerProcessor = exports.processor = function (inStream, outStream) {
   this.outStream = outStream;
   
   this.buffer = '';
-  
-  // Event emitters for callbacks.
-  this.emitters = {};
+  this.streams = {};
 };
 
 exports.processor.prototype = {
@@ -74,6 +72,16 @@ exports.processor.prototype = {
     }
   },
   
+  // Establish a view stream.
+  attach: function (stream, emitter) {
+    this.streams[stream] = emitter;
+  },
+  
+  // Drop a view stream.
+  detach: function (stream) {
+    delete this.streams[stream];
+  },
+  
   // Invoke an asynchronous method.
   notify: function (method, args) {
     var message = {
@@ -107,7 +115,7 @@ workerProcessor.handlers = {
   "shell.run": function (args, exit) {
     var that = this,
         tokens = args.tokens,
-        ref = args.ref;
+        rel = args.rel;
 
     var shellExit = function (success, object, meta) {
       meta = meta || {};
@@ -115,8 +123,12 @@ workerProcessor.handlers = {
       exit(success, object, meta);
     };
 
-    var list = new command.commandList(this, tokens, shellExit, ref);
+    var list = new command.commandList(this, tokens, shellExit, rel);
     list.go();
+  },
+  
+  "view.callback": function (args, exit) {
+    
   },
 
 };

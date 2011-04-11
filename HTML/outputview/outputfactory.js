@@ -11,6 +11,12 @@ ov.outputFactory = function () {
 
 ov.outputFactory.prototype = {
 
+  // Construct a tree of view objects.
+  tree: function (objects) {
+    var that = this;
+    return oneOrMany(objects).map(function (node) { return that.construct(node); });
+  },
+
   construct: function (properties) {
     var type = widgets[properties.type] || ov.outputNode,
         node = new type(properties),
@@ -58,6 +64,8 @@ widgets.raw.prototype = $.extend(new ov.outputNode(), {
   updateElement: function () {
     this.$contents.text(this.properties.contents);
     this.$element.data('controller', this);
+    
+    this.notify('view.callback', { raw: 'foo' });
   },
   
 });

@@ -5,7 +5,7 @@ var ov = termkit.outputView;
 /**
  * Represents a piece of output in an output view.
  */
-ov.outputNode = function (properties) {
+ov.outputNode = function (properties, root) {
 
   this.properties = properties || {};
   this.id = String(this.properties.id || '');
@@ -15,9 +15,9 @@ ov.outputNode = function (properties) {
   
   this.children = [];
   this.parent = null;
-  this.root = this;
+  this.root = root || this;
   
-  this.index = {};
+  this.map = {};
 };
 
 ov.outputNode.prototype = {
@@ -39,63 +39,37 @@ ov.outputNode.prototype = {
     return this.children.length;
   },
 
-  // Adopt node index.
-  mergeIndex: function (node) {
-    for (id in node.index) {
-      this.index[id] = node.index[id];
-    }
-  },
-
-  // Adopt node index.
-  unmergeIndex: function (node) {
-    for (id in node.index) if (this.index[id]) {
-      delete this.index[id];
-    }
-  },
-  
-  // Index node.
-  indexNode: function (node) {
-    if (node.id.length > 0) {
-      this.index[node.id] = node;
-    }
-  },
-
-  // Unindex node.
-  unindexNode: function (node) {
-    if (node.id.length > 0 && this.index[node.id]) {
-      delete this.index[node.id];
-    }
-  },
-  
   // Link up node.
   adopt: function (node) {
     node.root = this.root;
     node.parent = this;
     
-    this.root.indexNode(node);
-    this.root.mergeIndex(node);
-
+    if (node.id != '') {
+      this.map[node.id] = node;
+    }
+    
     node.updateElement();
   },
 
   // Detach node.
   detach: function (node) {
-    node.root = node;
+    node.root = null;
     node.parent = null;
-    
-    this.root.unindexNode(node);
-    this.root.unmergeIndex(node);
+
+    if (node.id != '') {
+      delete this.map[node.id];
+    }
   },
   
   // Insert node(s) inside this one.
-  add: function (collection, index) {
+  add: function (collection, pointer) {
     var that = this;
 
     // Prepare splice call.
-    if (typeof index != 'number') {
-      index = this.children.length;
+    if (typeof pointer != 'number') {
+      pointer = this.children.length;
     }
-    var args = [ index, 0 ].concat(collection);
+    var args = [ pointer, 0 ].concat(collection);
 
     // Allow both single object and array.
     $.each(oneOrMany(collection), function () {
@@ -106,22 +80,27 @@ ov.outputNode.prototype = {
     collection = collection.map(function (item) {
       return item.$element[0];
     });
-    if (index >= this.children.length) {
+    if (pointer >= this.children.length) {
       this.$children.append(collection);
     }
     else {
-      this.$children.children()[index].before($(collection));
+      this.$children.children()[pointer].before($(collection));
     }
 
     // Add elements.
     [].splice.apply(this.children, args);
-    console.log(this.children);
   },
 
-  // Remove node at index.
-  remove: function (index) {
+  // Remove node.
+  remove: function (pointer) {
+    // Self-remove?
+    if (typeof pointer == 'undefined') {
+      this.parent && this.parent.remove(this);
+      return;
+    }
+    
     // Locate node.
-    var index = this.indexOf(index);
+    var index = this.indexOf(pointer);
     var node = this.children[index];
 
     if (node) {
@@ -134,15 +113,64 @@ ov.outputNode.prototype = {
     }
   },
 
-  // Replace child node with this one.
-  replace: function (node, index) {
+  // Replace self with another node(s).
+  replace: function (collection, pointer) {
+    // Self-replace
+    if (typeof pointer == 'undefined') {
+      var index = this.parent.indexOf(this);
+      this.parent && this.parent.remove(index);
+      this.parent.add(collection, index);
+      return;
+    }
+
+    // Locate node.
+    var index = this.indexOf(pointer);
+    var node = this.children[index];
+
     this.remove(index);
-    this.add(node, index)
+    this.add(collection, index);
   },
 
-  // Find index of given command in list.
-  getNode: function (id) {
-    return (typeof id == 'string' && id != '' && this.root.index[id]) || this;
+  // Update node's own properties.
+  update: function (properties) {
+    this.properties = $.extend({}, this.properties, properties || {});
+
+    this.root && this.updateElement();
+  },
+
+  /**
+   * Find target node.
+   *
+   * 'target' is an array of keys, matching one per level starting at this node.
+   * Keys can be integers (node index) or strings (node IDs).
+   */
+  getNode: function (target) {
+
+    console.log('getNode', target, typeof target);
+
+    if ((target == null) || (typeof target != 'object') || (target.constructor != [].constructor)) {
+      target = [target];
+    }
+    key = target.shift();
+
+    if (key == null) {
+      return this;
+    }
+    
+    var types = {
+      string: 'map',
+      number: 'children',
+    };
+    
+    var node, hash = types[typeof key];
+    if (hash) {
+      node = this[hash][key];
+    }
+
+    if (node && target.length) {
+      return node.getNode(target);
+    }
+    return node;
   },
 
   // Find index of given object in list.
@@ -158,6 +186,11 @@ ov.outputNode.prototype = {
   // Previous iterator.
   prev: function (object) {
     return this.children[this.indexOf(object) - 1];
+  },
+  
+  // Notify callback for events.
+  notify: function (method, args) {
+    this.root && this.root.view && this.root.view.notify(method, args);
   },
 
 };

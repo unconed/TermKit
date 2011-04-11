@@ -1,5 +1,3 @@
-Redesigned message flow.
-
 Tasks:
 [ ] Viewstream integration
   [X] outputview splittable into multiple isolated trees w/ subviews
@@ -11,9 +9,9 @@ Tasks:
    [X] implement pipeline view alloc
    [X] update client format
    [X] update client callbacks
-   [ ] update view/frame DOM handling
-   [ ] do test run with CD
-   [ ] do test run with LS
+   [X] update view/frame DOM handling
+   [X] do test run with CD
+   [X] do test run with LS
    [ ] run pipeline test
   [.] output formatter
   [X] run built-in
@@ -111,7 +109,7 @@ Prototype:
   [X] view parser/tree on client side
   [X] list of files
   [X] file icons
-  [ ] implement view DOM v2 with path targeting
+  [X] implement view DOM v2 with path targeting
   [ ] auto-layout mechanism w/ padded max-height on view
   [ ] auto-layout column width (preferred size from widgets + widget variant/style)
   [ ] make file icons cacheable long-term in webkit cache
@@ -132,8 +130,8 @@ Prototype:
     [X] view proxy object on worker side
     [X] make ls / cd commands
     [X] simplify message format to raw json
-    [ ] viewstream integration
-+   [ ] arrange pipes for command/view
+    [X] viewstream integration
+    [ ] arrange pipes for command/view
 
   [ ] sudo support (askpass env?)
 

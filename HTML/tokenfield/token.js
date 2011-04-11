@@ -334,13 +334,13 @@ tf.tokenRegex.prototype = $.extend(new tf.token(), {
 tf.token.triggers = {
   '*': [
     { changes: /./, callback: tf.tokenQuoted.triggerResetEscape },
-    { changes: /./, callback: tf.tokenRegex.triggerResetEscape },
+//    { changes: /./, callback: tf.tokenRegex.triggerResetEscape },
   ],
   'empty': [
     { contents: /^["']/, callback: tf.tokenQuoted.triggerEscape },
     { contents: /["']/,  callback: tf.tokenQuoted.triggerQuote },
-    { contents: /^[\/]/, callback: tf.tokenRegex.triggerEscape },
-    { contents: /[\/]/,  callback: tf.tokenRegex.triggerRegex },
+//    { contents: /^[\/]/, callback: tf.tokenRegex.triggerEscape },
+//    { contents: /[\/]/,  callback: tf.tokenRegex.triggerRegex },
     { contents: /./,     callback: tf.tokenPlain.triggerCharacter },
     { contents: / /,     callback: tf.tokenPlain.triggerEmpty },
   ],
@@ -348,16 +348,16 @@ tf.token.triggers = {
     { contents: /^ ?$/,  callback: tf.tokenEmpty.triggerEmpty },
     { changes: / /,      callback: tf.tokenPlain.splitSpace },
     { changes: /["']/,   callback: tf.tokenQuoted.triggerQuote },
-    { changes: /[\/]/,   callback: tf.tokenRegex.triggerRegex },
+//    { changes: /[\/]/,   callback: tf.tokenRegex.triggerRegex },
   ],
   'quoted': [
     { changes: /["']/,   callback: tf.tokenQuoted.triggerEscape },
     { changes: /["']/,   callback: tf.tokenQuoted.triggerUnquote },
   ],
-  'regex': [
+/*  'regex': [
     { changes: /[\/]/,   callback: tf.tokenRegex.triggerEscape },
     { changes: /[\/]/,   callback: tf.tokenRegex.triggerUnregex },
-  ],
+  ],*/
 };
 
 

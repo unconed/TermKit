@@ -92,22 +92,19 @@ cv.command.prototype = {
     var command = tokens.map(function (t) { return t.toCommand(); });
 
     // Execute in current context.
-    this.context.shell.run(command, function (success, object, meta) {
-        // Set appropriate return state.
-        that.state = {
-          '1': 'ok',
-          '0': 'error',
-          '-1': 'warning',
-        }[+success] || 'ok';
-      
-        // Open new command.
-        async(function () {
-          that.commandView.newCommand();
-        });
-      },
-      // Send all output to outputFrame.
-      this.outputFrame.hook()
-    );
+    this.context.shell.run(command, this.outputFrame, function (success, object, meta) {
+      // Set appropriate return state.
+      that.state = {
+        '1': 'ok',
+        '0': 'error',
+        '-1': 'warning',
+      }[+success] || 'ok';
+    
+      // Open new command.
+      async(function () {
+        that.commandView.newCommand();
+      });
+    });
   },
 
   // Use triggers to respond to a creation or change event.

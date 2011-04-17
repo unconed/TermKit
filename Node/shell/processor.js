@@ -10,7 +10,7 @@ var workerProcessor = exports.processor = function (inStream, outStream) {
   this.outStream = outStream;
   
   this.buffer = '';
-  this.streams = {};
+  this.views = {};
 };
 
 exports.processor.prototype = {
@@ -48,7 +48,7 @@ exports.processor.prototype = {
             
             if (!returned) {
               meta = meta || {};
-              meta.success = success;
+              meta.success = !!success;
 
               meta.answer = message.query;
               meta.args = object;
@@ -73,13 +73,13 @@ exports.processor.prototype = {
   },
   
   // Establish a view stream.
-  attach: function (stream, emitter) {
-    this.streams[stream] = emitter;
+  attach: function (view, emitter) {
+    this.views[view] = emitter;
   },
   
   // Drop a view stream.
-  detach: function (stream) {
-    delete this.streams[stream];
+  detach: function (view) {
+    delete this.views[view];
   },
   
   // Invoke an asynchronous method.

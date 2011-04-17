@@ -123,7 +123,6 @@ cv.command.prototype = {
       for (n = 0; trigger.hasOwnProperty(n); ++n);
       if (n < 1) return;
       
-      //console.log('match '+ n);
       var match;
 
       // Match the multi-regexp on the tokens starting at [index].

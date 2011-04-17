@@ -185,10 +185,8 @@ tf.tokenQuoted.prototype = $.extend(new tf.token(), {
 });
 
 tf.tokenQuoted.resetEscape = function () {
-  console.log('resetEscape');
   tf.tokenQuoted.timer && clearTimeout(tf.tokenQuoted.timer);
   tf.tokenQuoted.timer = setTimeout(function () {
-    console.log('resetEscape ping');
     tf.tokenQuoted.escapeWaiting = false;
   }, 1500);
 };
@@ -207,8 +205,6 @@ tf.tokenQuoted.triggerQuote = function (offset, event) {
     out.push(new tf.tokenPlain(before));
   }
   out.push(new tf.tokenQuoted(after));
-
-  console.log('wtf', this);
 
   tf.tokenQuoted.setEscape();
 

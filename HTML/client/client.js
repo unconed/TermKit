@@ -36,7 +36,7 @@ tc.prototype = {
     this.sessions[session.id] = session;
   },
   
-  deregister: function (session) {
+  remove: function (session) {
     delete this.sessions[session.id];
   },
 

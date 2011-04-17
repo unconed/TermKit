@@ -51,11 +51,10 @@ body {
   overflow: hidden;
 }
 
-.termkitOutputView .widgetFile .icon {
+.termkitOutputView .widgetFile .icon, .termkitOutputView .widgetFile .icon * {
   float: left;
   width: 32px;
   height: 32px;
-  background: #333;
 }
 
 .termkitOutputView .widgetFile .name, .termkitOutputView .widgetFile .meta {
@@ -63,6 +62,14 @@ body {
 }
 
 .termkitOutputView .widgetFile .name {
+}
+
+.termkitOutputView .widgetFile.file-hidden .icon {
+/*  opacity: 0.5; */
+}
+
+.termkitOutputView .widgetRaw .contents {
+  white-space: pre-wrap;
 }
 
 /************/

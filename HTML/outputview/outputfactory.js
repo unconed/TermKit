@@ -70,6 +70,105 @@ widgets.raw.prototype = $.extend(new ov.outputNode(), {
   
 });
 
+/**
+ * Widget: File icon.
+ *
+ * Icon loading is collectively throttled.
+ */
+widgets.icon = function (properties) {
+  
+  // Initialize node.
+  ov.outputNode.call(this, properties);
+  
+  this.updateElement();
+  
+  this.queue();
+};
+
+// Process icon updates.
+widgets.icon.queue = [];
+widgets.icon.limit = 4;
+widgets.icon.process = function () {
+  if (widgets.icon.queue.length && widgets.icon.limit > 0) {
+    widgets.icon.limit--;
+    
+    var icon = widgets.icon.queue.shift();
+    icon.process();
+  }
+};
+
+widgets.icon.prototype = $.extend(new ov.outputNode(), {
+  
+  // Return active markup for this widget.
+  $markup: function () {
+    var $outputNode = $('<div class="termkitOutputNode widgetIcon"></div>').data('controller', this);
+    return $outputNode;
+  },
+
+  setDefaultIcon: function (callback) {
+    var that = this;
+
+    // Set default icon.
+    var image = new Image(),
+        extension = (this.properties.stats.mode & 0x4000) ? '...' : this.properties.name.split('.').pop(),
+        defaultUrl = 'termkit-icon-default:///' + encodeURIComponent(extension);
+
+    image.onload = function () {
+      that.$element.css({
+        background: 'url('+ defaultUrl +')',
+        backgroundSize: '32px 32px',
+      });
+      callback && callback();
+    };
+
+    image.src = defaultUrl;
+  },
+  
+  setOwnIcon: function (callback) {
+    var that = this;
+
+    // Set file-specific icon.
+    var image = new Image(),
+        path = this.properties.path + '/' + this.properties.name,
+        previewUrl = 'termkit-icon-preview:///' + encodeURIComponent(path);
+
+    image.onload = function () {
+      that.$element.css({
+        background: 'url('+ previewUrl +')'
+      });
+      callback && callback();
+    };
+
+    image.src = previewUrl;
+  },
+  
+  // Queue icon updates to avoid choking webkit.
+  queue: function () {
+    widgets.icon.queue.push(this);
+    widgets.icon.process();
+  },
+  
+  // Process the icon update.
+  process: function () {
+    function yield() {
+      widgets.icon.process();
+    }
+    
+    this.setOwnIcon(yield);
+    
+    widgets.icon.limit++;
+  },
+  
+  // Update markup to match.
+  updateElement: function () {
+    var that = this;
+
+    this.setDefaultIcon();
+
+    this.$element.data('controller', this);
+  },
+  
+});
 
 /**
  * Widget: File reference
@@ -82,6 +181,11 @@ widgets.file = function (properties) {
   this.$icon = this.$element.find('.icon');
   this.$name = this.$element.find('.name');
   this.$meta = this.$element.find('.meta');
+
+  this.icon = new widgets.icon(this.properties);
+  this.$icon.append(this.icon.$element);
+  this.icon.updateElement();
+
   this.updateElement();
 };
 
@@ -89,39 +193,24 @@ widgets.file.prototype = $.extend(new ov.outputNode(), {
   
   // Return active markup for this widget.
   $markup: function () {
-    var $outputNode = $('<div class="termkitOutputNode widgetFile"><div class="icon"></div><div class="name"></div><div class="meta"></div></div>').data('controller', this);
+    var $outputNode = $('<div class="termkitOutputNode widgetFile" draggable="true"><div class="icon"></div><div class="name"></div><div class="meta"></div></div>').data('controller', this);
     var that = this;
     return $outputNode;
   },
-
+  
   // Update markup to match.
   updateElement: function () {
     var that = this;
 
     this.$element.data('controller', this);
 
-    // Set default icon.
-    var extension = (this.properties.stats.mode & 0x4000) ? '/' : this.properties.name.split('.').pop(),
-        defaultUrl = 'termkit-icon-default:///' + encodeURIComponent(extension);
-    this.$icon.css({
-      background: 'url('+ defaultUrl +')',
-      backgroundSize: '32px 32px',
-    });
-    
-    // Set file-specific icon.
-    var image = new Image(),
-        path = this.properties.path + '/' + this.properties.name,
-        previewUrl = 'termkit-icon-preview:///' + encodeURIComponent(path);
-    image.onload = function () {
-      that.$icon.css({
-        background: 'url('+ previewUrl +')'
-      });
-    };
-    image.src = previewUrl;
-    
     // Set text labels.
     this.$name.text(this.properties.name);
     this.$meta.text(formatSize(this.properties.stats.size));
+    
+    if (this.properties.name[0] == '.') {
+      this.$element.addClass('file-hidden');
+    }
   },
   
 });

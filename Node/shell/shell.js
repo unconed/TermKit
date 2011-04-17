@@ -18,8 +18,6 @@ exports.shell = function (args, router) {
   
   // Determine user identity.
   if (user == process.env.USER) {
-    console.log('spawning shell worker: ' + path);
-
     // Spawn regular worker.
     p = this.process = spawn('/usr/local/bin/node', [ path ], {
       cwd: process.cwd(),
@@ -33,7 +31,7 @@ exports.shell = function (args, router) {
   if (p) {
     // Bind exit.
     p.on('exit', function (code) {
-      console.log('shell worker exited with code ' + code);
+//      console.log('shell worker exited with code ' + code);
     });
 
     // Bind receiver.
@@ -58,7 +56,6 @@ exports.shell.prototype = {
   
   send: function (query, method, args) {
     var json = JSON.stringify({ query: query, method: method, args: args });
-    console.log('shell sending '+json);
     this.process.stdin.write(json + "\u0000");
   },
   
@@ -74,7 +71,6 @@ exports.shell.prototype = {
       this.buffer = this.buffer.substring(chunk.length + 1);
 
       // Parse message.
-      console.log('shell receiving '+chunk);
       var message = JSON.parse(chunk);
 
       // Lock message to this session and forward.

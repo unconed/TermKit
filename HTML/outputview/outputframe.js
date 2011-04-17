@@ -33,13 +33,11 @@ of.prototype = {
 
   // Update the element's markup in response to internal changes.
   allocate: function (views) {
-    console.log('allocate from', this.views.length, ' to ', views);
     if (this.views.length < views) {
       views -= this.views.length;
       while (views--) {
         this.views.push(new termkit.outputView());
         this.$element.append(this.views[this.views.length - 1].$element);
-        console.log('allocate -- ', this.views.length, views);
       };
     }
   },

@@ -55,9 +55,10 @@ exports.bridge.prototype = {
   /**
    * Update view object.
    */
-  update: function (target) {
+  update: function (target, properties, append) {
     var args = this.target(target);
-    args.properties = arguments[arguments.length - 1];
+    args.properties = properties;
+    args.append = !!append;
     this.invoke('view.update', args);
   },
 
@@ -70,6 +71,7 @@ exports.bridge.prototype = {
 exports.prepareOutput = function prepareOutput(object, wrap) {
 
   // Allow plain text output..
+  object = object || '';
   if (object.constructor == "".constructor) {
     object = exports.raw(null, object);
   }

@@ -135,8 +135,13 @@ function testSession() {
  */
 function testCommands() {
   mockShell([
-    { query: 5, method: 'shell.run', args: { tokens: [ 'pwd' ], ref: 7 } },
+//    { query: 5, method: 'shell.run', args: { tokens: [ 'pwd' ], ref: 7 } },
+    { query: 5, method: 'shell.run', args: { tokens: [ 'cat', 'test.js' ], ref: 4 } },
   ], function (messages, success) {
+    for (i in messages) { 
+      console.log(messages[i]);
+      messages[i].args && messages[i].args.objects && console.log('Objects', messages[i].args.objects);
+    }
     var last = messages[messages.length - 1];
     assert(last.success && last.answer == 5, "Run single command");
   });
@@ -144,8 +149,8 @@ function testCommands() {
 
 // Run tests.
 var tests = [
-  testHandshake,
-  testSession,
+//  testHandshake,
+//  testSession,
   testCommands,
 ]
 for (i in tests) tests[i]();

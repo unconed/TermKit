@@ -47,40 +47,38 @@ tc.shell.prototype = {
   dispatch: function (method, args) {
     var that = this;
     
-    console.log('viewstream', method, args);
     switch (method) {
-      case 'stream.open':
+      case 'view.open':
         var frame = this.frames[args.rel];
 
         // Allocate views.
         if (frame) {
           // Add views to viewstream list.
-          frame.allocate(args.streams.length);
-          for (i in args.streams) (function (id) {
+          frame.allocate(args.views.length);
+          for (i in args.views) (function (id) {
             view = frame.get(+i);
             view.callback(function (method, args) {
               // Lock callback to this view.
-              args.stream = id;
+              args.view = id;
 
-              console.log('upstream', method, args);
               that.notify(method, args);
             });
 
             that.views[id] = view;
-          })(args.streams[i]);
+          })(args.views[i]);
         }
         break;
 
-      case 'stream.close':
+      case 'view.close':
         // Remove views from active viewstream list.
-        for (i in args.streams) {
-          delete this.views[args.streams[i]];
+        for (i in args.views) {
+          delete this.views[args.views[i]];
         }
         break;
       
       default:
         var view;
-        if (args.stream && (view = this.views[args.stream])) {
+        if (args.view && (view = this.views[args.view])) {
           view.dispatch(method, args);
         }
     }

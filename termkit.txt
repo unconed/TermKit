@@ -57,7 +57,7 @@ Good desktop citizen:
 0.3: Command suite
   [X] Redesign message protocol
   [X] Viewstream integration
-  [ ] 5-pipe command execution
+  [X] 5-pipe command execution
   [ ] unix command execution
   [ ] filesystem autocomplete
   [ ] command decoration

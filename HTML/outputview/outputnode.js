@@ -132,8 +132,15 @@ ov.outputNode.prototype = {
   },
 
   // Update node's own properties.
-  update: function (properties) {
-    this.properties = $.extend({}, this.properties, properties || {});
+  update: function (properties, append) {
+    if (append) {
+      for (i in properties) {
+        this.properties[i] += properties[i];
+      }
+    }
+    else {
+      this.properties = $.extend({}, this.properties, properties || {});
+    }
 
     this.root && this.updateElement();
   },
@@ -145,8 +152,6 @@ ov.outputNode.prototype = {
    * Keys can be integers (node index) or strings (node IDs).
    */
   getNode: function (target) {
-
-    console.log('getNode', target, typeof target);
 
     if ((target == null) || (typeof target != 'object') || (target.constructor != [].constructor)) {
       target = [target];

@@ -3,6 +3,7 @@ var EventEmitter = require("events").EventEmitter,
     spawn = require('child_process').spawn,
     builtin = require('shell/builtin'),
     view = require('view/view'),
+    meta = require('shell/meta'),
 
     async = require('misc').async,
     whenDone = require('misc').whenDone,
@@ -21,7 +22,7 @@ exports.outputView = function (processor) {
 
   // Generate 'view out' invoke method locked to one view.
   this.invoke = function (method, args) {
-    args.stream = id;
+    args.view = id;
     processor.notify(method, args);
   };
 };
@@ -45,19 +46,19 @@ exports.commandList = function (processor, tokens, exit, rel) {
   }
 
   // Allocate view streams on client side.
-  processor.notify('stream.open', {
+  processor.notify('view.open', {
     rel: rel,
-    streams: views.map(function (v) { return v.id; }),
+    views: views.map(function (v) { return v.id; }),
   });
 
   // Track exit of processes.
   var returns = [],
       track = whenDone(function () {
         // Detach all views.
-        processor.notify('stream.close', {
-          streams: views.map(function (v) { return v.id; }),
+        processor.notify('view.close', {
+          views: views.map(function (v) { return v.id; }),
         });
-        
+
         // Return the last exit info to the shell.
         exit.apply(null, returns);
       });
@@ -86,7 +87,7 @@ exports.commandList = function (processor, tokens, exit, rel) {
   })(this.units[i]);
   
   // Add output formatter at the end.
-  this.formatter = new outputFormatter(last, views[n].invoke);
+  this.formatter = new outputFormatter(last, views[n].invoke, track(function () { }));
 };
 
 exports.commandList.prototype = {
@@ -144,25 +145,35 @@ exports.commandUnit.builtinCommand.prototype.spawn = function () {
   var that = this,
       prefix = this.command[0];
   if (this.handler = builtin.shellCommands[prefix]) {
-    var process = {
-      stdin: new EventEmitter(),
-      stdout: new EventEmitter(),
-    };
+    
+    // Make fake process.
+    var fake    = new EventEmitter();
+    fake.stdin  = new EventEmitter();
+    fake.stdout = new EventEmitter();
+    fake.stderr = new EventEmitter();
 
     // Set up fake stdin.
-    process.stdin.write = function (data) {
-      process.stdin.emit('data', data);
+    fake.stdin.write = function (data) {
+      fake.stdin.emit('data', data);
     };
-    process.stdin.end = function () {
-      
+    fake.stdin.end = function () {
     };
   
     // Set up fake stdout.
-    process.stdout.write = function (data) {
-      process.stdout.emit('data', data);
+    fake.stdout.write = function (data) {
+      fake.stdout.emit('data', data);
+    };
+    fake.stdout.end = function () {
+    };
+
+    // Set up fake stderr.
+    fake.stderr.write = function (data) {
+      fake.stderr.emit('data', data);
+    };
+    fake.stderr.end = function () {
     };
     
-    this.process = process;
+    this.process = fake;
   }
   else {
     throw "No such built-in command '" + prefix;
@@ -171,8 +182,23 @@ exports.commandUnit.builtinCommand.prototype.spawn = function () {
 
 exports.commandUnit.builtinCommand.prototype.go = function () {
   var that = this;
+  
+  var pipes = {
+    dataIn: this.process.stdin,
+    dataOut: this.process.stdout,
+    errorOut: this.process.stderr,
+    viewIn: this.emitter,
+    viewOut: this.invoke,
+  };
+  
+  // Wrap exit handler to allow fake process to emit an exit event.
+  var exit = function (success, object) {
+    that.process.emit('exit', !success);
+    that.exit(success, object);
+  };
+  
   async(function () {
-    that.handler.call(that, that.command, that.emitter, that.invoke, that.exit);
+    that.handler.call(that, that.command, pipes, exit);
   });
 };
 
@@ -198,30 +224,14 @@ exports.commandUnit.unixCommand.prototype.spawn = function () {
 };
 
 exports.commandUnit.unixCommand.prototype.go = function () {
+
   // Add MIME headers to raw output from process.
-  this.process.stdout.write('Content-Type: application/octet-stream\r\n');
-  this.process.stdout.write('X-Command: '+ prefix + '\r\n');
-  this.process.stdout.write('X-Arguments: '+ mimify(command) + '\r\n\r\n');
+  var headers = new meta.headers();
+  headers.set('Content-Type', 'application/octet-stream');
+  headers.set('X-TermKit-Command', prefix);
+  headers.set('X-TermKit-Arguments', command);
+  this.process.stdout.write(headers.generate());
 
-  function mimify(object) {
-    function escape(string) {
-      return string.replace(/[\\"]/g, '\\$0');
-    }
-    
-    if (object.constructor == [].constructor) {
-      var out = [];
-      for (i in object) {
-        out.push(mimify(object[i]));
-      }
-      return out.join(' ');
-    }
-    
-    if (object.constructor == ''.constructor) {
-      return '"' + escape(object) +'"';
-    }
-
-    return '' + object;
-  }
 };
 
 

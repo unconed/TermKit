@@ -1,7 +1,7 @@
 var debug = false;
 if (typeof exports == 'undefined') {
   exports = termkit;
-  debug = true;
+  debug = false;
 }
 
 exports.protocol = function (connection, handler, autoconnect) {
@@ -62,16 +62,16 @@ exports.protocol.prototype = {
       var callback = this.callbacks[message.answer];
       if (callback) {
         delete this.callbacks[message.answer];
-        callback[+!message.success](message);
+        callback && callback(message);
       }
     }
   },
   
-  query: function (method, args, meta, success, error) {
+  query: function (method, args, meta, callback) {
     meta = meta || {};
     meta.query = this.counter++;
     
-    this.callbacks[meta.query] = [ success, error ];
+    this.callbacks[meta.query] = callback;
     this.notify(method, args, meta);
   },
   
@@ -97,7 +97,7 @@ exports.protocol.prototype = {
   
   send: function (message) {
     if (typeof message == 'object') {
-      debug && console.log('sending', message);
+      debug && console.log('sending', message.method, message.args && message.args.objects, message);
       var json = JSON.stringify(message);
       this.connection.send(json);
     }
@@ -106,7 +106,7 @@ exports.protocol.prototype = {
   receive: function (data) {
     var message = JSON.parse(data);
     if (typeof message == 'object') {
-      debug && console.log('receiving', message);
+      debug && console.log('receiving', message.method, message.args && message.args.objects, message);
       this.process(message);
     }
   },

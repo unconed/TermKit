@@ -74,8 +74,20 @@ exports.whenDone = function (done) {
  * Execute a function asynchronously.
  */
 exports.async = function (func) {
-  var that = this;
-  setTimeout(function () { func.call(that); }, 0);
+  var that = this,
+      args = [].slice.call(arguments, 1);
+  setTimeout(function () { func.apply(that, args); }, 0);
+}
+
+/**
+ * Make an asynchronously executed callback.
+ */
+exports.asyncCallback = function (func) {
+  var that = this,
+      args = [].slice.call(arguments, 1);
+  return function () {
+    setTimeout(function () { func.apply(that, args); }, 0);
+  };
 }
 
 /**

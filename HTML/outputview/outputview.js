@@ -18,7 +18,7 @@ ov.prototype = {
     var $outputView = $('<div class="termkitOutputView"><div class="isolate"></div></div>').data('controller', this);
     var that = this;
     
-    this.tree = new ov.outputNode({}, this);
+    this.tree = new ov.outputNode({});
     $outputView.find('.isolate').append(this.tree.$element);
 
     return $outputView;
@@ -60,7 +60,8 @@ ov.prototype = {
         break;
 
       case 'view.update':
-        target.update(args.properties);
+        console.log('updating', target, args.properties, args.append);
+        target.update(args.properties, args.append);
         break;
     }
 

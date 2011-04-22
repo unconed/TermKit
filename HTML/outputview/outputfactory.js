@@ -40,9 +40,9 @@ var widgets = ov.outputFactory.widgets = {};
 ///////////////////////////////////////////////////////////////////////////////
 
 /**
- * Widget: Raw output
+ * Widget: Base view
  */
-widgets.raw = function (properties) {
+widgets.view = function (properties) {
   
   // Initialize node.
   ov.outputNode.call(this, properties);
@@ -51,11 +51,27 @@ widgets.raw = function (properties) {
   this.updateElement();
 };
 
-widgets.raw.prototype = $.extend(new ov.outputNode(), {
+widgets.view.prototype = $.extend(new ov.outputNode(), {
+
+});
+
+/**
+ * Widget: Text output
+ */
+widgets.text = function (properties) {
+  
+  // Initialize node.
+  ov.outputNode.call(this, properties);
+  
+  this.$contents = this.$element.find('.contents');
+  this.updateElement();
+};
+
+widgets.text.prototype = $.extend(new ov.outputNode(), {
   
   // Return active markup for this widget.
   $markup: function () {
-    var $outputNode = $('<div class="termkitOutputNode widgetRaw"><div class="contents"></div></div>').data('controller', this);
+    var $outputNode = $('<div class="termkitOutputNode widgetText"><div class="contents"></div></div>').data('controller', this);
     var that = this;
     return $outputNode;
   },
@@ -216,6 +232,41 @@ widgets.file.prototype = $.extend(new ov.outputNode(), {
 });
 
 /**
+ * Widget: Image
+ */
+widgets.image = function (properties) {
+  
+  // Initialize node.
+  ov.outputNode.call(this, properties);
+  
+  this.$img = this.$element.find('img');
+  
+  this.updateElement();
+};
+
+widgets.image.prototype = $.extend(new ov.outputNode(), {
+  
+  // Return active markup for this widget.
+  $markup: function () {
+    var $outputNode = $('<div class="termkitOutputNode widgetImage" draggable="true"><img></div>').data('controller', this);
+    var that = this;
+    return $outputNode;
+  },
+  
+  // Update markup to match.
+  updateElement: function () {
+    var that = this;
+
+    this.$element.data('controller', this);
+
+    if (this.properties.url) {
+      this.$img[0].src = this.properties.url;
+    }
+  },
+  
+});
+
+/**
  * Container: list
  */
 widgets.list = function (properties) {
@@ -241,5 +292,46 @@ widgets.list.prototype = $.extend(new ov.outputNode(), {
   },
   
 });
+
+/**
+ * Widget: Code output
+ */
+widgets.code = function (properties) {
+  
+  // Initialize node.
+  ov.outputNode.call(this, properties);
+  
+  this.$contents = this.$element.find('.contents');
+  this.$pre = this.$contents.find('pre');
+  
+  var brushes = {
+    'application/javascript': 'js',
+  };
+  this.brush = brushes[properties.language];
+  
+  this.updateElement();
+};
+
+widgets.code.prototype = $.extend(new widgets.text(), {
+  
+  // Return active markup for this widget.
+  $markup: function () {
+    var $outputNode = $('<div class="termkitOutputNode widgetText widgetCode"><div class="contents"><pre></pre></div></div>').data('controller', this);
+    var that = this;
+    return $outputNode;
+  },
+
+  // Update markup to match.
+  updateElement: function () {
+    this.$pre.text(this.properties.contents);
+    this.$pre.attr('className', 'brush: ' + this.brush);
+
+  	SyntaxHighlighter.highlight({}, this.$pre[0]);
+
+    this.$element.data('controller', this);
+  },
+  
+});
+
 
 })(jQuery);

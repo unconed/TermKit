@@ -2,7 +2,7 @@ html {
   height: 100%;
 }
 body {
-  background: #234;
+  background: #000;
   color: #fff;
   padding: 0;
   margin: 0;
@@ -41,7 +41,7 @@ body {
   overflow-x: auto;
 }
 
-.termkitOutputView .widgetRaw {
+.termkitOutputView .widgetText {
   margin: 1em;
 }
 
@@ -68,7 +68,8 @@ body {
 /*  opacity: 0.5; */
 }
 
-.termkitOutputView .widgetRaw .contents {
+.termkitOutputView .widgetText .contents {
+  padding: 0.5em;
   white-space: pre-wrap;
 }
 

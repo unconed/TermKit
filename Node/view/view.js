@@ -73,7 +73,7 @@ exports.prepareOutput = function prepareOutput(object, wrap) {
   // Allow plain text output..
   object = object || '';
   if (object.constructor == "".constructor) {
-    object = exports.raw(null, object);
+    object = exports.text(null, object);
   }
 
   // Allow array of objects, if so, recurse.
@@ -100,14 +100,37 @@ exports.list = function (id, items) {
   };
 }
 
+
 /**
- * Widget: raw output
+ * Widget: base view
  */
-exports.raw = exports.view = function (id, contents) {
+exports.view = function (id) {
   return {
-    type: 'raw',
+    type: 'view',
+    id: id || null,
+  };
+}
+
+/**
+ * Widget: text output
+ */
+exports.text = function (id, contents) {
+  return {
+    type: 'text',
     id: id || null,
     contents: contents || '',
+  };
+}
+
+/**
+ * Widget: code output
+ */
+exports.code = function (id, contents, language) {
+  return {
+    type: 'code',
+    id: id || null,
+    contents: contents || '',
+    language: language || 'text/plain',
   };
 }
 
@@ -121,6 +144,18 @@ exports.file = function (name, path, stats) {
     name: name,
     path: path,
     stats: stats,
+  };
+};
+
+/**
+ * Widget: image reference.
+ */
+exports.image = function (name, url) {
+  
+  return {
+    type: 'image',
+    name: name,
+    url: url,
   };
 };
 

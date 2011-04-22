@@ -60,7 +60,6 @@ ov.prototype = {
         break;
 
       case 'view.update':
-        console.log('updating', target, args.properties, args.append);
         target.update(args.properties, args.append);
         break;
     }

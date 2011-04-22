@@ -152,23 +152,31 @@ exports.commandUnit.builtinCommand.prototype.spawn = function () {
     fake.stdout = new EventEmitter();
     fake.stderr = new EventEmitter();
 
+    // Helper for converting strings to buffers.
+    function buffer(data) {
+      if (data.constructor != Buffer) {
+        data = new Buffer(data, 'utf8');
+      }
+      return data;
+    }
+
     // Set up fake stdin.
     fake.stdin.write = function (data) {
-      fake.stdin.emit('data', data);
+      fake.stdin.emit('data', buffer(data));
     };
     fake.stdin.end = function () {
     };
   
     // Set up fake stdout.
     fake.stdout.write = function (data) {
-      fake.stdout.emit('data', data);
+      fake.stdout.emit('data', buffer(data));
     };
     fake.stdout.end = function () {
     };
 
     // Set up fake stderr.
     fake.stderr.write = function (data) {
-      fake.stderr.emit('data', data);
+      fake.stderr.emit('data', buffer(data));
     };
     fake.stderr.end = function () {
     };

@@ -17,6 +17,10 @@ exports.shellCommands = {
       out.print('Usage: cat <file> [file] ...');
       return exit(false);
     }
+    if (tokens.length > 2) {
+      out.print('Multiple input files not supported yet.');
+      return exit(false);
+    }
     
     var errors = 0,
         track = whenDone(function () {
@@ -52,10 +56,10 @@ exports.shellCommands = {
                 headers.set({
                   'Content-Type': meta.sniff(file, buffer),
                   'Content-Length': stats.size,
-                  'Content-Disposition': {
-                    attachment: true,
-                    filename: file,
-                  },
+                  'Content-Disposition': [
+                    [ 'attachment' ],
+                    [ 'filename', file ],
+                  ],
                 });
 
                 pipes.dataOut.write(headers.generate());

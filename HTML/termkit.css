@@ -80,6 +80,13 @@ body {
 /*  opacity: 0.5; */
 }
 
+.termkitOutputView .widgetImage img {
+  margin: 0 auto;
+  display: block;
+  padding: 5px;
+  background: #fff;
+}
+
 /************/
 
 .termkitCommandView {

@@ -1,5 +1,34 @@
 var mime = require('mime');
 
+function isObject(x) {
+  return typeof x == 'object';
+}
+
+function isString(x) {
+  return (isObject(x) || typeof x == 'string') && x.constructor == ''.constructor;
+}
+
+function isArray(x) {
+  return isObject(x) && x.constructor == [].constructor;
+}
+
+// Flatten multi-line strings.
+function join(string) {
+  return (''+string).replace(/[\r\n] ?/g, ' ');
+}
+
+// Quoted string
+function quote(string) {
+  if (/[\u0080-\uFFFF]/(string)) {
+    // Do RFC2047 mime encoded tokens.
+  }
+  if (/[ ()<>@,;:\\"\/\[\]?=]/(string)) {
+    return '"' + string.replace(/[\\"]/g, '\\$0') + '"';
+  }
+  return string;
+}
+
+
 exports.headers = function () {
   this.fields = {};
   this.params = {};
@@ -32,7 +61,6 @@ exports.headers.prototype = {
       }
       return this.fields[key];
     }
-    return undefined;
   },
 
   set: function (keyObject, paramValue, value) {
@@ -57,18 +85,6 @@ exports.headers.prototype = {
       key: [ [ value, { param: value, param: value } ], [ value, { param: value, param: value } ] ],
     })
     */
-    
-    function isObject(x) {
-      return typeof x == 'object';
-    }
-
-    function isString(x) {
-      return (isObject(x) || typeof x == 'string') && x.constructor == ''.constructor;
-    }
-    
-    function isArray(x) {
-      return isObject(x) && x.constructor == [].constructor;
-    }
     
     // Set single key.
     if (isString(keyObject)) {
@@ -256,7 +272,7 @@ exports.headers.prototype = {
         // Check for comments.
         if (token == '(') {
           // Comments are recursive. Can't regexp in JS.
-          // Remove everything but unescaped parentheses.
+          // Remove everything but unescaped parentheses so we can count them.
           var parens = work.replace(/([^\(\)\\]|\\.)+/g, ''),
               depth = 0;
 
@@ -265,6 +281,7 @@ exports.headers.prototype = {
             if (depth == 0) {
               // Balanced pairs found.
               which = 'comment';
+              // Extract up to the i-th unescaped parenthesis.
               token = new RegExp("([^\(\)]*[()]){" + (i + 1) + "}")(work)[0];
               break;
             }
@@ -329,74 +346,53 @@ exports.headers.prototype = {
    */
   generate: function () {
     var out = [];
-    for (key in this.fields) {
-      out.push(key +': '+ this.escape(this.fields[key]));
+    for (var key in this.fields) {
+      var items = [],
+          prefix = key + ': ',
+          value = this.fields[key];
+      
+      if (!isArray(value)) {
+        value = [ value ];
+      }
+      for (var i in value) {
+        var item = this.escape(value[i]);
+        for (var j in this.params[key]) {
+          var param = this.params[key][j];
+          if (!isArray(param)) {
+            param = [ param ];
+          }
+          if (typeof param[i] != 'undefined') {
+            item += '; ' + this.param(j, param[i]);
+          }
+        } 
+        items.push(item); 
+      }
+
+      out.push(key + ': ' + items.join(', '));
     } 
     return out.join("\r\n") + "\r\n\r\n";
   },
 
   /**
-   * Escape a type for output.
+   * Escape a parameter for output.
    */
-  escape: function escape(object) {
-    
-    // Flatten multi-line strings.
-    function join(string) {
-      return string.replace(/[\r\n] ?/g, ' ');
-    }
-
-    // Quoted string
-    function quote(string) {
-      if (/[\u0080-\uFFFF]/(string)) {
-        // Do RFC2047 mime encoded tokens.
-      }
-      if (/[ ()<>@,;:\\"\/\[\]?=]/(string)) {
-        return '"' + string.replace(/[\\"]/g, '\\$0') + '"';
-      }
-      return string;
-    }
-    
+  param: function (key, value) {
     // Parameter value (RFC 2231.. ugh)
-    function param(key, string) {
-      if (/[\u0080-\uFFFF]/(string)) {
-        var encoded = encodeURIComponent(string);
-        var safe = quote(string.replace(/[\u0080-\uFFFF]/g, ''));
-        return key + '*="' + encodeURIComponent(string) + '";' + key + '=' + safe;
-      }
-      return key + '=' + quote(string);
+    if (/[\u0080-\uFFFF]/(value)) {
+      var encoded = encodeURIComponent(value);
+      var safe = quote(value.replace(/[\u0080-\uFFFF]/g, ''));
+      return quote(key + '*') + '="' + encodeURIComponent(value) + '";' + quote(key) + '=' + quote(safe);
     }
-    
-    // Flatten arrays
-    if (object.constructor == [].constructor) {
-      var out = [];
-      for (i in object) {
-        out.push(escape(object[i]));
-      }
-      return out.join(' ');
-    }
-    
-    // Output strings safely.
-    if (object.constructor == ''.constructor) {
-      return quote(join(object));
-    }
-    
-    // Output objects as mime parameter value lists.
-    if (typeof object == 'object') {
-      var params = [];
-      for (i in object) {
-        if (object[i] === true) {
-          params.push(i);
-        }
-        else {
-          params.push(param(i, object[i]));
-        }
-      }
-      return params.join(';');
-    }
-
-    return '' + object;
+    return quote(key) + '=' + quote(value);
   },
-  
+
+  /**
+   * Escape a value for output.
+   */
+  escape: function (string) {
+    return quote(join(string));
+  },
+
 };
 
 exports.sniff = function (file, data) {

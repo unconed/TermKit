@@ -8,6 +8,11 @@ body {
   font-size: 70%;
 }
 
+.termkitCommandView pre {
+  font-family: "BitStream Vera Sans Mono";
+  font-size: inherit;
+}
+
 .termkitOutputView .widgetFile .name {
 /*  font-weight: bold; */
   font-size: 1em;

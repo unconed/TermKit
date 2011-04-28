@@ -45,6 +45,18 @@ body {
   margin: 1em;
 }
 
+.termkitOutputView .widgetText .contents {
+  padding: 0 0.5em;
+  white-space: pre-wrap;
+}
+
+.termkitOutputView .widgetCode pre {
+  margin: 0;
+  padding: 0;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
 .termkitOutputView .widgetFile {
   padding: .5em;
   clear: left;
@@ -66,11 +78,6 @@ body {
 
 .termkitOutputView .widgetFile.file-hidden .icon {
 /*  opacity: 0.5; */
-}
-
-.termkitOutputView .widgetText .contents {
-  padding: 0.5em;
-  white-space: pre-wrap;
 }
 
 /************/

@@ -11,8 +11,8 @@ var cv = termkit.commandView = function (shell) {
   this.$element = this.$markup();
 
   // Find structural markup.
-  this.$commands = $(this.$element).find('.commands');
-  this.$context = $(this.$element).find('.context');
+  this.$commands = this.$element.find('.commands');
+  this.$context = this.$element.find('.context');
   
   this.activeIndex = 0;
   this.beginIndex = 0;

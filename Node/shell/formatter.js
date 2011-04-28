@@ -31,24 +31,27 @@ exports.formatter = function (tail, viewOut, exit) {
   
   // Track process state.
   tail.process.on('exit', function () {
-    
-    if (this.plugin) {
-      // Send all buffered output to plug-in in one chunk.
-      if (this.plugin.buffered) {
-        process.stderr.write('flushing ' + this.length +" @ "+ this.offset +"\n");
 
-        this.buffer = new Buffer(this.length);
-        
-        // Join chunks.
-        for (i in this.chunks) {
-          var data = this.chunks[i];
-          data.copy(this.buffer, this.offset, 0, data.length)
-          this.offset += data.length;
+    if (that.plugin) {
+      // Send all buffered output to plug-in in one chunk.
+      if (that.plugin.buffered) {
+        process.stderr.write('flushing ' + that.length +" @ "+ that.offset +"\n");
+
+        if (!that.buffer) {
+          that.buffer = new Buffer(that.length);
+
+          // Join chunks.
+          for (i in that.chunks) {
+            var data = that.chunks[i];
+            process.stderr.write("chunk "+ i +" at "+ that.offset +" - " + data.length + "\n");
+            data.copy(that.buffer, that.offset, 0, data.length)
+            that.offset += data.length;
+          }
         }
         
-        this.plugin.data(this.buffer);
+        that.plugin.data(that.buffer);
       }
-      this.plugin.end();
+      that.plugin.end();
     }
     
     exit();
@@ -68,7 +71,7 @@ exports.formatter.prototype = {
   
   // Parse MIME headers for stream
   data: function (data) {
-    
+//    process.stderr.write('CHUNK ' + data + "\n\n");
     if (!this.identified) {
       // Swallow data until we encounter the MIME header delimiter.
       this.lookahead += data.toString('ascii');
@@ -84,15 +87,16 @@ exports.formatter.prototype = {
         this.plugin.begin();
 
         // See if size is known ahead of time.
-        var length = this.headers.get('Content-Length');
-        if (typeof length != 'undefined') {
+        var length = this.length = parseInt(this.headers.get('Content-Length'));
+        if (this.plugin.buffered && !isNaN(length)) {
           // Allocate large buffer.
-          this.length = length;
           this.buffer = new Buffer(length);
+          process.stderr.write('allocated ' + this.length+" got " + this.buffer.length + "\n");
+        }
+        else {
+          this.length = 0;
         }
 
-        process.stderr.write('allocated ' + this.length+"\n");
-        
         // Emit left-over data.
         var end = chunk.length + 4;
         if (end < data.length) {
@@ -200,6 +204,8 @@ exports.plugins.text.supports = function (headers) {
 exports.plugins.code = function (headers, out) {
   // Inherit.
   exports.plugin.apply(this, arguments);
+
+  this.buffered = true;
 };
 
 exports.plugins.code.prototype = extend(new exports.plugins.text(), {

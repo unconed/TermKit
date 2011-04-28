@@ -23,6 +23,11 @@ ov.prototype = {
 
     return $outputView;
   },
+  
+  // Remove this element.
+  remove: function () {
+    this.$element.remove();
+  },
 
   // Update the element's markup in response to internal changes.
   updateElement: function () {

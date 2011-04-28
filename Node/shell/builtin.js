@@ -10,7 +10,7 @@ exports.shellCommands = {
 
   'cat': function (tokens, pipes, exit) {
     var out = new view.bridge(pipes.viewOut);
-    var chunkSize = 4096;
+    var chunkSize = 16384;
 
     // "cat <file> [file ...]" syntax.
     if (tokens.length < 2) {
@@ -41,9 +41,10 @@ exports.shellCommands = {
             return;
           }
           
-          var position = 0, buffer = new Buffer(chunkSize);
+          var position = 0;
 
           (function read() {
+            var buffer = new Buffer(chunkSize);
             fs.read(fd, buffer, 0, chunkSize, position, track(function (err, bytesRead) {
               if (err) {
                 errors++;
@@ -56,10 +57,7 @@ exports.shellCommands = {
                 headers.set({
                   'Content-Type': meta.sniff(file, buffer),
                   'Content-Length': stats.size,
-                  'Content-Disposition': [
-                    [ 'attachment' ],
-                    [ 'filename', file ],
-                  ],
+                  'Content-Disposition': [ 'attachment', { 'filename': file } ],
                 });
 
                 pipes.dataOut.write(headers.generate());
@@ -108,6 +106,9 @@ exports.shellCommands = {
       return exit(false);
     }
     var path = tokens[1] || process.env.HOME;
+    
+    // Complete ~
+    path = path.replace(/^~(\/|$)/, process.env.HOME + '/');
 
     // Try to change working dir.
     try {

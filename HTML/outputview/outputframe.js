@@ -26,9 +26,17 @@ of.prototype = {
     return this.views[i];
   },
   
-  // Remove all views.
+  // Remove this element.
   remove: function () {
     this.$element.remove();
+  },
+  
+  // Remove all views.
+  clear: function () {
+    for (i in this.views) {
+      this.views[i].remove();
+    }
+    this.views = [];
   },
 
   // Update the element's markup in response to internal changes.

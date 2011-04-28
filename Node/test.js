@@ -238,6 +238,8 @@ function testMeta() {
   assert(set.length == 6 && set[0] == 'application/xml' && set[5] == '*/*', 'Identical properties');
   set = headers.get('Accept', 'q');
   assert(set.length == 6 && typeof set[1] == 'undefined' && set[2] == '0.9' && set[3] == '0.8' && set[5] == '0.5', 'Identical property parameters');
+  
+  console.log(headers.generate());
 }
 
 // Run tests.

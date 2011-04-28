@@ -1,23 +1,13 @@
 Tasks:
 [.] Viewstream integration
-  [X] outputview splittable into multiple isolated trees w/ subviews
-  [X] command pipeline generator (list, units, pipes)
-  [X] write universal server/client router 
-   [X] update router format
-   [X] update worker
-   [X] update handlers for builtins + manual view alloc
-   [X] implement pipeline view alloc
-   [X] update client format
-   [X] update client callbacks
-   [X] update view/frame DOM handling
-   [X] do test run with CD
-   [X] do test run with LS
-   [X] get cat error=true to quit cleanly
-   [ ] run pipeline test
-  [.] output formatter
+  [ ] run pipeline test
   [X] run built-in
   [ ] run unix
-  [ ] output formatter: http get. txt, png/jpg. include headers option
+[X] output formatter
+  [X] make formatter factory with stream and data types
+  [X] parse out content-length
+  [X] mime header parser
+  [X] parse image into data URI. 
 [ ] 5-pipe command execution
 [ ] unix command execution
 [ ] filesystem autocomplete
@@ -27,7 +17,6 @@ Tasks:
 [ ] version control
 [ ] interactive quicklook
 
-[.] data/view stream multipipes.
 [ ] File autocompletion
 [ ] cat/echo Piping + progress bar
 [ ] refactor/standardize view bridge onto standard DOM
@@ -133,7 +122,10 @@ Prototype:
     [X] simplify message format to raw json
     [X] viewstream integration
     [ ] arrange pipes for command/view for unix processes
-
+  [ ] output formatter
+    [ ] full mime header parser/generator
+    [ ] sniff plaintext / unicode
+    [ ] handle encoding
   [ ] sudo support (askpass env?)
 
 5) Command Suite

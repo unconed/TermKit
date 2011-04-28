@@ -88,6 +88,9 @@ cv.command.prototype = {
     this.state = 'running';
     this.collapsed = false;
     
+    // Clear view.
+    this.outputFrame.clear();
+    
     // Convert tokens into strings.
     var command = tokens.map(function (t) { return t.toCommand(); });
 

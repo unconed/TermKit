@@ -13,6 +13,7 @@ tf.autocomplete = function (caret) {
   this.prefix = '';
   this.selected = 0;
   this.token = null;
+  this.last = null;
 };
 
 tf.autocomplete.prototype = {
@@ -61,52 +62,73 @@ tf.autocomplete.prototype = {
     this.remove();
   },
 
-  updateContents: function (event) {
-    var tl = this.caret.tokenList, token = this.caret.selection.anchor.token;
+  updateContents: function (event, local) {
+    var that = this,
+        tl = this.caret.tokenList,
+        token = this.caret.selection.anchor.token;
 
     // Check if it's appropriate to display suggestions.
     // TODO
 
     var $e = this.$element.find('.lines');
-    $e.hide();
 
-    // Get list of suggestions.
-    var that = this;
-    if (this.handler) {
-      this.handler.call(this, tl.indexOf(token), event, tl.contents, function (items) {
-        that.items = items || [];
-
+    // Update state.
+    function updateState() {
+      // Highlight active line, if any,
+      if (that.items.length) {
         // Insert lines into box.
         var prefix = that.prefix;
         $e.empty();
         $.each(that.items, function () {
-          $e.append($('<span>').addClass("line").html('<span class="prefix">' + escapeText(prefix) +'</span><span>'+ escapeText(this) +'</span>'));
+          $e.append($('<span>').addClass("line").html('<span class="prefix">' + escapeText(prefix) +'</span><span>'+ escapeText(this.substring(prefix.length)) +'</span>'));
         });
         $e.show();
 
-        // Highlight active line, if any,
-        if (that.items.length) {
-          that.selected = (that.selected + that.items.length) % that.items.length;
-          var $line = $($e.find('.line')[that.selected]);
+        that.selected = (that.selected + that.items.length) % that.items.length;
+        var $line = $($e.find('.line')[that.selected]);
 
-          // Move caret element to active line.
-          var offsetY = $line.addClass('active').position().top;
-          //this.caret.$element.find('input').css('marginTop', offsetY);
-          that.$element.animate({ 'marginTop': -offsetY }, { duration: 50 });
-        }
+        // Move caret element to active line.
+        var offsetY = $line.addClass('active').position().top;
+        //this.caret.$element.find('input').css('marginTop', offsetY);
+        that.$element.animate({ 'marginTop': -offsetY }, { duration: 30, queue: false });
+      }
+      else {
+        $e.empty().hide();
+      }
+
+      // Don't show single item popup.
+      if (that.items.length == 1 && that.items[0] == prefix) {
+        that.remove();
+      }
+    }
+
+    // Get list of suggestions.
+    if (!local && this.handler) {
+      $e.hide();
+      var last = token.contents;
+      this.handler.call(this, tl.indexOf(token), event, tl.contents, function (items) {
+        if (last != token.contents) return;
+        
+        that.items = items || [];
+
+        updateState();
       });
+    }
+    else {
+      updateState();
     }
   },
   
   onComplete: function (event) {
     if (this.token && this.selected < this.items.length) {
-      this.caret.setContents(this.prefix + this.items[this.selected], event);
+      this.caret.setContents(this.items[this.selected] +' ', event);
       this.remove();
     }
   },
   
   onKeyDown: function (event) {
-    var attached = this.token && this.items.length;
+    var attached = this.token && this.items.length,
+        local = false;
     // Intercept special keys
     switch (event.keyCode) {
       case 9: // TAB
@@ -127,11 +149,13 @@ tf.autocomplete.prototype = {
         this.selected--;
         event.preventDefault();
         event.stopPropagation();
+        local = true;
         break;
       case 40: // Down arrow
         this.selected++;
         event.preventDefault();
         event.stopPropagation();
+        local = true;
         break;
     };
     
@@ -139,7 +163,7 @@ tf.autocomplete.prototype = {
     this.charCode = 0;
     
     async.call(this, function () {
-      this.updateContents(event);
+      this.updateContents(event, local);
     });
   },
 

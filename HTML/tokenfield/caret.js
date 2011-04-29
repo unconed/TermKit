@@ -51,7 +51,6 @@ tf.caret.prototype = {
 
   // Insert the caret on the given selection.
   moveTo: function (selection, event) {
-
     // Make sure selection is within bounds.
     selection.validate();
     

@@ -66,6 +66,7 @@ Good desktop citizen:
   [ ] version control
   [ ] interactive quicklook
   [X] OS X icon loading
+  [X] inline image display
 
 0.4: Network & Modularity
   [ ] SSH tunneling

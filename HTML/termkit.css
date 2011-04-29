@@ -80,11 +80,18 @@ body {
 /*  opacity: 0.5; */
 }
 
+.termkitOutputView .widgetImage {
+  margin: 5px 15px 5px 5px;
+  padding: 0 1em;
+}
+
 .termkitOutputView .widgetImage img {
   margin: 0 auto;
   display: block;
   padding: 5px;
   background: #fff;
+  max-width: 100%;
+  max-height: 100%;
 }
 
 /************/
@@ -193,7 +200,7 @@ body {
 
 .termkitTokenField span#caret input {
   position: absolute;
-  z-index: 2;
+  z-index: 5;
   padding: 0;
   border: 0;
   margin: 0 0 0 -1px;
@@ -254,6 +261,7 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
+  z-index: 4;
   -webkit-box-shadow: 0px -1px 1px rgba(128,128,128,1), 0px 1px 6px rgba(0,0,0,1), 3px 1px 6px rgba(0,0,0,1);
   -webkit-border-radius: .25em;
   background: #555 -webkit-gradient(linear, left top, left bottom, from(#555), to(#333));
@@ -265,6 +273,7 @@ body {
   display: block;
   white-space: nowrap;
   height: 21px;
+  z-index: 5;
 }
 
 .termkitTokenField span.autocomplete .line span.prefix {

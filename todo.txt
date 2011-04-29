@@ -1,16 +1,12 @@
 Tasks:
+[ ] filesystem autocomplete
 [.] Viewstream integration
   [ ] run pipeline test
   [X] run built-in
   [ ] run unix
 [X] output formatter
-  [X] make formatter factory with stream and data types
-  [X] parse out content-length
-  [X] mime header parser
-  [X] parse image into data URI. 
 [ ] 5-pipe command execution
 [ ] unix command execution
-[ ] filesystem autocomplete
 [ ] command decoration
 [ ] interactive execution
 [ ] inline man-pages tips
@@ -122,10 +118,10 @@ Prototype:
     [X] simplify message format to raw json
     [X] viewstream integration
     [ ] arrange pipes for command/view for unix processes
-  [ ] output formatter
-    [ ] full mime header parser/generator
-    [ ] sniff plaintext / unicode
-    [ ] handle encoding
+  [X] output formatter
+    [X] full mime header parser/generator
+    [ ] handle encodings
+    [ ] smart binary output
   [ ] sudo support (askpass env?)
 
 5) Command Suite

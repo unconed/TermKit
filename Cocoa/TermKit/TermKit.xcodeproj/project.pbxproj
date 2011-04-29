@@ -21,6 +21,7 @@
 		B0B02B2711E2CDA4004C960F /* TermKitTerminalController.m in Sources */ = {isa = PBXBuildFile; fileRef = B0B02B2611E2CDA4004C960F /* TermKitTerminalController.m */; };
 		B0B02B7111E31B56004C960F /* HTML in Resources */ = {isa = PBXBuildFile; fileRef = B0B02B5D11E31B55004C960F /* HTML */; };
 		B0B1899711E7C2A900C62CEC /* TermKit.icns in Resources */ = {isa = PBXBuildFile; fileRef = B0B1899611E7C2A900C62CEC /* TermKit.icns */; };
+		B0C532851352271300A92633 /* Shared in Resources */ = {isa = PBXBuildFile; fileRef = B0C532821352271300A92633 /* Shared */; };
 		B0CAB03B12685FE50085604B /* NSImage+QuickLook.m in Sources */ = {isa = PBXBuildFile; fileRef = B0CAB03A12685FE50085604B /* NSImage+QuickLook.m */; };
 		B0CAB03F12686AF70085604B /* TermKitIconProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = B0CAB03E12686AF70085604B /* TermKitIconProtocol.m */; };
 		B0CAB04612686D220085604B /* TermKitIconLoadDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B0CAB04512686D220085604B /* TermKitIconLoadDelegate.m */; };
@@ -43,6 +44,7 @@
 		B041C7F5127AA36F0098469B /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/Window.xib; sourceTree = "<group>"; };
 		B041C8DB127AA9AD0098469B /* TermKitWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TermKitWindowController.h; sourceTree = "<group>"; };
 		B041C8DC127AA9AD0098469B /* TermKitWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TermKitWindowController.m; sourceTree = "<group>"; };
+		B061E2A0136AB12000F4632D /* WebInspector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebInspector.h; sourceTree = "<group>"; };
 		B090FFFB11E1CE7800AC604B /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = /System/Library/Frameworks/WebKit.framework; sourceTree = "<absolute>"; };
 		B0965B7C11DB375E00350D83 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/Terminal.xib; sourceTree = "<group>"; };
 		B0965B8011DB380600350D83 /* TermKitWebView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TermKitWebView.h; sourceTree = "<group>"; };
@@ -52,6 +54,7 @@
 		B0B02B2611E2CDA4004C960F /* TermKitTerminalController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TermKitTerminalController.m; sourceTree = "<group>"; };
 		B0B02B5D11E31B55004C960F /* HTML */ = {isa = PBXFileReference; lastKnownFileType = folder; name = HTML; path = ../../HTML; sourceTree = SOURCE_ROOT; };
 		B0B1899611E7C2A900C62CEC /* TermKit.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = TermKit.icns; sourceTree = "<group>"; };
+		B0C532821352271300A92633 /* Shared */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Shared; path = ../../Shared; sourceTree = SOURCE_ROOT; };
 		B0CAB03912685FE50085604B /* NSImage+QuickLook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSImage+QuickLook.h"; path = "NSImageQuickLook/NSImage+QuickLook.h"; sourceTree = "<group>"; };
 		B0CAB03A12685FE50085604B /* NSImage+QuickLook.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSImage+QuickLook.m"; path = "NSImageQuickLook/NSImage+QuickLook.m"; sourceTree = "<group>"; };
 		B0CAB03D12686AF70085604B /* TermKitIconProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TermKitIconProtocol.h; sourceTree = "<group>"; };
@@ -92,6 +95,7 @@
 				B0965B8111DB380600350D83 /* TermKitWebView.m */,
 				B041C8DB127AA9AD0098469B /* TermKitWindowController.h */,
 				B041C8DC127AA9AD0098469B /* TermKitWindowController.m */,
+				B061E2A0136AB12000F4632D /* WebInspector.h */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -148,6 +152,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				B0C532821352271300A92633 /* Shared */,
 				B0AB0F8812437C960076C132 /* Images */,
 				B0B02B5D11E31B55004C960F /* HTML */,
 				1DDD58140DA1D0A300B32029 /* MainMenu.xib */,
@@ -227,6 +232,7 @@
 				B0B02B7111E31B56004C960F /* HTML in Resources */,
 				B0AB0F9112437C960076C132 /* Images in Resources */,
 				B0B1899711E7C2A900C62CEC /* TermKit.icns in Resources */,
+				B0C532851352271300A92633 /* Shared in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

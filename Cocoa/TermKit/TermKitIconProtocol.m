@@ -64,8 +64,6 @@
  of our special protocol.  You should call this routine BEFORE any urls
  specifying your special protocol scheme are presented to webkit. */
 + (void) registerProtocol {
-    NSLog(@"registerProtocol");
-
     static BOOL inited = NO;
     if ( ! inited ) {
         [NSURLProtocol registerClass:[TermKitIconDefaultProtocol class]];
@@ -79,10 +77,6 @@
  protocol should be used to load the request. */
 + (BOOL)canInitWithRequest:(NSURLRequest *)theRequest {
 
-    NSLog(@"%@ received %@ with url='%@' and scheme='%@'", 
-         self, NSStringFromSelector(_cmd),
-         [[theRequest URL] absoluteString], [[theRequest URL] scheme]);
-    
     /* get the scheme from the URL */
     NSString *theScheme = [[theRequest URL] scheme];
     
@@ -95,11 +89,6 @@
  canonicalRequestForRequest method so you have an opportunity to modify
  the NSURLRequest before processing the request */
 +(NSURLRequest *)canonicalRequestForRequest:(NSURLRequest *)request {
-    
-    NSLog(@"%@ received %@", self, NSStringFromSelector(_cmd));
-    
-    /* we don't do any special processing here, though we include this
-     method because all subclasses must implement this method. */
     
     return request;
 }
@@ -114,7 +103,6 @@
  interesting part is that we create the jpeg entirely in memory and return
  it back for rendering in the webView.  */
 - (void)startLoading {
-    NSLog(@"%@ received %@ - start", self, NSStringFromSelector(_cmd));
     
     /* retrieve the current request. */
     NSURLRequest *request = [self request];
@@ -131,7 +119,7 @@
     }
     
     /* get the path component from the url */
-    NSString* iconPath = [[[[request URL] path] substringFromIndex:1] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSString* iconPath = [[[request URL] path] substringFromIndex:1];
 
     /* render into an icon */
     NSImage* icon = [self imageForIconPath:iconPath];
@@ -166,16 +154,13 @@
                                                                       code:resultCode userInfo:nil]];
     }
     
-    /* added the extra log statement here so you can see that stopLoading is called
-     by the underlying machinery before we leave this routine. */
-    NSLog(@"%@ received %@ - end", self, NSStringFromSelector(_cmd));
 }
 
 /* called to stop loading or to abort loading.  We don't do anything special
  here. */
 - (void)stopLoading
 {
-    NSLog(@"%@ received %@", self, NSStringFromSelector(_cmd));
+
 }
 
 
@@ -196,8 +181,7 @@
 /* return image for path */
 - (NSImage*) imageForIconPath:(NSString*)iconPath {
     NSSize iconSize = NSMakeSize(32, 32);
-
-    NSImage *icon = [[NSWorkspace sharedWorkspace] iconForFileType:([iconPath isEqualToString:@"/"] ? NSFileTypeForHFSTypeCode(kGenericFolderIcon) : iconPath)];
+    NSImage *icon = [[NSWorkspace sharedWorkspace] iconForFileType:([iconPath isEqualToString:@"..."] ? NSFileTypeForHFSTypeCode(kGenericFolderIcon) : iconPath)];
     if (icon) {
         [icon setSize:iconSize];
     }
@@ -221,7 +205,6 @@
 /* return image for path */
 - (NSImage*) imageForIconPath:(NSString*)iconPath {
     NSSize iconSize = NSMakeSize(32, 32);
-    
     NSImage* icon = [NSImage imageWithPreviewOfFileAtPath:(NSString *)iconPath ofSize:(NSSize)iconSize asIcon:YES];
     return icon;
 }
@@ -237,8 +220,6 @@
  original NSImage encoding format.  compressionValue is between 0 and 1.  
  values 0.6 thru 0.7 are fine for most purposes.  */
 - (NSData *)TIFFData {
-    
-    NSLog(@"tiffdata size", [self size]);
     
     /* Figure out right representation by size. */
     NSSize selfSize = [self size],

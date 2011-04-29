@@ -26,11 +26,15 @@
     return self;
 }
 
+- (IBAction) showConsole: sender {
+    [terminalController showConsole];
+}
+
 - (IBAction) newTerminal: sender {
     id contentView = [[self window] contentView];
     NSRect contentRect = [contentView frame];
     
-    id terminalController = [[TermKitTerminalController alloc] init];
+    /*id */terminalController = [[TermKitTerminalController alloc] init];
     id terminalView = [terminalController view];
     [terminalView setFrame:contentRect];
     

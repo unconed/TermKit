@@ -13,7 +13,6 @@
 #import <Foundation/NSURLRequest.h>
 #import <Foundation/NSURLProtocol.h>
 
-
 @interface TermKitIconProtocol : NSURLProtocol {
 }
 + (NSString*) protocolVarsKey;

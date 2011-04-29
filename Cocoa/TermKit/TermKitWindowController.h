@@ -10,10 +10,11 @@
 
 
 @interface TermKitWindowController : NSWindowController {
-
+    id terminalController;
 }
 
 - (id) init;
+- (IBAction) showConsole: sender;
 - (IBAction) newTerminal: sender;
 
 @end

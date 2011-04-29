@@ -7,7 +7,7 @@
 //
 
 #import "TermKitTerminalController.h"
-
+#import "WebInspector.h"
 
 @implementation TermKitTerminalController
 
@@ -17,6 +17,29 @@
         //
     }
     return self;
+};
+
+- (void)showConsole {
+    [self toggleConsole:true];
+};
+
+- (void)hideConsole {
+    [self toggleConsole:false];
+};
+
+- (void)toggleConsole:(bool)show {
+    WebView *view = (WebView*)[self view];
+    if (!webInspector) {
+        webInspector = [[WebInspector alloc] initWithWebView:view];
+        [webInspector detach:view];
+    }
+        
+    if (show) {
+        [webInspector showConsole:view];
+    }
+    else {
+        [webInspector show:view];
+    }
 };
 
 - (void)loadView {

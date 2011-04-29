@@ -10,9 +10,13 @@
 #import <WebKit/WebKit.h>
 
 @interface TermKitTerminalController : NSViewController {
+    id webInspector;
 }
 
 - (id)init;
 - (void)loadView;
+- (void)showConsole;
+- (void)hideConsole;
+- (void)toggleConsole:(bool)show;
 
 @end

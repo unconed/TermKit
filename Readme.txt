@@ -17,13 +17,18 @@ Warning: Alpha version. Nothing works.
 
 How to use:
 
-1) Run NodeKit daemon:
+1) Install node.js and npm.
+
+2) Run "npm install mime".
+
+3) Run NodeKit daemon:
 
  cd Node
  node nodekit.js
 
-2) Open HTML/index.html in a WebKit browser.
+4) Open the Cocoa app in Build/
 
+Tip: Press Command-Option-C to access the WebKit console.
 
 
 Includes “NSImage+QuickLook” code by Matt Gemmell (http://mattgemmell.com/source).

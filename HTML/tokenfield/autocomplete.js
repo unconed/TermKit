@@ -167,8 +167,14 @@ tf.autocomplete.prototype = {
         event.stopPropagation();
         local = true;
         break;
+      
+      case 16:
+      case 17:
+      case 18:
+      case 91:
+        return;
     };
-    
+    console.log(event.keyCode);
     this.keyCode = event.keyCode;
     this.charCode = 0;
     

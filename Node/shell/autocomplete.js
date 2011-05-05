@@ -53,17 +53,26 @@ exports.autocomplete.prototype = {
   filesystem: function (path, prefix, options, callback) {
     var sticky = '';
 
-    path = path || process.cwd();
-
-    if (/[^\/]$/(path)) {
-      path += '/';
+    function trail(path) {
+      if (/[^\/]$/(path)) {
+        path += '/';
+      }
+      return path;
     }
+  
+    path = trail(path || process.cwd());
     prefix = prefix || '';
     
     if (prefix[0] == '/') {
       prefix = prefix.substring(1);
       sticky = '/';
       path = '/';
+    }
+
+    if (prefix.substring(0,2) == '~/') {
+      prefix = prefix.substring(2);
+      sticky = '~/';
+      path = trail(process.env.HOME);
     }
     
     if (prefix.indexOf('/') != -1) {

@@ -60,10 +60,9 @@ tf.token.prototype = {
   transmute: function (token) {
     if (this.contents == token.contents) {
       this.constructor = token.constructor;
-      this.checkSelf = token.checkSelf;
-      this.checkTriggers = token.checkTriggers;
       this.type = token.type;
       this.allowEmpty = token.allowEmpty;
+      this.__proto__ = token.prototype;
       return true;
     }
   },
@@ -72,6 +71,9 @@ tf.token.prototype = {
   // @return Array of replacement tokens for this token (optional).
   checkTriggers: function (selection, event) {
     var token = this, t = tf.token.triggers;
+
+    console.log('checkTriggers', event, token, selection.anchor.token);
+
     // Apply type 
     var update, triggers = [].concat(t[this.type] || [], t['*'] || []);
     $.each(triggers, function () {

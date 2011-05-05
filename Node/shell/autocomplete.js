@@ -42,6 +42,7 @@ exports.autocomplete.prototype = {
     var matches = [];
     for (i in builtin.shellCommands) {
       if (prefix == '' || i.indexOf(prefix) === 0) {
+        // TODO: Add space suffix / label
         matches.push(i);
       }
     }
@@ -51,7 +52,12 @@ exports.autocomplete.prototype = {
   
   filesystem: function (path, prefix, options, callback) {
     var sticky = '';
+
     path = path || process.cwd();
+
+    if (/[^\/]$/(path)) {
+      path += '/';
+    }
     prefix = prefix || '';
     
     if (prefix[0] == '/') {
@@ -59,11 +65,13 @@ exports.autocomplete.prototype = {
       sticky = '/';
       path = '/';
     }
-    else if (prefix.indexOf('/') != -1) {
-      var split = prefix.split(/\//);
-      path += '/' + split[0];
-      prefix = split[1];
-      sticky = split[0] + '/';
+    
+    if (prefix.indexOf('/') != -1) {
+      var split = prefix.split(/\//g);
+      prefix = split.pop();
+      head = split.join('/') + '/';
+      path += head;
+      sticky += head;
     }
     
     if (typeof options == 'function') {
@@ -80,11 +88,12 @@ exports.autocomplete.prototype = {
       matches.sort();
       callback(matches);
     });
-    
+
     fs.readdir(path, track(function (err, files) {
       if (!err) {
         for (i in files) (function (file) {
           if (prefix == '' || file.indexOf(prefix) === 0) {
+            // TODO: stat file, and add appropriate suffix
             matches.push(sticky + file);
           }
         })(files[i]);

@@ -1,10 +1,9 @@
 Tasks:
-[ ] filesystem autocomplete
+[:] filesystem autocomplete
 [.] Viewstream integration
+[ ] run unix
   [ ] run pipeline test
-  [X] run built-in
-  [ ] run unix
-[X] output formatter
+[ ] cat/echo Piping + progress bar
 [ ] 5-pipe command execution
 [ ] unix command execution
 [ ] command decoration
@@ -13,17 +12,12 @@ Tasks:
 [ ] version control
 [ ] interactive quicklook
 
-[ ] File autocompletion
-[ ] cat/echo Piping + progress bar
-[ ] refactor/standardize view bridge onto standard DOM
-[ ] file < input piping, use node-mime to detect type?
-[ ] Improve typography of directory listing
 
 Prototype:
 
 1) UI prototypes
 
-[alpha] Token field
+[:] Token field
   [X] plain text
   [X] encapsed string
   [X] token transmutation
@@ -45,14 +39,7 @@ Prototype:
   [ ] caret.remove() shouldn't need to touch tokenList when pruning empties -> let triggers do it
   [ ] | and >> token support
     
-  [?] write external bindings for tokenfield
-    => tokenfield abstracts, interface for matching should be only multiregexp + callback
-    . on change -> process tokens, apply multiregexps
-    . register multiregexp
-    . execute command
-  [?] rewrite $element / $markup pattern to create new $markup on demand when doing insert/remove from DOM
-
-[X] inline autocomplete
+[:] inline autocomplete
   [X] panel overlayed on token
   [X] alignment
   [X] keyboard controls up/down
@@ -60,7 +47,7 @@ Prototype:
   [X] escape to close popup
   [ ] autocomplete icons, markup, widgets, etc
   
-[ ] command view
+[:] command view
   [X] list of collapsible sections
   [X] host token field
   [X] context bar by command
@@ -79,10 +66,11 @@ Prototype:
   [X] triggers system, unify with token field triggers a bit?
   [X] autocomplete a string / command
   [X] autocomplete empties
-  [ ] autocomplete commands
-  [ ] autocomplete filesystem
-  [ ] autocomplete dir / file distinction
-  [ ] badge tokens with one/many/command icons
+  [X] autocomplete commands
+  [X] autocomplete filesystem
++  [ ] autocomplete label / contents / icon
++  [ ] autocomplete dir / file distinction
++  [ ] badge tokens with one/many/command icons
 
 3) Smart output with selectable things
   [X] research FastCGI socket protocol
@@ -96,12 +84,13 @@ Prototype:
   [X] list of files
   [X] file icons
   [X] implement view DOM v2 with path targeting
-  [ ] auto-layout mechanism w/ padded max-height on view
+  [X] auto-layout mechanism w/ padded max-height on view
+  [ ] intercontrol focus / caret, set up global manager
+  [ ] tab, switch between widgets.
+  [ ] working widget callbacks
   [ ] auto-layout column width (preferred size from widgets + widget variant/style)
   [ ] make file icons cacheable long-term in webkit cache
   [ ] stable multi-column layout
-  [ ] intercontrol focus / caret, set up global manager
-  [ ] tab, switch between widgets.
   [ ] smart tab-tabling layout for plain-text
 
 4) NodeKit daemon
@@ -118,7 +107,7 @@ Prototype:
     [X] simplify message format to raw json
     [X] viewstream integration
     [ ] arrange pipes for command/view for unix processes
-  [X] output formatter
++ [X] output formatter
     [X] full mime header parser/generator
     [ ] handle encodings
     [ ] smart binary output

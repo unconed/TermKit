@@ -140,6 +140,7 @@ body {
   left: 15px;
   top: 12px;
   color: #ccc;
+  font-size: 12px;
 }
 
 .termkitCommand > span.sigil-ok {
@@ -272,7 +273,7 @@ body {
   z-index: 2;
   display: block;
   white-space: nowrap;
-  height: 21px;
+  height: 23px;
   z-index: 5;
 }
 

@@ -14,6 +14,7 @@ tf.autocomplete = function (caret) {
   this.selected = 0;
   this.token = null;
   this.last = null;
+  this.animateTarget = 0;
 };
 
 tf.autocomplete.prototype = {
@@ -52,6 +53,7 @@ tf.autocomplete.prototype = {
     this.prefix = '';
     this.selected = 0;
     this.token = null;
+    this.animateTarget = 0;
     
     // Reset caret position.
     //this.caret.$element.find('input').css('marginTop', 0);
@@ -90,7 +92,14 @@ tf.autocomplete.prototype = {
         // Move caret element to active line.
         var offsetY = $line.addClass('active').position().top;
         //this.caret.$element.find('input').css('marginTop', offsetY);
-        that.$element.animate({ 'marginTop': -offsetY }, { duration: 30, queue: false });
+        that.$element.stop().css({
+            marginTop: that.animateTarget,
+          })
+          .animate({ 'marginTop': -offsetY }, {
+            duration: 30,
+            queue: false,
+          });
+        that.animateTarget = -offsetY;
       }
       else {
         $e.empty().hide();
@@ -121,6 +130,7 @@ tf.autocomplete.prototype = {
   
   onComplete: function (event) {
     if (this.token && this.selected < this.items.length) {
+      event.charCode = 10; // LF \n
       this.caret.setContents(this.items[this.selected] +' ', event);
       this.remove();
     }

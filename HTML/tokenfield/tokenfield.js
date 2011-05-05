@@ -102,6 +102,8 @@ tf.prototype = {
   // Refresh the given token in response to input.
   updateToken: function (token, event) {
     
+    console.log('tokenField.updateToken', token, event);
+
     // Apply own rules.
     var update = token.checkSelf(this.selection, event);
     if (!update) {
@@ -111,6 +113,7 @@ tf.prototype = {
     
     // Insert replacement tokens if given.
     if (update) {
+      console.log('  .updateToken update', update);
       // Allow both single replacement token as well as array of tokens.
       if (update.length === undefined) update = [update];
 

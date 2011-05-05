@@ -132,7 +132,6 @@ tf.caret.prototype = {
     this.prefix = '';
     this.$input.val(string);
     this.suffix = '';
-    
     this.updateContents(event);
   },
 
@@ -145,6 +144,8 @@ tf.caret.prototype = {
     var old = this.token;
     var updated = this.prefix + this.$input.val() + this.suffix;
 
+    console.log('caret.updateContents', updated, this.selection, event);
+
     // Check for changes and apply them.
     if (this.token.contents != updated) {
       this.autocomplete.remove();
@@ -154,8 +155,8 @@ tf.caret.prototype = {
       // (asynchronous to give the DOM time to finish event handling).
       async.call(this, function () {
         // Merge stored key/char codes in, effectively merging keydown/keypress info.
-        event.keyCode = this.keyCode;
-        event.charCode = this.charCode;
+        event.keyCode = event.keyCode || this.keyCode;
+        event.charCode = event.charCode || this.charCode;
         this.onChange(this.token, event);
         
         // TODO: replace with real autocomplete

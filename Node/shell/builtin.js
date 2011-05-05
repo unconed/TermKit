@@ -51,11 +51,13 @@ exports.shellCommands = {
                 out.print("Error reading file (" + file + ")");
                 return;
               }
+              
+              var slice = buffer.slice(0, bytesRead);
 
               if (position == 0) {
                 var headers = new meta.headers();
                 headers.set({
-                  'Content-Type': meta.sniff(file, buffer),
+                  'Content-Type': meta.sniff(file, slice),
                   'Content-Length': stats.size,
                   'Content-Disposition': [ 'attachment', { 'filename': file } ],
                 });
@@ -63,7 +65,7 @@ exports.shellCommands = {
                 pipes.dataOut.write(headers.generate());
               }
 
-              pipes.dataOut.write(buffer.slice(0, bytesRead));
+              pipes.dataOut.write(slice);
               position += bytesRead;
 
               if (position < stats.size) {

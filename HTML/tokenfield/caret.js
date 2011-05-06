@@ -191,6 +191,7 @@ tf.caret.prototype = {
           // Move caret to previous token.
           var prev = this.tokenList.prev(this.token),
               selection = this.selection;
+          if (!prev) break;        
           selection.anchor = { token: prev, offset: prev.contents.length };
           this.moveTo(selection, event);
 

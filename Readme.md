@@ -1,8 +1,6 @@
-<div style="float: right">
-  <img src="https://github.com/unconed/TermKit/raw/master/Illustrator/TermKit%20Icon%20128.png" alt="TermKit Icon">
-</div>
-
 # TermKit
+
+![TermKit Icon](https://github.com/unconed/TermKit/raw/master/Illustrator/TermKit%20Icon%20128.png)
 
 ### Goal: next gen terminal / command application
 

@@ -24,12 +24,13 @@ Addresses following problems:
 1. Install node.js and npm.
 1. Run "npm install mime".
 1. Run NodeKit daemon:
+
 ```
 cd Node
-
 node nodekit.js
 ```
-1. Open the Cocoa app in Build/
+
+4. Open the Cocoa app in Build/
 
 *Tip:* Press Command-Option-C to access the WebKit console.
 

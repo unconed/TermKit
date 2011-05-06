@@ -43,6 +43,7 @@ tf.token.prototype = {
   // Text of contents
   get contents() { return this._contents; },
   set contents(contents) {
+    this._oldContents = this._contents;
     this._contents = contents || '';
     this.updateElement();
   },
@@ -71,8 +72,6 @@ tf.token.prototype = {
   // @return Array of replacement tokens for this token (optional).
   checkTriggers: function (selection, event) {
     var token = this, t = tf.token.triggers;
-
-    console.log('checkTriggers', event, token, selection.anchor.token);
 
     // Apply type 
     var update, triggers = [].concat(t[this.type] || [], t['*'] || []);
@@ -182,6 +181,9 @@ tf.tokenQuoted = function (contents) {
 tf.tokenQuoted.prototype = $.extend(new tf.token(), {
 
   checkSelf: function (selection, event) {
+    if (event.keyCode == 8 && this.contents == '' && selection.anchor.token != this) {
+      return [];
+    }
   },
 
 });

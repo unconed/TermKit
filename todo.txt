@@ -30,13 +30,13 @@ Prototype:
   [X] clickable mouse position
   [X] fix event bindings lost when clicking inside textfield
   [X] Unify tokenlist and commandlist into collection class, derive from.
-  [ ] mouseclick caret is off by ~8px, but only in first token 
-  [ ] fix backspacing around edges of tokens
+  [X] fix backspacing around edges of tokens
   [ ] caret positions around allowempty tokens and ^/$
+  [ ] caret.remove() shouldn't need to touch tokenList when pruning empties -> let triggers do it
+  [ ] mouseclick caret is off by ~8px, but only in first token 
   [ ] add icon/spinner support to tokens
   [ ] switch between inline and block tokens -> input vs textarea.
   [ ] fix wrapping of tokens
-  [ ] caret.remove() shouldn't need to touch tokenList when pruning empties -> let triggers do it
   [ ] | and >> token support
     
 [:] inline autocomplete

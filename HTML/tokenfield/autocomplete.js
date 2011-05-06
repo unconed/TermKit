@@ -174,7 +174,7 @@ tf.autocomplete.prototype = {
       case 91:
         return;
     };
-    console.log(event.keyCode);
+
     this.keyCode = event.keyCode;
     this.charCode = 0;
     

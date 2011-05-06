@@ -144,8 +144,6 @@ tf.caret.prototype = {
     var old = this.token;
     var updated = this.prefix + this.$input.val() + this.suffix;
 
-    console.log('caret.updateContents', updated, this.selection, event);
-
     // Check for changes and apply them.
     if (this.token.contents != updated) {
       this.autocomplete.remove();
@@ -185,6 +183,29 @@ tf.caret.prototype = {
     
     // Intercept special keys
     switch (event.keyCode) {
+      case 8: // Backspace
+        if (this.$input.val() == '') {
+          // Save current token.
+          var empty = this.token;
+          
+          // Move caret to previous token.
+          var prev = this.tokenList.prev(this.token),
+              selection = this.selection;
+          selection.anchor = { token: prev, offset: prev.contents.length };
+          this.moveTo(selection, event);
+
+          // Propagate change.
+          this.onChange(empty, event);
+
+          // Trim contents.
+          var value = this.$input.val();
+          this.setContents(value.substring(0, value.length - 1), event);
+          
+          event.preventDefault();
+          event.stopPropagation();
+          return false;
+        }
+        break;
       case 13: // Return
         async.call(this, function () {
           this.remove();

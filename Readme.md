@@ -32,6 +32,6 @@ node nodekit.js
 
 4. Open the Cocoa app in Build/
 
-*Tip:* Press Command-Option-C to access the WebKit console.
+*Tip:* Press ⌥⌘C to access the WebKit console.
 
 Includes “NSImage+QuickLook” code by Matt Gemmell (http://mattgemmell.com/source).

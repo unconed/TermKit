@@ -25,8 +25,9 @@ Addresses following problems:
 1. Run "npm install mime".
 1. Run NodeKit daemon:
 ```
-cd Node 
-node nodekit.js 
+cd Node
+
+node nodekit.js
 ```
 1. Open the Cocoa app in Build/
 

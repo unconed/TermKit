@@ -1,5 +1,5 @@
 <div style="float: right">
-![TermKit Icon](https://github.com/unconed/TermKit/raw/master/Illustrator/TermKit%20Icon%20128.png)
+  <img src="https://github.com/unconed/TermKit/raw/master/Illustrator/TermKit%20Icon%20128.png" alt="TermKit Icon">
 </div>
 
 # TermKit

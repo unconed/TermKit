@@ -23,7 +23,7 @@ function quote(string) {
     // Do RFC2047 mime encoded tokens.
   }
   if (/[ ()<>@,;:\\"\/\[\]?=]/(string)) {
-    return '"' + string.replace(/[\\"]/g, '\\$0') + '"';
+    return '"' + string.replace(/([\\"])/g, '\\$1') + '"';
   }
   return string;
 }
@@ -403,7 +403,7 @@ exports.sniff = function (file, data) {
     return mime.types[extension];
   }
 
-  if (/[^\u0001-\u00FD]/('' + data)) {
+  if (/[^\u0001-\uFFFF]/('' + data)) {
     return 'application/octet-stream';
   }
 

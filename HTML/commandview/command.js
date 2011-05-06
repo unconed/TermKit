@@ -174,37 +174,59 @@ cv.command.prototype = {
 ///////////////////////////////////////////////////////////////////////////////
 
 /**
- * Basic command.
+ * Autocompleted command.
  */
-cv.commandExecutable = function () {
+cv.commandAutocomplete = function () {
   cv.command.call(this, 'empty', '');
 };
 
-cv.commandExecutable.triggerExecutable = function (offset, event, tokens) {
+cv.commandAutocomplete.trigger = function (offset, event, tokens) {
   var token = tokens[offset];
-  if (!token.flags.commandExecutable) {
+  if (!token.flags.commandAutocomplete) {
     var that = this;
-    token.flags.commandExecutable = true;
+    token.flags.commandAutocomplete = true;
     token.autocomplete = function () {
-      return cv.commandExecutable.autocompleteExecutable.apply(that, arguments);
+      return cv.commandAutocomplete.handler.apply(that, arguments);
     };
   }
 };
 
-cv.commandExecutable.autocompleteExecutable = function (offset, event, tokens, callback) {
+cv.commandAutocomplete.handler = function (offset, event, tokens, callback) {
+  var shell = this.commandView.shell,
+      token = tokens[offset],
+      contents = token.contents,
+      last = token.lastAutocomplete;
+
+  // De-bounce multiple events, wait for generic onchange after tokenlist changes.
+  if (contents == last || event) return; 
+
+  var command = tokens.map(function (t) { return t.toCommand(); });
+
+  if (command[offset].length == 0) return callback([]);
+  
   var suggestions = [];
-  callback(suggestions);
+  shell.query('shell.autocomplete', {
+    cwd: shell.environment.cwd,
+    tokens: command,
+    offset: offset,
+  }, function (message) {
+    if (message.args.matches) {
+      callback(message.args.matches);
+    }
+    else {
+      callback([]);
+    }
+  });
 };
 
-cv.commandExecutable.prototype = $.extend(new cv.command(), {});
+cv.commandAutocomplete.prototype = $.extend(new cv.command(), {});
 
 ///////////////////////////////////////////////////////////////////////////////
 
 cv.command.triggers = [
   { // path match, environment var match, ... ?
-    anchor: '^',
     0: /[a-zA-Z0-9_-]+/,
-    callback: cv.commandExecutable.triggerExecutable,
+    callback: cv.commandAutocomplete.trigger,
   },
   /*
   '*': [

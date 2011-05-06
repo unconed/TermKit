@@ -1,5 +1,6 @@
 var command = require('shell/command'),
-    returnMeta = require('misc').returnMeta;
+    returnMeta = require('misc').returnMeta,
+    autocomplete = require('shell/autocomplete').autocomplete;
 
 // Set up worker command processor.
 var workerProcessor = exports.processor = function (inStream, outStream) {
@@ -108,10 +109,33 @@ exports.processor.prototype = {
 
 workerProcessor.handlers = {
 
+  /**
+   * Return environment state/variables.
+   */
   "shell.environment": function (args, exit) {
     exit(true, this.environment());
   },
   
+  /**
+   * Autocomplete the command line.
+   */
+  "shell.autocomplete": function (args, exit) {
+    var tokens = args.tokens,
+        offset = args.offset,
+        cwd = args.cwd;
+    
+    if (offset >= tokens.length) return exit(false);
+
+    var auto = new autocomplete();
+    auto.process(cwd, tokens, offset, function (m) {
+      exit(true, { matches: m });
+    });
+    
+  },
+  
+  /**
+   * Run a shell command.
+   */
   "shell.run": function (args, exit) {
     var that = this,
         tokens = args.tokens,

@@ -15,6 +15,7 @@ var EventEmitter = require("events").EventEmitter;
 var router = require("router");
 var processor = require("shell/processor");
 var meta = require("shell/meta");
+var autocomplete = require("shell/autocomplete");
 
 var asserts = [];
 function assert(condition, message) {
@@ -239,15 +240,73 @@ function testMeta() {
   set = headers.get('Accept', 'q');
   assert(set.length == 6 && typeof set[1] == 'undefined' && set[2] == '0.9' && set[3] == '0.8' && set[5] == '0.5', 'Identical property parameters');
   
-  console.log(headers.generate());
+  // Generate headers back.
+  var string = headers.generate();
+  assert(/\r\n\r\n$/(string), 'Headers end in CRLF x2');
+  assert(string.split(/\r\n/).length == 5 + 2, '5 Headers returned');
+  assert(/^Content-Type:\s*text\/plain;\s*charset=utf-16\r\n/m, 'Content-Type correct');
+  assert(/^Content-Disposition:\s*attachment;\s*filename=genome.jpeg;\s*modification-date="Wed, 12 February 1997 16:29:51 -0500"\r\n/m, 'Content-Disposition correct');
+  assert(/^Foo: bar\r\n/m, 'Foo correct');
+  assert(/^Accept: application\/xml,application\/xhtml\+xml,text\/html;q=0.9,text\/plain;q=0.8,image\/png,\*\/\*;q=0.5\r\n/m, 'Accept correct');
+  assert(/^X-Unknown: "this \"value does not follow, \(mime syntax"\r\n/m, 'X-Unknown correct');
+}
+
+/**
+ * Test autocompletion handler.
+ */
+function testAutocomplete() {
+  var auto = new autocomplete.autocomplete(), c;
+  auto.add('test', 'foo');
+  auto.add('test', 'bar');
+  auto.add('test', 'xyzzy');
+  auto.add('test', 'xyzqq');
+  auto.add('test', 'xyzty');
+
+  c = auto.complete('test', 'f', function (c) {
+    assert(c.length == 1 && c[0] == 'foo', 'Complete foo');
+  });
+
+  c = auto.complete('test', 'b', function (c) {
+    assert(c.length == 1 && c[0] == 'bar', 'Complete bar');
+  });
+
+  c = auto.complete('test', 'bx', function (c) {
+    assert(c.length == 0, 'Complete bx');
+  });
+
+  c = auto.complete('test', 'xyz', function (c) {
+    assert(c.length == 3 && c[0] == 'xyzqq' && c[1] == 'xyzty' && c[2] == 'xyzzy', 'Complete xyz');
+  });
+
+  mockShell([
+    { query: 7, method: 'shell.autocomplete', args: { tokens: [ 'c' ], offset: 0 } },
+  ], function (messages, success) {
+    for (i in messages) { 
+      console.log(messages[i]);
+    }
+    var last = messages[messages.length - 1];
+    assert(last && last.success && last.answer == 7, "Autocomplete c command");
+  });
+  
+  auto.process(process.cwd(), [ 'c' ], 0, function (m) {
+    assert(m && m.length == 2 && m[0] == 'cat' && m[1] == 'cd', "Autocomplete c command");
+  });
+
+  auto.process(process.cwd(), [ 'cat', 'test.j' ], 1, function (m) {
+    assert(m && m.length == 1 && m[0] == 'test.js', "Autocomplete test.j filename");
+  });
+
 }
 
 // Run tests.
 var tests = [
-  //  testHandshake,
-  //  testSession,
-  //  testCommands,
+/*
+    testHandshake,
+    testSession,
+    testCommands,
     testMeta,
+    */
+    testAutocomplete,
 ]
 for (i in tests) tests[i]();
 

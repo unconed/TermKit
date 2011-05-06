@@ -8,7 +8,7 @@ $(document).ready(function () {
 
   var client = new termkit.client();
   client.onConnect = function () {
-    var shell = new termkit.client.shell(client, {}, function () {
+    var shell = new termkit.client.shell(client, {}, function (shell) {
       var view = new termkit.commandView(shell);
       $('#terminal').append(view.$element);
       view.newCommand();

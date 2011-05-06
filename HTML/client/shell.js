@@ -24,7 +24,7 @@ tc.shell = function (client, environment, success) {
 
     that.query('shell.environment', { }, function (message) {
       that.environment = message.args;
-      success();
+      success(that);
     });
     
   });

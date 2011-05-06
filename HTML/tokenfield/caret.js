@@ -51,7 +51,6 @@ tf.caret.prototype = {
 
   // Insert the caret on the given selection.
   moveTo: function (selection, event) {
-
     // Make sure selection is within bounds.
     selection.validate();
     
@@ -133,7 +132,6 @@ tf.caret.prototype = {
     this.prefix = '';
     this.$input.val(string);
     this.suffix = '';
-    
     this.updateContents(event);
   },
 
@@ -155,8 +153,8 @@ tf.caret.prototype = {
       // (asynchronous to give the DOM time to finish event handling).
       async.call(this, function () {
         // Merge stored key/char codes in, effectively merging keydown/keypress info.
-        event.keyCode = this.keyCode;
-        event.charCode = this.charCode;
+        event.keyCode = event.keyCode || this.keyCode;
+        event.charCode = event.charCode || this.charCode;
         this.onChange(this.token, event);
         
         // TODO: replace with real autocomplete
@@ -185,6 +183,29 @@ tf.caret.prototype = {
     
     // Intercept special keys
     switch (event.keyCode) {
+      case 8: // Backspace
+        if (this.$input.val() == '') {
+          // Save current token.
+          var empty = this.token;
+          
+          // Move caret to previous token.
+          var prev = this.tokenList.prev(this.token),
+              selection = this.selection;
+          selection.anchor = { token: prev, offset: prev.contents.length };
+          this.moveTo(selection, event);
+
+          // Propagate change.
+          this.onChange(empty, event);
+
+          // Trim contents.
+          var value = this.$input.val();
+          this.setContents(value.substring(0, value.length - 1), event);
+          
+          event.preventDefault();
+          event.stopPropagation();
+          return false;
+        }
+        break;
       case 13: // Return
         async.call(this, function () {
           this.remove();

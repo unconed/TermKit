@@ -1,33 +1,23 @@
 Tasks:
+[:] filesystem autocomplete
 [.] Viewstream integration
+[ ] run unix
   [ ] run pipeline test
-  [X] run built-in
-  [ ] run unix
-[X] output formatter
-  [X] make formatter factory with stream and data types
-  [X] parse out content-length
-  [X] mime header parser
-  [X] parse image into data URI. 
+[ ] cat/echo Piping + progress bar
 [ ] 5-pipe command execution
 [ ] unix command execution
-[ ] filesystem autocomplete
 [ ] command decoration
 [ ] interactive execution
 [ ] inline man-pages tips
 [ ] version control
 [ ] interactive quicklook
 
-[ ] File autocompletion
-[ ] cat/echo Piping + progress bar
-[ ] refactor/standardize view bridge onto standard DOM
-[ ] file < input piping, use node-mime to detect type?
-[ ] Improve typography of directory listing
 
 Prototype:
 
 1) UI prototypes
 
-[alpha] Token field
+[:] Token field
   [X] plain text
   [X] encapsed string
   [X] token transmutation
@@ -40,23 +30,16 @@ Prototype:
   [X] clickable mouse position
   [X] fix event bindings lost when clicking inside textfield
   [X] Unify tokenlist and commandlist into collection class, derive from.
-  [ ] mouseclick caret is off by ~8px, but only in first token 
-  [ ] fix backspacing around edges of tokens
+  [X] fix backspacing around edges of tokens
   [ ] caret positions around allowempty tokens and ^/$
+  [ ] caret.remove() shouldn't need to touch tokenList when pruning empties -> let triggers do it
+  [ ] mouseclick caret is off by ~8px, but only in first token 
   [ ] add icon/spinner support to tokens
   [ ] switch between inline and block tokens -> input vs textarea.
   [ ] fix wrapping of tokens
-  [ ] caret.remove() shouldn't need to touch tokenList when pruning empties -> let triggers do it
   [ ] | and >> token support
     
-  [?] write external bindings for tokenfield
-    => tokenfield abstracts, interface for matching should be only multiregexp + callback
-    . on change -> process tokens, apply multiregexps
-    . register multiregexp
-    . execute command
-  [?] rewrite $element / $markup pattern to create new $markup on demand when doing insert/remove from DOM
-
-[X] inline autocomplete
+[:] inline autocomplete
   [X] panel overlayed on token
   [X] alignment
   [X] keyboard controls up/down
@@ -64,7 +47,7 @@ Prototype:
   [X] escape to close popup
   [ ] autocomplete icons, markup, widgets, etc
   
-[ ] command view
+[:] command view
   [X] list of collapsible sections
   [X] host token field
   [X] context bar by command
@@ -83,10 +66,11 @@ Prototype:
   [X] triggers system, unify with token field triggers a bit?
   [X] autocomplete a string / command
   [X] autocomplete empties
-  [ ] autocomplete commands
-  [ ] autocomplete filesystem
-  [ ] autocomplete dir / file distinction
-  [ ] badge tokens with one/many/command icons
+  [X] autocomplete commands
+  [X] autocomplete filesystem
++  [ ] autocomplete label / contents / icon
++  [ ] autocomplete dir / file distinction
++  [ ] badge tokens with one/many/command icons
 
 3) Smart output with selectable things
   [X] research FastCGI socket protocol
@@ -100,12 +84,13 @@ Prototype:
   [X] list of files
   [X] file icons
   [X] implement view DOM v2 with path targeting
-  [ ] auto-layout mechanism w/ padded max-height on view
+  [X] auto-layout mechanism w/ padded max-height on view
+  [ ] intercontrol focus / caret, set up global manager
+  [ ] tab, switch between widgets.
+  [ ] working widget callbacks
   [ ] auto-layout column width (preferred size from widgets + widget variant/style)
   [ ] make file icons cacheable long-term in webkit cache
   [ ] stable multi-column layout
-  [ ] intercontrol focus / caret, set up global manager
-  [ ] tab, switch between widgets.
   [ ] smart tab-tabling layout for plain-text
 
 4) NodeKit daemon
@@ -122,10 +107,10 @@ Prototype:
     [X] simplify message format to raw json
     [X] viewstream integration
     [ ] arrange pipes for command/view for unix processes
-  [ ] output formatter
-    [ ] full mime header parser/generator
-    [ ] sniff plaintext / unicode
-    [ ] handle encoding
++ [X] output formatter
+    [X] full mime header parser/generator
+    [ ] handle encodings
+    [ ] smart binary output
   [ ] sudo support (askpass env?)
 
 5) Command Suite

@@ -19,6 +19,8 @@ var cv = termkit.commandView = function (shell) {
   this.endIndex = 0;
 
   this.commandList = new termkit.container();  
+  
+  $(window).resize(function () { that.resize(); });
 };
 
 cv.prototype = {
@@ -44,6 +46,14 @@ cv.prototype = {
     if (command && command.context) {
       this.$context.empty().append(command.context.$element);
     }
+
+    this.resize();
+  },
+  
+  resize: function () {
+    // Measure view.
+    var height = $('body').height() - this.$context[0].offsetHeight - (22 + 13) * 2 - 5;
+    $('#dynamic-styles').html('.termkitCommandView .termkitLimitHeight { max-height: ' + height + 'px; }');
   },
   
   activeCommand: function () {

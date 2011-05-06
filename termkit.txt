@@ -58,14 +58,18 @@ Good desktop citizen:
   [X] Redesign message protocol
   [X] Viewstream integration
   [X] 5-pipe command execution
+  [ ] fix tokenfield
   [ ] unix command execution
-  [ ] filesystem autocomplete
+  [.] filesystem autocomplete
+  [ ] http get/post data piping
   [ ] command decoration
   [ ] interactive execution
   [ ] inline man-pages tips
   [ ] version control
   [ ] interactive quicklook
   [X] OS X icon loading
+  [X] inline image display
+  [ ] regexp hinter
 
 0.4: Network & Modularity
   [ ] SSH tunneling
@@ -394,11 +398,11 @@ seq: set, callback
 method: view.*
 
 
- > shell-specific interaction rules are client-side.
+ > shell-specific interaction rules are server-side.
  > rich widget lib for display, extensible
  > widgets are streamed to client like termkit-ML. objects are smartly typed and have callback commands defined for them. callbacks can be stateful or stateless. though stateful is only intended to be used for interactive commands.
 
- tableview / listcontainer -> generic, scales form simple list to tabled headers w/ simple syntax
+ tableview / listcontainer -> generic, scales from simple list to tabled headers w/ simple syntax
  object references for files and other things. are multi-typed and annotated on server-side.
 
 +++ --

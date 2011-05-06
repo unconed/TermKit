@@ -4,13 +4,14 @@ body {
 
 
 .termkitCommandView {
-  font-family: "BitStream Vera Sans Mono";
+  font-family: "BitStream Vera Sans";
   font-size: 70%;
 }
 
 .termkitCommandView pre {
   font-family: "BitStream Vera Sans Mono";
   font-size: inherit;
+  font-size: 87.5%;
 }
 
 .termkitOutputView .widgetFile .name {

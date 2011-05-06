@@ -130,10 +130,13 @@ widgets.icon.prototype = $.extend(new ov.outputNode(), {
         defaultUrl = 'termkit-icon-default:///' + encodeURIComponent(extension);
 
     image.onload = function () {
-      that.$element.css({
-        background: 'url('+ defaultUrl +')',
-        backgroundSize: '32px 32px',
-      });
+      if (!that.noDefault) {
+        that.$element.css({
+          background: 'url('+ defaultUrl +')',
+          backgroundSize: '32px 32px',
+        });
+      }
+
       callback && callback();
     };
 
@@ -149,6 +152,8 @@ widgets.icon.prototype = $.extend(new ov.outputNode(), {
         previewUrl = 'termkit-icon-preview:///' + encodeURIComponent(path);
 
     image.onload = function () {
+      this.noDefault = true;
+
       that.$element.css({
         background: 'url('+ previewUrl +')'
       });
@@ -248,7 +253,7 @@ widgets.image.prototype = $.extend(new ov.outputNode(), {
   
   // Return active markup for this widget.
   $markup: function () {
-    var $outputNode = $('<div class="termkitOutputNode widgetImage" draggable="true"><img></div>').data('controller', this);
+    var $outputNode = $('<div class="termkitOutputNode widgetImage termkitLimitHeight" draggable="true"><img></div>').data('controller', this);
     var that = this;
     return $outputNode;
   },
@@ -281,7 +286,7 @@ widgets.list.prototype = $.extend(new ov.outputNode(), {
   
   // Return active markup for this widget.
   $markup: function () {
-    var $outputNode = $('<div class="termkitOutputNode list"><div class="children"></div></div>').data('controller', this);
+    var $outputNode = $('<div class="termkitOutputNode list termkitLimitHeight"><div class="children"></div></div>').data('controller', this);
     var that = this;
     return $outputNode;
   },

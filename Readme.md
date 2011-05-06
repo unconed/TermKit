@@ -1,3 +1,7 @@
+<div style="float: right">
+![TermKit Icon](https://github.com/unconed/TermKit/raw/master/Illustrator/TermKit%20Icon%20128.png)
+</div>
+
 # TermKit
 
 ### Goal: next gen terminal / command application
@@ -12,6 +16,7 @@ Addresses following problems:
 1. String-based command line requires arcane syntax, results in mistakes, repeated attempts at escaping, etc.
 1. Unix commands are "useless by default", and when asked, will only tell you raw data, not useful facts. e.g. "rwxr-xr-x" instead of "You can't edit this file."
 
+![TermKit 0.3 alpha](https://github.com/unconed/TermKit/raw/master/Mockups/Shot-0.3.png)
 
 ### Warning: Alpha version. Nothing works.
 
@@ -25,6 +30,6 @@ Addresses following problems:
    node nodekit.js
 1. Open the Cocoa app in Build/
 
-*Tip:* Press ⌥⌘C to access the WebKit console.
+*Tip:* Press Command-Option-C to access the WebKit console.
 
 Includes “NSImage+QuickLook” code by Matt Gemmell (http://mattgemmell.com/source).

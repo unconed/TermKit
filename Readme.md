@@ -7,9 +7,10 @@
 Addresses following problems:
 
 1. Monospace character grid with ansi colors is not rich enough to display modern files / media / visualizations / metadata. Cannot effectively handle large output, long/wide tables or direct interaction.
-1. Piping binary or text streams between apps is bad for everyone:
- * Humans have to suffer syntax, cannot reflow/manipulate output in real-time
- * Computers have to suffer ambiguities
+1. Relying on anonymous pipes to transfer data around is error-prone
+ * Human-friendly text results in ambiguities
+ * Need to match formats at pipe ends
+ * Confusion between data output and notification output
 1. Synchronous input/output makes you wait. SSH keystroke latency is frustrating.
 1. String-based command line requires arcane syntax, results in mistakes, repeated attempts at escaping, etc.
 1. Unix commands are "useless by default", and when asked, will only tell you raw data, not useful facts. e.g. "rwxr-xr-x" instead of "You can't edit this file."
@@ -18,6 +19,12 @@ Addresses following problems:
 
 ### Warning: Alpha version. Nothing works.
 
+Some highlights:
+
+* Smart token-based input with inline autocomplete
+* Rich output for common tasks
+* Asynchronous views for background / parallel tasks
+* Full separation between front/back-end
 
 ## How to use:
 

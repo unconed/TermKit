@@ -133,6 +133,9 @@ tf.caret.prototype = {
     this.$input.val(string);
     this.suffix = '';
     this.updateContents(event);
+    
+    console.log('satisfy', this.token);
+    this.token.satisfy();
   },
 
   updateContents: function (event) {

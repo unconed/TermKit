@@ -3,7 +3,7 @@
 var tf = termkit.tokenField;
 
 /**
- * Autocomplete selection bubble for use with a token.
+ * Autocomplete selection popup for use with a token.
  */
 tf.autocomplete = function (caret) {
   this.caret = caret;

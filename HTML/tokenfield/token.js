@@ -58,12 +58,12 @@ tf.token.prototype = {
   },
 
   // Transmute this token into a different type/class in-place to maintain focus/state.
-  transmute: function (token) {
-    if (this.contents == token.contents) {
+  transmute: function (token, force) {
+    if (force || this.contents == token.contents) {
       this.constructor = token.constructor;
       this.type = token.type;
       this.allowEmpty = token.allowEmpty;
-      this.__proto__ = token.prototype;
+      this.__proto__ = token.__proto__;
       return true;
     }
   },
@@ -115,6 +115,8 @@ tf.token.prototype = {
     }
     return false;
   },
+  
+  satisfy: function () { },
 
   checkSelf: function () {
     return false;
@@ -153,6 +155,45 @@ tf.tokenPlain = function (contents) {
   tf.token.call(this, 'plain', contents);
 };
 
+tf.tokenPlain.prototype = $.extend(new tf.token(), {
+  
+  satisfy: function () {
+    /*
+    var test = this.contents;
+    console.log('sats', this.contents);
+    // Ignore trailing space, will auto-split.
+    if (/ $/(test)) {
+      test = test.substring(0, test.length - 1);
+    }
+
+    // Special characters must be quoted.
+    if (/[ "'\\]/(test)) {
+      this.transmute(new tf.tokenQuoted(test), true);
+      console.log('sats', this.type, this.contents, this.__proto__);
+    }
+    */
+  },
+
+});
+
+tf.tokenPlain.triggerComplete = function (offset, event) {
+  
+  var update = [],
+      test = this.contents;
+
+  // Split trailing space.
+  if (/ $/(test)) {
+    test = test.substring(0, test.length - 1);
+    update.push(new tf.tokenEmpty());
+  }
+
+  // Special characters must be quoted.
+  var type = /[ "'\\]/(test) ? tf.tokenQuoted : tf.tokenPlain;
+  update.unshift(new type(test));
+
+  return update;
+};
+
 tf.tokenPlain.triggerCharacter = function (offset, event) {
   return [new tf.tokenPlain(this.contents)];
 };
@@ -165,8 +206,6 @@ tf.tokenPlain.splitSpace = function (offset, event) {
     new tf.tokenPlain(after)
   ];
 };
-
-tf.tokenPlain.prototype = $.extend(new tf.token(), {});
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -187,6 +226,24 @@ tf.tokenQuoted.prototype = $.extend(new tf.token(), {
   },
 
 });
+
+tf.tokenQuoted.triggerComplete = function (offset, event) {
+  
+  var update = [],
+      test = this.contents;
+
+  console.log('trigger', test);
+
+  // Split trailing space.
+  if (/ $/(test)) {
+    test = test.substring(0, test.length - 1);
+    update.push(new tf.tokenEmpty());
+  }
+  
+  update.unshift(new tf.tokenQuoted(test));
+
+  return update;
+};
 
 tf.tokenQuoted.resetEscape = function () {
   tf.tokenQuoted.timer && clearTimeout(tf.tokenQuoted.timer);
@@ -345,12 +402,14 @@ tf.token.triggers = {
     { contents: / /,     callback: tf.tokenPlain.triggerEmpty },
   ],
   'plain': [
+    { contents: / /,     callback: tf.tokenPlain.triggerComplete, keys: [ 9, 13 ] },
     { contents: /^ ?$/,  callback: tf.tokenEmpty.triggerEmpty },
     { changes: / /,      callback: tf.tokenPlain.splitSpace },
     { changes: /["']/,   callback: tf.tokenQuoted.triggerQuote },
 //    { changes: /[\/]/,   callback: tf.tokenRegex.triggerRegex },
   ],
   'quoted': [
+    { contents: / $/,    callback: tf.tokenQuoted.triggerComplete, keys: [ 9, 13 ] },
     { changes: /["']/,   callback: tf.tokenQuoted.triggerEscape },
     { changes: /["']/,   callback: tf.tokenQuoted.triggerUnquote },
   ],

@@ -22,7 +22,7 @@ Addresses following problems:
 Some highlights:
 
 * Smart token-based input with inline autocomplete
-* Rich output for common tasks
+* Rich output for common tasks and formats, using MIME types + sniffing
 * Asynchronous views for background / parallel tasks
 * Full separation between front/back-end
 

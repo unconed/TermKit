@@ -82,7 +82,7 @@ tf.autocomplete.prototype = {
         var prefix = that.prefix;
         $e.empty();
         $.each(that.items, function () {
-          $e.append($('<span>').addClass("line").html('<span class="prefix">' + escapeText(prefix) +'</span><span>'+ escapeText(this.substring(prefix.length)) +'</span>'));
+          $e.append($('<span>').addClass("line").addClass("match-" + this.type).html('<span class="prefix">' + escapeText(prefix) +'</span><span>'+ escapeText(this.label.substring(prefix.length)) +'</span>'));
         });
         $e.show();
 
@@ -90,16 +90,16 @@ tf.autocomplete.prototype = {
         var $line = $($e.find('.line')[that.selected]);
 
         // Move caret element to active line.
-        var offsetY = $line.addClass('active').position().top;
+        var offsetY = -$line.addClass('active').position().top;
         //this.caret.$element.find('input').css('marginTop', offsetY);
         that.$element.stop().css({
             marginTop: that.animateTarget,
           })
-          .animate({ 'marginTop': -offsetY }, {
-            duration: 30,
+          .animate({ 'marginTop': offsetY }, {
+            duration: 40 + Math.max(Math.abs(offsetY - that.animateTarget) / 10, 0),
             queue: false,
           });
-        that.animateTarget = -offsetY;
+        that.animateTarget = offsetY;
       }
       else {
         $e.empty().hide();
@@ -131,7 +131,7 @@ tf.autocomplete.prototype = {
   onComplete: function (event) {
     if (this.token && this.selected < this.items.length) {
       event.charCode = 10; // LF \n
-      this.caret.setContents(this.items[this.selected] +' ', event);
+      this.caret.setContents(this.items[this.selected].value, event);
       this.remove();
     }
   },
@@ -139,6 +139,9 @@ tf.autocomplete.prototype = {
   onKeyDown: function (event) {
     var attached = this.token && this.items.length,
         local = false;
+
+    if (!this.token) return;
+
     // Intercept special keys
     switch (event.keyCode) {
       case 9: // TAB
@@ -148,8 +151,12 @@ tf.autocomplete.prototype = {
         event.stopPropagation();
         if (attached) return false;
         break;
+      case 8: // Backspace
       case 27: // Escape
         this.remove();
+        event.preventDefault();
+        event.stopPropagation();
+        return false;
         break;
       case 37: // Left arrow
         break;

@@ -200,10 +200,13 @@ cv.commandAutocomplete.handler = function (offset, event, tokens, callback) {
   // De-bounce multiple events, wait for generic onchange after tokenlist changes.
   if (contents == last || event) return; 
 
+  // Map tokens to command strings.
   var command = tokens.map(function (t) { return t.toCommand(); });
 
+  // Don't complete empty tokens.
   if (command[offset].length == 0) return callback([]);
   
+  // Fetch suggestions.
   var suggestions = [];
   shell.query('shell.autocomplete', {
     cwd: shell.environment.cwd,

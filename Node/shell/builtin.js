@@ -172,7 +172,7 @@ exports.shellCommands = {
 
                 var children = [];
                 files.sort(function (a, b) { 
-                  return a.localeCompare(b);
+                  return a.toLowerCase().localeCompare(b.toLowerCase());
                 });
 
                 for (var j in files) (function (j, child) {

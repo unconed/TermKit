@@ -256,56 +256,41 @@ function testMeta() {
  */
 function testAutocomplete() {
   var auto = new autocomplete.autocomplete(), c;
-  auto.add('test', 'foo');
-  auto.add('test', 'bar');
-  auto.add('test', 'xyzzy');
-  auto.add('test', 'xyzqq');
-  auto.add('test', 'xyzty');
-
-  c = auto.complete('test', 'f', function (c) {
-    assert(c.length == 1 && c[0] == 'foo', 'Complete foo');
-  });
-
-  c = auto.complete('test', 'b', function (c) {
-    assert(c.length == 1 && c[0] == 'bar', 'Complete bar');
-  });
-
-  c = auto.complete('test', 'bx', function (c) {
-    assert(c.length == 0, 'Complete bx');
-  });
-
-  c = auto.complete('test', 'xyz', function (c) {
-    assert(c.length == 3 && c[0] == 'xyzqq' && c[1] == 'xyzty' && c[2] == 'xyzzy', 'Complete xyz');
-  });
 
   mockShell([
     { query: 7, method: 'shell.autocomplete', args: { tokens: [ 'c' ], offset: 0 } },
   ], function (messages, success) {
+    /*
+    var i, j;
     for (i in messages) { 
-      console.log(messages[i]);
+      for (j in messages[i].args.matches) {
+        console.log(messages[i].args.matches[j]);
+      }
     }
+    */
     var last = messages[messages.length - 1];
     assert(last && last.success && last.answer == 7, "Autocomplete c command");
   });
   
-  auto.process(process.cwd(), [ 'c' ], 0, function (m) {
-    assert(m && m.length == 2 && m[0] == 'cat' && m[1] == 'cd', "Autocomplete c command");
+  auto.process(process.cwd(), [], [ 'c' ], 0, function (m) {
+    assert(m && m.length == 2 &&
+           m[0].label == 'cat' && m[0].type == 'command' &&
+           m[1].label == 'cd'  && m[1].type == 'command', "Autocomplete c command");
   });
 
-  auto.process(process.cwd(), [ 'cat', 'test.j' ], 1, function (m) {
-    assert(m && m.length == 1 && m[0] == 'test.js', "Autocomplete test.j filename");
+  auto.process(process.cwd(), [], [ 'cat', 'test.j' ], 1, function (m) {
+    assert(m && m.length == 1 &&
+           m[0].label == 'test.js' && m[0].type == 'file', "Autocomplete test.j filename");
   });
 
 }
 
 // Run tests.
 var tests = [
-/*
     testHandshake,
     testSession,
     testCommands,
     testMeta,
-    */
     testAutocomplete,
 ]
 for (i in tests) tests[i]();

@@ -179,7 +179,7 @@ tf.tokenPlain.triggerComplete = function (offset, event) {
   var type = /[ "'\\]/(test) ? tf.tokenQuoted : tf.tokenPlain;
   out.unshift(new type(test));
 
-  return update;
+  return out;
 };
 
 /**

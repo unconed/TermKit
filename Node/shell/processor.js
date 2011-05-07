@@ -126,9 +126,10 @@ workerProcessor.handlers = {
     
     if (offset >= tokens.length) return exit(false);
 
-    var auto = new autocomplete();
-    auto.process(cwd, tokens, offset, function (m) {
-      exit(true, { matches: m });
+    var auto = new autocomplete(),
+        path = process.env.PATH.split(':');
+    auto.process(cwd, path, tokens, offset, function (matches) {
+      exit(true, { matches: matches });
     });
     
   },

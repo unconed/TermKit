@@ -115,17 +115,18 @@ tf.token.prototype = {
     }
     return false;
   },
-  
-  satisfy: function () { },
 
+  // Apply self-consistency checks when changing.
   checkSelf: function () {
     return false;
   },
   
+  // Convert to debug string.
   toString: function () {
     return '['+ this.contents + '(' + this.type +')]';
   },
-  
+
+  // Convert token to executable command format.
   toCommand: function () {
     return this.contents;
   },
@@ -140,6 +141,9 @@ tf.tokenEmpty = function () {
   tf.token.call(this, 'empty', '');
 };
 
+/**
+ * Make token empty.
+ */
 tf.tokenEmpty.triggerEmpty = function (offset, event) {
   return [new tf.tokenEmpty()];
 };
@@ -155,27 +159,11 @@ tf.tokenPlain = function (contents) {
   tf.token.call(this, 'plain', contents);
 };
 
-tf.tokenPlain.prototype = $.extend(new tf.token(), {
-  
-  satisfy: function () {
-    /*
-    var test = this.contents;
-    console.log('sats', this.contents);
-    // Ignore trailing space, will auto-split.
-    if (/ $/(test)) {
-      test = test.substring(0, test.length - 1);
-    }
+tf.tokenPlain.prototype = $.extend(new tf.token(), {});
 
-    // Special characters must be quoted.
-    if (/[ "'\\]/(test)) {
-      this.transmute(new tf.tokenQuoted(test), true);
-      console.log('sats', this.type, this.contents, this.__proto__);
-    }
-    */
-  },
-
-});
-
+/**
+ * When autocompleted, ensure type constraints are still valid.
+ */
 tf.tokenPlain.triggerComplete = function (offset, event) {
   
   var update = [],
@@ -194,10 +182,16 @@ tf.tokenPlain.triggerComplete = function (offset, event) {
   return update;
 };
 
+/**
+ * Tokens with characters should become plain.
+ */
 tf.tokenPlain.triggerCharacter = function (offset, event) {
   return [new tf.tokenPlain(this.contents)];
 };
 
+/**
+ * Spaces inside plain tokens are not allowed, split up.
+ */
 tf.tokenPlain.splitSpace = function (offset, event) {
   var before = this.contents.substring(0, offset - 1),
       after = this.contents.substring(offset);
@@ -219,7 +213,12 @@ tf.tokenQuoted = function (contents) {
 
 tf.tokenQuoted.prototype = $.extend(new tf.token(), {
 
+  /**
+   * Apply self-consistency checks.
+   */ 
   checkSelf: function (selection, event) {
+    // When backspacing from empty quoted token into another, remove ourselves.
+    // Required due to allowEmpty == true.
     if (event.keyCode == 8 && this.contents == '' && selection.anchor.token != this) {
       return [];
     }
@@ -227,12 +226,13 @@ tf.tokenQuoted.prototype = $.extend(new tf.token(), {
 
 });
 
+/**
+ * When autocompleted, split off trailing space.
+ */
 tf.tokenQuoted.triggerComplete = function (offset, event) {
   
   var update = [],
       test = this.contents;
-
-  console.log('trigger', test);
 
   // Split trailing space.
   if (/ $/(test)) {
@@ -245,6 +245,16 @@ tf.tokenQuoted.triggerComplete = function (offset, event) {
   return update;
 };
 
+/**
+ * Start a double-tap escape.
+ */
+tf.tokenQuoted.setEscape = function () {
+  tf.tokenQuoted.escapeWaiting = true;
+};
+
+/**
+ * Remove state for double-tap escape.
+ */
 tf.tokenQuoted.resetEscape = function () {
   tf.tokenQuoted.timer && clearTimeout(tf.tokenQuoted.timer);
   tf.tokenQuoted.timer = setTimeout(function () {
@@ -252,10 +262,9 @@ tf.tokenQuoted.resetEscape = function () {
   }, 1500);
 };
 
-tf.tokenQuoted.setEscape = function () {
-  tf.tokenQuoted.escapeWaiting = true;
-};
-
+/**
+ * Process a lone quote character in a plain token.
+ */
 tf.tokenQuoted.triggerQuote = function (offset, event) {
   
   var out = [],
@@ -272,12 +281,16 @@ tf.tokenQuoted.triggerQuote = function (offset, event) {
   return out;
 };
 
+/**
+ * Unquote out of a quoted token.
+ */
 tf.tokenQuoted.triggerUnquote = function (offset, event) {
   
   var out = [],
       before = this.contents.substring(0, offset - 1),
       after = this.contents.substring(offset);
 
+  // Split off parts.
   if (before != '' || after == '') {
     out.push(new tf.tokenQuoted(before));
   }
@@ -288,11 +301,15 @@ tf.tokenQuoted.triggerUnquote = function (offset, event) {
     out.push(new tf.tokenEmpty());
   }
   
+  // Could be a double-tap escape.
   tf.tokenQuoted.setEscape();
 
   return out;
 };
 
+/**
+ * Check for double-tap escape.
+ */
 tf.tokenQuoted.triggerEscape = function (offset, event) {
   if (offset == 1 && tf.tokenQuoted.escapeWaiting) {
     var prev = this.container.prev(this);
@@ -302,6 +319,9 @@ tf.tokenQuoted.triggerEscape = function (offset, event) {
   }
 }
 
+/**
+ * Reset escape flag after modifications.
+ */
 tf.tokenQuoted.triggerResetEscape = function (offset, event) {
   tf.tokenQuoted.resetEscape();
 }

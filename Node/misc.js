@@ -1,3 +1,5 @@
+var exec = require('child_process').exec;
+
 /**
  * Process shortcut return values
  *
@@ -106,4 +108,19 @@ exports.extend = function (a,b) {
              a[i] = b[i];
     }
     return a;
+}
+
+/**
+ * Expand a local file path.
+ */
+exports.expandPath = function (path, callback) {
+  if (path[0] == '~') {
+    if (path.length == 1 || path[1] == '/') {
+      return callback(process.env.HOME + path.substring(1));
+    }
+    else {
+      // TODO: support ~user syntax. Need getpwnam bindings to work across BSD/Linux.
+    }
+  }
+  return callback(path);
 }

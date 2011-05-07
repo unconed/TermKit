@@ -1,8 +1,7 @@
 Tasks:
 [:] filesystem autocomplete
-[.] Viewstream integration
-[ ] run unix
-  [ ] run pipeline test
++[ ] run unix
++  [ ] run pipeline test
 [ ] cat/echo Piping + progress bar
 [ ] 5-pipe command execution
 [ ] unix command execution
@@ -31,13 +30,13 @@ Prototype:
   [X] fix event bindings lost when clicking inside textfield
   [X] Unify tokenlist and commandlist into collection class, derive from.
   [X] fix backspacing around edges of tokens
+!  [ ] add icon/spinner support to tokens
   [ ] caret positions around allowempty tokens and ^/$
+  [ ] | and >> token support
   [ ] caret.remove() shouldn't need to touch tokenList when pruning empties -> let triggers do it
   [ ] mouseclick caret is off by ~8px, but only in first token 
-  [ ] add icon/spinner support to tokens
   [ ] switch between inline and block tokens -> input vs textarea.
   [ ] fix wrapping of tokens
-  [ ] | and >> token support
     
 [:] inline autocomplete
   [X] panel overlayed on token
@@ -45,7 +44,7 @@ Prototype:
   [X] keyboard controls up/down
   [X] hit enter after autocomplete in empty token -> undefined
   [X] escape to close popup
-  [ ] autocomplete icons, markup, widgets, etc
+!  [ ] autocomplete icons, markup, widgets, etc
   
 [:] command view
   [X] list of collapsible sections
@@ -69,8 +68,8 @@ Prototype:
   [X] autocomplete commands
   [X] autocomplete filesystem
 +  [ ] autocomplete label / contents / icon
-+  [ ] autocomplete dir / file distinction
-+  [ ] badge tokens with one/many/command icons
+!  [ ] autocomplete dir / file distinction
+!  [ ] badge tokens with one/many/command icons
 
 3) Smart output with selectable things
   [X] research FastCGI socket protocol
@@ -98,7 +97,7 @@ Prototype:
   [X] keep state of sessions
   [X] export environment
   [X] allow path navigation
-+ [X] worker process
+! [X] worker process
     [X] refactor processor.js handler/return handling
     [X] spawn process
     [X] stream in/out json packets
@@ -106,14 +105,15 @@ Prototype:
     [X] make ls / cd commands
     [X] simplify message format to raw json
     [X] viewstream integration
-    [ ] arrange pipes for command/view for unix processes
-+ [X] output formatter
+!    [ ] arrange pipes for command/view for unix processes
+! [X] output formatter
     [X] full mime header parser/generator
     [ ] handle encodings
     [ ] smart binary output
   [ ] sudo support (askpass env?)
 
 5) Command Suite
+![:] code syntax highlighter
 [ ] make a script for git (arguments, file/dir, ...)
 [ ] basic top/w infographs + live update
 [ ] robust unix basics

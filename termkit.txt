@@ -58,10 +58,11 @@ Good desktop citizen:
   [X] Redesign message protocol
   [X] Viewstream integration
   [X] 5-pipe command execution
-  [ ] fix tokenfield
+  [X] fix tokenfield
   [ ] unix command execution
   [.] filesystem autocomplete
   [ ] http get/post data piping
+  [ ] code syntax highlighting
   [ ] command decoration
   [ ] interactive execution
   [ ] inline man-pages tips

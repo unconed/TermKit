@@ -4,7 +4,8 @@ var fs = require('fs'),
     whenDone = require('misc').whenDone,
     EventEmitter = require('events').EventEmitter,
     async = require('misc').async,
-    meta = require('shell/meta');
+    meta = require('shell/meta'),
+    expandPath = require('misc').expandPath;
 
 exports.shellCommands = {
 
@@ -28,54 +29,56 @@ exports.shellCommands = {
         });
     
     for (i in tokens) if (i > 0) (function (file) {
-      fs.stat(file, track(function (err, stats) {
-        if (err) {
-          errors++;
-          out.print("No such file (" + file + ")");
-          return;
-        }
-        fs.open(file, 'r', track(function (err, fd) {
+      expandPath(file, track(function (file) {
+        fs.stat(file, track(function (err, stats) {
           if (err) {
             errors++;
-            out.print("Unable to open file (" + file + ")");
+            out.print("No such file (" + file + ")");
             return;
           }
-          
-          var position = 0;
+          fs.open(file, 'r', track(function (err, fd) {
+            if (err) {
+              errors++;
+              out.print("Unable to open file (" + file + ")");
+              return;
+            }
 
-          (function read() {
-            var buffer = new Buffer(chunkSize);
-            fs.read(fd, buffer, 0, chunkSize, position, track(function (err, bytesRead) {
-              if (err) {
-                errors++;
-                out.print("Error reading file (" + file + ")");
-                return;
-              }
-              
-              var slice = buffer.slice(0, bytesRead);
+            var position = 0;
 
-              if (position == 0) {
-                var headers = new meta.headers();
-                headers.set({
-                  'Content-Type': meta.sniff(file, slice),
-                  'Content-Length': stats.size,
-                  'Content-Disposition': [ 'attachment', { 'filename': file } ],
-                });
+            (function read() {
+              var buffer = new Buffer(chunkSize);
+              fs.read(fd, buffer, 0, chunkSize, position, track(function (err, bytesRead) {
+                if (err) {
+                  errors++;
+                  out.print("Error reading file (" + file + ")");
+                  return;
+                }
 
-                pipes.dataOut.write(headers.generate());
-              }
+                var slice = buffer.slice(0, bytesRead);
 
-              pipes.dataOut.write(slice);
-              position += bytesRead;
+                if (position == 0) {
+                  var headers = new meta.headers();
+                  headers.set({
+                    'Content-Type': meta.sniff(file, slice),
+                    'Content-Length': stats.size,
+                    'Content-Disposition': [ 'attachment', { 'filename': file } ],
+                  });
 
-              if (position < stats.size) {
-                read();
-              }
-            }));
-          })();
-        }));
-      }));
-    })(tokens[i]);
+                  pipes.dataOut.write(headers.generate());
+                }
+
+                pipes.dataOut.write(slice);
+                position += bytesRead;
+
+                if (position < stats.size) {
+                  read();
+                }
+              })); // fs.read
+            })(); // read
+          })); // fs.open
+        })); // fs.stat
+      })); // expandPath
+    })(tokens[i]); // for i in tokens
     
     
   },
@@ -107,21 +110,21 @@ exports.shellCommands = {
       out.print('Usage: cd [dir]');
       return exit(false);
     }
-    var path = tokens[1] || process.env.HOME;
+    var path = tokens[1] || '~';
     
-    // Complete ~
-    path = path.replace(/^~(\/|$)/, process.env.HOME + '/');
+    // Complete path
+    expandPath(path, function (path) {
+      // Try to change working dir.
+      try {
+        process.chdir(path);
+      }
+      catch (error) {
+        out.print(error.message + ' (' + path + ')');
+        return exit(false);
+      }
 
-    // Try to change working dir.
-    try {
-      process.chdir(path);
-    }
-    catch (error) {
-      out.print(error.message + ' (' + path + ')');
-      return exit(false);
-    }
-
-    exit(true);
+      exit(true);
+    }); // expandPath
   },
 
   'ls': function (tokens, pipes, exit) {
@@ -148,47 +151,51 @@ exports.shellCommands = {
         out.print(view.list(i, output[i]));
       }
       exit(errors == 0);
-    });
+    }); // whenDone
 
     // Process arguments (list of paths).
     for (var i in items) (function (i, path) {
 
       output[i] = [];
 
-      // Stat the requested files / directories.
-      fs.stat(path, track(function (error, stats) {
-        
-        // Iterate valid directories.
-        if (stats && stats.isDirectory()) {
+      // Expand path
+      expandPath(path, track(function (path) {
+        // Stat the requested files / directories.
+        fs.stat(path, track(function (error, stats) {
 
-          // Scan contents of found directories.
-          fs.readdir(path, track(function (error, files) {
-            if (!error) {
+          // Iterate valid directories.
+          if (stats && stats.isDirectory()) {
 
-              var children = [];
-              files.sort(function (a, b) { 
-                return a.localeCompare(b);
-              });
-              
-              for (var j in files) (function (j, child) {
-                // Stat each child.
-                fs.stat(composePath(child, path), track(function (error, stats) {
-                  if (!error) {
-                    output[i][j] = view.file(child, path, stats);
-                  }
-                })); // fs.stat
-              })(j, files[j]); // for j in files
-            } // !error
-          })); // fs.readdir
-        } // isDirectory
-        else {
-          // Count errors.
-          errors += +error;
+            // Scan contents of found directories.
+            fs.readdir(path, track(function (error, files) {
+              if (!error) {
 
-          // Output message.
-          out.print(error.message);
-        }
-      })); // fs.stat
+                var children = [];
+                files.sort(function (a, b) { 
+                  return a.localeCompare(b);
+                });
+
+                for (var j in files) (function (j, child) {
+                  // Stat each child.
+                  fs.stat(composePath(child, path), track(function (error, stats) {
+                    if (!error) {
+                      output[i][j] = view.file(child, path, stats);
+                    }
+                  })); // fs.stat
+                })(j, files[j]); // for j in files
+              } // !error
+            })); // fs.readdir
+          } // isDirectory
+          else {
+            // Count errors.
+            errors += +error;
+
+            // Output message.
+            out.print(error.message);
+          }
+        })); // fs.stat
+      })); // expandPath
+
     })(i, items[i]); // for i in items
 
   },

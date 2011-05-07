@@ -166,18 +166,18 @@ tf.tokenPlain.prototype = $.extend(new tf.token(), {});
  */
 tf.tokenPlain.triggerComplete = function (offset, event) {
   
-  var update = [],
+  var out = [],
       test = this.contents;
 
   // Split trailing space.
   if (/ $/(test)) {
     test = test.substring(0, test.length - 1);
-    update.push(new tf.tokenEmpty());
+    out.push(new tf.tokenEmpty());
   }
 
   // Special characters must be quoted.
   var type = /[ "'\\]/(test) ? tf.tokenQuoted : tf.tokenPlain;
-  update.unshift(new type(test));
+  out.unshift(new type(test));
 
   return update;
 };
@@ -231,18 +231,18 @@ tf.tokenQuoted.prototype = $.extend(new tf.token(), {
  */
 tf.tokenQuoted.triggerComplete = function (offset, event) {
   
-  var update = [],
+  var out = [],
       test = this.contents;
 
   // Split trailing space.
   if (/ $/(test)) {
     test = test.substring(0, test.length - 1);
-    update.push(new tf.tokenEmpty());
+    out.push(new tf.tokenEmpty());
   }
   
-  update.unshift(new tf.tokenQuoted(test));
+  out.unshift(new tf.tokenQuoted(test));
 
-  return update;
+  return out;
 };
 
 /**
@@ -311,10 +311,14 @@ tf.tokenQuoted.triggerUnquote = function (offset, event) {
  * Check for double-tap escape.
  */
 tf.tokenQuoted.triggerEscape = function (offset, event) {
+  // If we typed a lone quote.
   if (offset == 1 && tf.tokenQuoted.escapeWaiting) {
+    // Add contents to previous token.
     var prev = this.container.prev(this);
     prev.contents = prev.contents + this.contents;
     tf.tokenQuoted.resetEscape();
+    
+    // Remove ourselves.
     return [];
   }
 }

@@ -71,6 +71,7 @@ body {
 
 .termkitOutputView .widgetFile .name, .termkitOutputView .widgetFile .meta {
   padding-left: 42px;
+  background: #000;
 }
 
 .termkitOutputView .widgetFile .name {
@@ -278,7 +279,7 @@ body {
 }
 
 .termkitTokenField span.autocomplete .line span.prefix {
-  opacity: 0.5;
+  color: rgba(207, 207, 207, .65);
 }
 
 .termkitTokenField span.autocomplete .line:nth-child(2n) {
@@ -313,6 +314,33 @@ body {
   -webkit-box-shadow: 0px -1px 1px rgba(160,180,192,1), 0px 1px 6px rgba(0,0,0,1), 3px 1px 6px rgba(0,0,0,1);
   background: #678 -webkit-gradient(linear, left top, left bottom, from(#678), to(#456));
 }
+
+.termkitTokenField span.autocomplete .line.match-command .prefix {
+  padding-left: 20px;
+  background: url(../Images/command.png) no-repeat 0 50%;
+}
+.termkitTokenField span.autocomplete .line.match-file .prefix {
+  padding-left: 20px;
+  background: url(../Images/file.png) no-repeat 0 50%;
+}
+.termkitTokenField span.autocomplete .line.match-folder .prefix {
+  padding-left: 20px;
+  background: url(../Images/folder.png) no-repeat 0 50%;
+}
+
+.termkitTokenField span#caret input.match-command {
+  padding-left: 20px;
+  background: url(../Images/command.png) no-repeat 0 50%;
+}
+.termkitTokenField span#caret input.match-file {
+  padding-left: 20px;
+  background: url(../Images/file.png) no-repeat 0 50%;
+}
+.termkitTokenField span#caret input.match-folder {
+  padding-left: 20px;
+  background: url(../Images/folder.png) no-repeat 0 50%;
+}
+
 
 /************/
 

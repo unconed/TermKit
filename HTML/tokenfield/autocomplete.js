@@ -58,6 +58,7 @@ tf.autocomplete.prototype = {
     // Reset caret position.
     //this.caret.$element.find('input').css('marginTop', 0);
     this.$element.css('marginTop', 0);
+    this.caret && this.caret.$input.removeClass()
   },
 
   onBlur: function (element) {
@@ -100,13 +101,16 @@ tf.autocomplete.prototype = {
             queue: false,
           });
         that.animateTarget = offsetY;
+        
+        // Style caret to match line.
+        that.caret && that.caret.$input.removeClass().addClass('match-' + that.items[that.selected].type);
       }
       else {
         $e.empty().hide();
       }
 
       // Don't show single item popup.
-      if (that.items.length == 1 && that.items[0] == prefix) {
+      if (that.items.length == 1 && that.items[0].label == prefix) {
         that.remove();
       }
     }

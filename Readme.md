@@ -17,11 +17,11 @@ Addresses following problems:
 
 ![TermKit 0.3 alpha](https://github.com/unconed/TermKit/raw/master/Mockups/Shot-0.3.png)
 
-### Warning: Alpha version. Nothing works.
+### Warning: Alpha version, still under development. Nothing works yet.
 
 Some highlights:
 
-* Smart token-based input with inline autocomplete
+* Smart token-based input with inline autocomplete and automatic escaping
 * Rich output for common tasks and formats, using MIME types + sniffing
 * Asynchronous views for background / parallel tasks
 * Full separation between front/back-end

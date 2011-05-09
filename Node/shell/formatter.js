@@ -1,9 +1,11 @@
-var meta = require('shell/meta'),
+var fs = require('fs'),
+    meta = require('shell/meta'),
     view = require('view/view'),
     asyncCallback = require('misc').asyncCallback;
     async = require('misc').async,
     extend = require('misc').extend,
-    JSONPretty = require('misc').JSONPretty;
+    JSONPretty = require('misc').JSONPretty,
+    composePath = require('misc').composePath;
     
 /**
  * Output formatter.
@@ -52,10 +54,12 @@ exports.formatter = function (tail, viewOut, exit) {
         
         that.plugin.data(that.buffer);
       }
-      that.plugin.end();
+
+      that.plugin.end(exit);
     }
-    
-    exit();
+    else {
+      exit();
+    }
   });
 
 };
@@ -145,14 +149,13 @@ exports.factory = function (headers, out) {
   for (i in exports.plugins) {
     var supports = exports.plugins[i].supports;
     if (supports && (level = supports(headers))) {
-      if (level > max) {
+      if (level >= max) {
         selected = i;
         max = level;
       }
     }
   }
   if (selected) {
-    process.stderr.write('selected plugin ' + selected + "\n\n");
     return new exports.plugins[selected](headers, out);
   }
   return new exports.plugin();
@@ -173,7 +176,9 @@ exports.plugin.supports = function (headers) {
 exports.plugin.prototype = {
   begin: function () { },
   data: function (data) { },
-  end: function () { },
+  end: function (exit) {
+    exit(true);
+  },
 };
 
 /**
@@ -289,10 +294,15 @@ exports.plugins.json.supports = function (headers) {
  *
  * JSON schema: termkit.files
  * {
- *   '/path/to/dir': [
- *      'file1',
- *      'file2',
- *      'file3',
+ *   "/path/to/dir": [
+ *      "file1",
+ *      "file2",
+ *      "file3"
+ *   ],
+ *   "/path/to/dir": [
+ *      "file1",
+ *      "file2",
+ *      "file3"
  *   ]
  * }
  */
@@ -308,32 +318,49 @@ exports.plugins.files = function (headers, out) {
 exports.plugins.files.prototype = extend(new exports.plugin(), {
 
   data: function (data) {
-    var output = [];
-    process.stderr.write('files data ' + data.toString('utf-8'));
+    var that = this,
+        output = [],
+        errors = 0;
+
+    // Parse JSON (termkit.files).
     data = JSON.parse(data);
     
     // Job tracker.
     var track = whenDone(function () {
       for (i in output) {
         // Output one directory listing at a time.
-        out.print(view.list(i, output[i]));
+        that.out.print(view.list(i, output[i]));
       }
+
+      that.exit(errors == 0);
     });
     
     // Iterate over each list.
+    var set = 0, j;
     for (key in data) (function (files, path) {
+
       // Prepare files.
-      for (i in files) (function (file) {
-        output[i] = [];
-        
+      for (j in files) (function (file, i, j) {
+
         // Stat each file.
-        fs.stat(file, track(function (error, stats) {
+        fs.stat(composePath(file, path), track(function (error, stats) {
           if (!error) {
             output[i][j] = view.file(file, path, stats);
           }
+          else {
+            errors++;
+          }
         })); // fs.stat
-      })(files[i]); // for i in files
+      })(files[j], set, j); // for j in files
+
+      // Prepare array.
+      output[set++] = [];
+
     })(data[key], key); // for key in data
+  },
+
+  end: function (exit) {
+    this.exit = exit;
   },
 
 });
@@ -341,5 +368,5 @@ exports.plugins.files.prototype = extend(new exports.plugin(), {
 exports.plugins.files.supports = function (headers) {
   var type = headers.get('Content-Type'),
       schema = headers.get('Content-Type', 'schema');
-  return !!(/^application\/json$/(type) && (schema == 'termkit.files')) * 2;
+  return !!(/^application\/json$/(type) && (schema == 'termkit.files')) * 3;
 };

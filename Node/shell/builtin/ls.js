@@ -23,6 +23,9 @@ exports.main = function (tokens, pipes, exit) {
         case 'A':
           hidden = true;
           break;
+        default:
+          out.print('Unrecognized argument "'+ tokens[i] +'"');
+          exit(false);
       }
     }
     else {
@@ -42,15 +45,15 @@ exports.main = function (tokens, pipes, exit) {
     // Format data.
     var data = JSON.stringify(output);
     
-    // Output headers.
+    // Prepare headers.
     var headers = new meta.headers();
     headers.set({
       'Content-Type': [ 'application/json', { schema: 'termkit.files' } ],
       'Content-Length': data.length,
     });
 
+    // Output data.
     pipes.dataOut.write(headers.generate());
-    
     pipes.dataOut.write(data);
 
     exit(errors == 0);

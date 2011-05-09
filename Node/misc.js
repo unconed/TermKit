@@ -130,10 +130,11 @@ exports.expandPath = function (path, callback) {
  * JSON pretty printer.
  */
 exports.JSONPretty = function (data) {
-  // Convert to JSON.
-  if (typeof data != 'string') {
-    data = JSON.stringify(data);
+  // Normalize to compact JSON.
+  if (typeof data == 'string') {
+    data = JSON.parse(data);
   }
+  data = JSON.stringify(data);
   
   // Add spaces around operators and quotes.
   data = data.replace(/("[^"]*"|'[^']*')?([\[{:,}\]](?!\s))/g, '$1$2 ');

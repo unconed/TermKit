@@ -10,38 +10,59 @@ var fs = require('fs'),
 exports.main = function (tokens, pipes, exit) {
   
   var out = new view.bridge(pipes.viewOut);
+  
+  var hidden = false;
 
   // Parse out directory references to list.
   var items = [];
-  if (tokens.length <= 1) {
-    items.push(process.cwd());
-  }
-  else {
-    for (i in tokens) if (i > 0) {
+  for (i in tokens) if (i > 0) {
+    var m;
+    if (m = /-([aA])/(tokens[i])) {
+      switch (m[1]) {
+        case 'a':
+        case 'A':
+          hidden = true;
+          break;
+      }
+    }
+    else {
       items.push(tokens[i]);
     }
   }
-  
-  //application/json; schema=termkit.files
+  // Default to working directory.
+  if (!items.length) {
+    items.push(process.cwd());
+  }
 
   // Prepare async job tracker.
   var errors = 0;
-  var output = [];
+  var output = {};
   var track = whenDone(function () {
-    for (i in output) {
-      // Output one directory listing at a time.
-      out.print(view.list(i, output[i]));
-    }
+    
+    // Format data.
+    var data = JSON.stringify(output);
+    
+    // Output headers.
+    var headers = new meta.headers();
+    headers.set({
+      'Content-Type': [ 'application/json', { schema: 'termkit.files' } ],
+      'Content-Length': data.length,
+    });
+
+    pipes.dataOut.write(headers.generate());
+    
+    pipes.dataOut.write(data);
+
     exit(errors == 0);
   }); // whenDone
 
   // Process arguments (list of paths).
-  for (var i in items) (function (i, path) {
+  for (var i in items) (function (i, key) {
 
-    output[i] = [];
+    output[key] = [];
 
     // Expand path
-    expandPath(path, track(function (path) {
+    expandPath(key, track(function (path) {
       // Stat the requested files / directories.
       fs.stat(path, track(function (error, stats) {
 
@@ -51,20 +72,20 @@ exports.main = function (tokens, pipes, exit) {
           // Scan contents of found directories.
           fs.readdir(path, track(function (error, files) {
             if (!error) {
-
+              
+              // Sort files.
               var children = [];
               files.sort(function (a, b) { 
                 return a.toLowerCase().localeCompare(b.toLowerCase());
               });
 
-              for (var j in files) (function (j, child) {
-                // Stat each child.
-                fs.stat(composePath(child, path), track(function (error, stats) {
-                  if (!error) {
-                    output[i][j] = view.file(child, path, stats);
-                  }
-                })); // fs.stat
-              })(j, files[j]); // for j in files
+              // Apply hidden filter.
+              if (!hidden) {
+                files = files.filter(function (file) { return file[0] != '.'; });
+              }
+
+              // Output files.
+              output[key] = files;
             } // !error
           })); // fs.readdir
         } // isDirectory

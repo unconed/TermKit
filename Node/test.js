@@ -7,6 +7,7 @@ var termkit = {
 };
 require.paths.unshift('./socket.io-node/lib');
 require.paths.unshift('.');
+require.paths.unshift('shell');
 require.paths.unshift('../Shared/');
 
 var whenDone = require('misc').whenDone;
@@ -16,6 +17,7 @@ var router = require("router");
 var processor = require("shell/processor");
 var meta = require("shell/meta");
 var autocomplete = require("shell/autocomplete");
+var misc = require("misc");
 
 var asserts = [];
 function assert(condition, message) {
@@ -88,7 +90,7 @@ function mockShell(flow, callback) {
 /**
  * Test termkit handshake.
  */
-function testHandshake() {
+function testHandshake(assert) {
   mockClient([
     {},
   ], function (messages, success) {
@@ -111,7 +113,7 @@ function testHandshake() {
 /**
  * Test session/shell handling.
  */
-function testSession() {
+function testSession(assert) {
 
   mockClient([
     { termkit: "1" },
@@ -135,7 +137,7 @@ function testSession() {
 /**
  * Test command handling.
  */
-function testCommands() {
+function testCommands(assert) {
   mockShell([
 //    { query: 5, method: 'shell.run', args: { tokens: [ 'pwd' ], ref: 7 } },
     { query: 5, method: 'shell.run', args: { tokens: [ 'cat', 'test.js' ], ref: 4 } },
@@ -152,7 +154,7 @@ function testCommands() {
 /**
  * Test mime-type handling.
  */
-function testMeta() {
+function testMeta(assert) {
   var headers, set, string;
   
   // Test basic getters and setters.
@@ -254,7 +256,7 @@ function testMeta() {
 /**
  * Test autocompletion handler.
  */
-function testAutocomplete() {
+function testAutocomplete(assert) {
   var auto = new autocomplete.autocomplete(), c;
 
   mockShell([
@@ -285,14 +287,39 @@ function testAutocomplete() {
 
 }
 
+/**
+ * Test misc utilties.
+ */
+function testMisc(assert) {
+  assert(misc.JSONPretty({}) == '{\n} ', 'Pretty print {}');
+  assert(misc.JSONPretty([]) == '[\n] ', 'Pretty print []');
+
+  assert(misc.JSONPretty({'foo':'bar', 'baz':'bam'})
+         == '{ \n  "foo": "bar", \n  "baz": "bam"\n} ',
+         'Pretty print object');
+
+  assert(misc.JSONPretty({foo: {baz:'bam'}, faz: {baz:'bam'}})
+         == '{ \n  "foo": { \n    "baz": "bam"\n  } , \n  "faz": { \n    "baz": "bam"\n  }\n} ',
+         'Pretty print nested objects');
+
+  assert(misc.JSONPretty(['baz', {'foo':'bar'}, 12.3, 'aaa'])
+         == '[ \n  "baz", \n  { \n    "foo": "bar"\n  } , \n  12.3, \n  "aaa"\n] ',
+         'Pretty print array');
+}
+
 // Run tests.
-var tests = [
-    testHandshake,
-    testSession,
-    testCommands,
-    testMeta,
-    testAutocomplete,
-]
-for (i in tests) tests[i]();
+var tests = {
+    handshake: testHandshake,
+    session: testSession,
+    commands: testCommands,
+    meta: testMeta,
+    autocomplete: testAutocomplete,
+    misc: testMisc,
+};
+for (i in tests) (function (i, test) {
+  test(function (c, msg) {
+    assert(c, i +': '+ msg);
+  });
+})(i, tests[i]);
 
 (track(function () {}))();

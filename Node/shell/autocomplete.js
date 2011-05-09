@@ -1,5 +1,5 @@
 var fs = require('fs'),
-    builtin = require('shell/builtin');
+    builtin = require('shell/builtin/builtin');
 
 /*
 
@@ -94,7 +94,7 @@ exports.autocomplete.prototype = {
    */
   builtin: function (prefix) {
     var matches = [];
-    for (i in builtin.shellCommands) {
+    for (i in builtin.commands) {
       if (prefix == '' || i.indexOf(prefix) === 0) {
         matches.push(exports.autocomplete.match(i, i + ' ', 'command'));
       }

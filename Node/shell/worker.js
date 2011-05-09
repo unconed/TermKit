@@ -1,6 +1,7 @@
 require.paths.unshift('.');
 require.paths.unshift('..');
-require.paths.unshift('shell');
+require.paths.unshift(__dirname);
+require.paths.unshift(__dirname + '/..');
 
 var processor = require('processor');
 

@@ -148,8 +148,14 @@ workerProcessor.handlers = {
       exit(success, object, meta);
     };
 
-    var list = new command.commandList(this, tokens, shellExit, rel);
-    list.go();
+    try {
+      var list = new command.commandList(this, tokens, shellExit, rel);
+      list.go();
+    }
+    catch (e) {
+      process.stderr.write('exception ' + e + "\n\n");
+      exit(false);
+    };
   },
   
   "view.callback": function (args, exit) {

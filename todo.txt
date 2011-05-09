@@ -1,6 +1,21 @@
 Tasks:
 +[ ] run unix
-+  [ ] run pipeline test
+  [X] split off builtins
+  [X] make ls output list of files
++  [ ] ls output formatter
+  [ ] make universal grep
+
+    grep:
+      text/plain: line by line
+      application/json:
+        array -> grep each item 
+        string -> grep value
+        object -> grep values
+        object -k -> grep keys
+      
+  [ ] implement pipe token
+  [ ] split command into subcommands
+  [ ] run pipeline test
 [ ] cat/echo Piping + progress bar
 [ ] 5-pipe command execution
 [ ] unix command execution
@@ -66,9 +81,9 @@ Prototype:
   [X] autocomplete empties
   [X] autocomplete commands
   [X] autocomplete filesystem
-+  [ ] autocomplete label / contents / icon
-!  [ ] autocomplete dir / file distinction
-!  [ ] badge tokens with one/many/command icons
+  [X] autocomplete label / contents / icon
+  [X] autocomplete dir / file distinction
+  [ ] badge tokens with icons
 
 3) Smart output with selectable things
   [X] research FastCGI socket protocol

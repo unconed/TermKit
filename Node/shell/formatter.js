@@ -2,7 +2,8 @@ var meta = require('shell/meta'),
     view = require('view/view'),
     asyncCallback = require('misc').asyncCallback;
     async = require('misc').async,
-    extend = require('misc').extend;
+    extend = require('misc').extend,
+    JSONPretty = require('misc').JSONPretty;
     
 /**
  * Output formatter.
@@ -35,7 +36,7 @@ exports.formatter = function (tail, viewOut, exit) {
     if (that.plugin) {
       // Send all buffered output to plug-in in one chunk.
       if (that.plugin.buffered) {
-        process.stderr.write('flushing ' + that.length +" @ "+ that.offset +"\n");
+        //process.stderr.write('flushing ' + that.length +" @ "+ that.offset +"\n");
 
         if (!that.buffer) {
           that.buffer = new Buffer(that.length);
@@ -43,7 +44,7 @@ exports.formatter = function (tail, viewOut, exit) {
           // Join chunks.
           for (i in that.chunks) {
             var data = that.chunks[i];
-            process.stderr.write("chunk "+ i +" at "+ that.offset +" - " + data.length + "\n");
+            //process.stderr.write("chunk "+ i +" at "+ that.offset +" - " + data.length + "\n");
             data.copy(that.buffer, that.offset, 0, data.length)
             that.offset += data.length;
           }
@@ -65,7 +66,7 @@ exports.formatter.prototype = {
     this.headers = new meta.headers();
     this.headers.parse(headers);
     for (i in this.headers.fields) {
-      process.stderr.write('Header  ' + i +': ' + this.headers.fields[i] +"\n");
+      //process.stderr.write('Header  ' + i +': ' + this.headers.fields[i] +"\n");
     }
   },
   
@@ -91,7 +92,7 @@ exports.formatter.prototype = {
         if (this.plugin.buffered && !isNaN(length)) {
           // Allocate large buffer.
           this.buffer = new Buffer(length);
-          process.stderr.write('allocated ' + this.length+" got " + this.buffer.length + "\n");
+          //process.stderr.write('allocated ' + this.length+" got " + this.buffer.length + "\n");
         }
         else {
           this.length = 0;
@@ -109,7 +110,7 @@ exports.formatter.prototype = {
       if (this.plugin.buffered) {
         // Collect output.
         if (this.buffer) {
-          process.stderr.write('buffered, known size ' + this.length+", data size " + data.length +"\n");
+          //process.stderr.write('buffered, known size ' + this.length+", data size " + data.length +"\n");
 
           // Append chunk to buffer.
           data.copy(this.buffer, this.offset, 0, data.length);
@@ -117,7 +118,7 @@ exports.formatter.prototype = {
         }
         else {
 
-          process.stderr.write('buffered, mystery size ' + this.length+", data size " + data.length +"\n");
+          //process.stderr.write('buffered, mystery size ' + this.length+", data size " + data.length +"\n");
 
           // Size not known. Push chunk onto array to grow indefinitely.
           this.chunks.push(data);
@@ -127,7 +128,7 @@ exports.formatter.prototype = {
         }
       }
       else {
-        process.stderr.write('stream, packet size ' + data.length+"\n");
+        //process.stderr.write('stream, packet size ' + data.length+"\n");
         // Stream out data.
         this.plugin.data(data);
       }
@@ -139,12 +140,20 @@ exports.formatter.prototype = {
  * Factory for output plugins.
  */
 exports.factory = function (headers, out) {
+  var max = 0, selected;
+
   for (i in exports.plugins) {
     var supports = exports.plugins[i].supports;
-    if (supports && supports(headers)) {
-      process.stderr.write('selected plugin ' + i + "\n\n");
-      return new exports.plugins[i](headers, out);
+    if (supports && (level = supports(headers))) {
+      if (level > max) {
+        selected = i;
+        max = level;
+      }
     }
+  }
+  if (selected) {
+    process.stderr.write('selected plugin ' + selected + "\n\n");
+    return new exports.plugins[selected](headers, out);
   }
   return new exports.plugin();
 };
@@ -195,7 +204,7 @@ exports.plugins.text.prototype = extend(new exports.plugin(), {
 
 exports.plugins.text.supports = function (headers) {
   var type = headers.get('Content-Type');
-  return !!(/^text\//(type));
+  return !!(/^text\//(type)) * 1;
 }
 
 /**
@@ -213,15 +222,24 @@ exports.plugins.code.prototype = extend(new exports.plugins.text(), {
   begin: function () {
     this.out.add(null, view.code('output', '', this.headers.get('Content-Type')));
   },
+
+  data: function (data) {
+    data = data.toString('utf-8');
+    if (this.headers.get('Content-Type') == 'application/json') {
+      data = JSONPretty(data);
+    }
+    this.out.update('output', { contents: data }, true);
+  },
   
 });
 
 exports.plugins.code.supports = function (headers) {
   var type = headers.get('Content-Type');
   var supported = {
+    'application/json': true,
     'application/javascript': true,
   };
-  return !!supported[type];
+  return !!supported[type] * 2;
 }
 
 /**
@@ -236,9 +254,6 @@ exports.plugins.image = function (headers, out) {
 
 exports.plugins.image.prototype = extend(new exports.plugin(), {
   
-  begin: function () {
-  },
-  
   data: function (data) {
     var url = 'data:' + this.headers.get('Content-Type') + ';base64,' + data.toString('base64');
     this.out.add(null, view.image('image', url));
@@ -248,7 +263,83 @@ exports.plugins.image.prototype = extend(new exports.plugin(), {
 
 exports.plugins.image.supports = function (headers) {
   var type = headers.get('Content-Type');
-  return !!(/^image\//(type));
-}
+  return !!(/^image\//(type)) * 1;
+};
 
+/**
+ * JSON formatter.
+ */
+exports.plugins.json = function (headers, out) {
+  // Inherit.
+  exports.plugin.apply(this, arguments);
+  
+  this.buffered = true;
+};
 
+exports.plugins.json.prototype = extend(new exports.plugin(), {
+});
+
+exports.plugins.json.supports = function (headers) {
+  var type = headers.get('Content-Type');
+  return !!(/^application\/json$/(type)) * 1;
+};
+
+/**
+ * File listing formatter.
+ *
+ * JSON schema: termkit.files
+ * {
+ *   '/path/to/dir': [
+ *      'file1',
+ *      'file2',
+ *      'file3',
+ *   ]
+ * }
+ */
+exports.plugins.files = function (headers, out) {
+  // Inherit.
+  exports.plugin.apply(this, arguments);
+  
+  this.buffered = true;
+  
+  process.stderr.write(headers.generate());
+};
+
+exports.plugins.files.prototype = extend(new exports.plugin(), {
+
+  data: function (data) {
+    var output = [];
+    process.stderr.write('files data ' + data.toString('utf-8'));
+    data = JSON.parse(data);
+    
+    // Job tracker.
+    var track = whenDone(function () {
+      for (i in output) {
+        // Output one directory listing at a time.
+        out.print(view.list(i, output[i]));
+      }
+    });
+    
+    // Iterate over each list.
+    for (key in data) (function (files, path) {
+      // Prepare files.
+      for (i in files) (function (file) {
+        output[i] = [];
+        
+        // Stat each file.
+        fs.stat(file, track(function (error, stats) {
+          if (!error) {
+            output[i][j] = view.file(file, path, stats);
+          }
+        })); // fs.stat
+      })(files[i]); // for i in files
+    })(data[key], key); // for key in data
+  },
+
+});
+
+exports.plugins.files.supports = function (headers) {
+  var type = headers.get('Content-Type'),
+      schema = headers.get('Content-Type', 'schema');
+  return !!(/^application\/json$/(type) && (schema == 'termkit.files')) * 2;
+};

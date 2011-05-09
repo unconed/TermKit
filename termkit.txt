@@ -60,6 +60,9 @@ Good desktop citizen:
   [X] 5-pipe command execution
   [X] fix tokenfield
   [X] filesystem autocomplete
+  [X] OS X icon loading
+  [X] inline image display
+  [X] json pretty printer
   [ ] unix command execution
   [ ] http get/post data piping
   [ ] code syntax highlighting
@@ -68,9 +71,9 @@ Good desktop citizen:
   [ ] inline man-pages tips
   [ ] version control
   [ ] interactive quicklook
-  [X] OS X icon loading
-  [X] inline image display
+  [ ] wildcard handling
   [ ] regexp hinter
+  
 
 0.4: Network & Modularity
   [ ] SSH tunneling

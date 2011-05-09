@@ -157,13 +157,10 @@ tf.caret.prototype = {
         event.charCode = event.charCode || this.charCode;
         this.onChange(this.token, event);
         
-        // TODO: replace with real autocomplete
-        if (event.keyCode != 8 && event.keyCode != 13)
+        // Attach autocomplete to this token.
+        if (event.keyCode != 8 && event.keyCode != 13) {
           this.autocomplete.attach();
-        /*
-        var that = this;
-        this.autocompleteTimer && clearTimeout(this.autocompleteTimer);
-        this.autocompleteTimer = setTimeout(function () { this.autocompleteTimer = null; that.autocomplete.attach(); }, 1000);*/
+        }
       });
     }
 

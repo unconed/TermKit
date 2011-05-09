@@ -20,7 +20,7 @@ Programs / commands
 
 Cool input scenarios:
 * As you type, the command is visually tokenized and highlighted. tokens can display autocomplete suggestions, icons and indicators inline.
-* Instead of quoting and escaping, keys like " and > just trigger the creation of special tokens which are visually different and represent e.g. a quoted string, an argument, a regular expression. to type the special characters literally, just press them twice. the 'command' is just the concatenation of these tokens, interpreted the same way bash interprets a string.
+* Instead of quoting and escaping, keys like " and > just trigger the creation of special tokens which are visually different and represent e.g. a quoted string, an argument, a regular expression. to type the special characters literally, just press them twice. the 'command' is just the concatenation of these tokens, interpreted the same way a shell interprets a command.
 * Man pages are consulted inline with autocomplete options for arguments and (later) required arguments
 
 Cool output scenarios:
@@ -247,22 +247,24 @@ problem: if front-end is agnostic, then how to make commands smarter?
                             [ Worker.js ]
  
  
- Worker invokes process chain:
+ Worker sets up process chain:
  
  
-  pipe in - commandstream
-  pipe out - viewstream
-  stdin - data in. mime formatted
-  stdout - data out. mime formatted
+  view in - callbacks / command stream
+  view out - view stream
+  stdin = data in (mime typed)
+  stdout = data out (mime typed)
   
-                | events/sigs?         ^ view stream: view updates
-  stdin         v                      |        "view.*" or return/exit
-  ---->     [   proc1: args = command?   ]  ---->
-                                              stdout
- 
- outgoing view stream is tagged with:
-   * originating command = query ID (wrapped through exit() helper)
-   * view ID per process
+                | callbacks         ^ view stream: view updates
+  stdin         v                   |
+  ---->     [   "command [args...]"   ]  ---->
+                                            stdout
+
+  View streams are multiplexed and sent to the front-end.
+  Front-end callbacks are routed back to the right process.
+  
+  Each process has its own view, referenced by ID number.
+  Processes cannot break out of their view.
  
  
 +++ Data vs UI glue
@@ -272,41 +274,26 @@ e.g.
  content-type: application/xml
  
  -> process streams out xml data
- -> must also generate/trigger viewing of xml tree
- 
-[ ] A) Implied end-of-command pipe into default formatter for display.
-   Server-side handlers. Generic OS structures in shell/termkit namespace. App-specific, e.g. mysql handler turns query data into tables.
-   
-   Pro: complete separation of data and display
-   Pro: can pipe in any resource in the correct format. processing stages do not have to be termkit-capable.
-   Con: intermediate processes in pipeline cannot interact
-
-[X] B) Every program outputs viewstream parallel to datastream. invocation toggle to show only final output, or also intermediate? per-executable hints?
-  
-   Pro: view can be arbitrarily complex over simplistic data
-   Pro: two binaries which output the same datatypes can have radically different presentations
-   Con: need full wrapper around non-termkit processes
-   
-   chain of termkit / non-termkits:
-   
-       native               bridge    process   autodetect
-   Rich Datastream -> Typed Binary Data -> Std Out -> Typed Data -> Rich Datastream -> OUT
-   Viewstream      v                    v                        v    ViewStream 
-         terminal..........................................................
 
    get | grep
    Data Stream:  .txt|html|... > .txt|html|...
    View Stream: file metadata, download progress, grep stats (# hits)
+   Output Formatting:  turn application/xml into dynamic XML tree.
   
    get | ungzip | untar
    Data Stream:  .gz  > .tar  >   nothing
    View Stream:  file metadata, download progress, unzip progress (# files)
+   Output Formatting: no data output.
     
-    Need generic default formatter for data-in. Takes mime blob and turns into static display.
-     - Binary stream (blob, image, zip, csv, ...)
-     - Url/path reference
-     - HTML/XML
-     - 
+   The output formatter takes a mime-typed blob and turns into a display.
+   - Plain text or HTML
+   - Images
+   - Binary data (hex or escaped)
+   - Url/file reference with icon
+   ...
+   
+   Existing tools are wrapped to provide richer output, either by parsing
+   old school output or by interacting directly with the raw library.
     
 +++ stream structure
 
@@ -394,11 +381,6 @@ e.g.
 
 viewstream:
 
-sessId: set
-seq: set, callback
-method: view.*
-
-
  > shell-specific interaction rules are server-side.
  > rich widget lib for display, extensible
  > widgets are streamed to client like termkit-ML. objects are smartly typed and have callback commands defined for them. callbacks can be stateful or stateless. though stateful is only intended to be used for interactive commands.
@@ -420,15 +402,13 @@ protocol:
  fastcgi
 
 command output:
-* has to be rich
-* has to be easy to generate
-* has to size to multiple layouts, including on the fly
-* has to be interactive
+* rich output, consisting of an element tree
+* simple container types (list, table) and various viewers to represent common objects and data types
 
 current widget model:
-* base = viewcontroller 
-* instantiated OO
-* $markup / $element pattern for jquery manipulation
+* use a viewcontroller for each widget
+* viewcontroller own its own markup
+* simple object instantiation, widgets can create child widgets
 
 more ideas:
 * autocorrection of mistyped commands
@@ -436,3 +416,34 @@ more ideas:
 * history access
 * don't execute if invalid command
 
+
++++ -
+
+Code base on May 9th 2011
+
+front
+1200 tokenfield + autocomplete
+690  output view
+393  command handling
+184  shell client
+181  misc
+465  CSS
+55   HTML
+= 3168
+
+back
+204  builtin commands
+214  autocomplete
+255  output formatter
+250  command handling
+103  router
+166  misc
+162  view bridge
+160  processor
+83   shell
+= 1597
+
+tests = 162
+
+4927 lines of code
+ + jquery + socket.io + syntax highlighter + node + node-mime 

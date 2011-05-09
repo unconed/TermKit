@@ -148,8 +148,10 @@ tf.autocomplete.prototype = {
 
     // Intercept special keys
     switch (event.keyCode) {
-      case 9: // TAB
       case 13: // Enter
+        this.onComplete(event);
+        break;
+      case 9: // TAB
         this.onComplete(event);
         event.preventDefault();
         event.stopPropagation();

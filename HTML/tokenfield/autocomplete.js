@@ -110,7 +110,7 @@ tf.autocomplete.prototype = {
       }
 
       // Don't show single item popup.
-      if (that.items.length == 1 && that.items[0].label == prefix) {
+      if (that.items.length == 0 || (that.items.length == 1 && that.items[0].label == prefix)) {
         that.remove();
       }
     }

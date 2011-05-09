@@ -1,5 +1,4 @@
 Tasks:
-[:] filesystem autocomplete
 +[ ] run unix
 +  [ ] run pipeline test
 [ ] cat/echo Piping + progress bar

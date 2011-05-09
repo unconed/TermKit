@@ -158,7 +158,7 @@ tf.caret.prototype = {
         this.onChange(this.token, event);
         
         // TODO: replace with real autocomplete
-        if (event.keyCode != 8)
+        if (event.keyCode != 8 && event.keyCode != 13)
           this.autocomplete.attach();
         /*
         var that = this;

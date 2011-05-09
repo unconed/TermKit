@@ -59,8 +59,8 @@ Good desktop citizen:
   [X] Viewstream integration
   [X] 5-pipe command execution
   [X] fix tokenfield
+  [X] filesystem autocomplete
   [ ] unix command execution
-  [.] filesystem autocomplete
   [ ] http get/post data piping
   [ ] code syntax highlighting
   [ ] command decoration

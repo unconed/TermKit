@@ -124,3 +124,44 @@ exports.expandPath = function (path, callback) {
   }
   return callback(path);
 }
+
+
+/**
+ * JSON pretty printer.
+ */
+exports.JSONPretty = function (data) {
+  // Normalize to compact JSON.
+  if (typeof data == 'string') {
+    data = JSON.parse(data);
+  }
+  data = JSON.stringify(data);
+  
+  // Add spaces around operators and quotes.
+  data = data.replace(/("[^"]*"|'[^']*')?([\[{:,}\]](?!\s))/g, '$1$2 ');
+  data = data.replace(/(\S)([\]}])/g, '$1 $2');
+
+  // Add linebreaks around element/list separators.
+  data = data.replace(/[ \n\t]+([\]}])/g, " $1");
+  data = data.replace(/ ([\]}])/g, "\n$1");
+  data = data.replace(/(("[^"]*"|'[^']*')?[\[{,])[ \n\t]+/g, "$1 ");
+  data = data.replace(/(("[^"]*"|'[^']*')?[\[{,] )/g, "$1\n");
+
+  // Indent
+  var m = [],
+      indent = 0,
+      data = data.split("\n");
+  
+  for (i in data) (function (line) {
+    // Count closing chars.
+    indent -= (m = line.match(/[\]}]/g)) && m.length;
+
+    // Two spaced indent.
+    line = Array(indent + 1).join('  ') + line;
+
+    // Count opening chars.
+    indent += (m = line.match(/[\[{]/g)) && m.length;
+    data[i] = line;
+  })(data[i]);
+  
+  return data.join("\n");
+}

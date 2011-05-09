@@ -98,6 +98,7 @@ exports.protocol.prototype = {
   send: function (message) {
     if (typeof message == 'object') {
       debug && console.log('sending', message.method, message.args && message.args.objects, message);
+      debug && console.log('sending objs', message.method, message.args && message.args.objects && message.args.objects[0] && message.args.objects[0].children, message);
       var json = JSON.stringify(message);
       this.connection.send(json);
     }

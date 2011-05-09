@@ -20,9 +20,9 @@ function join(string) {
 // Quoted string
 function quote(string) {
   if (/[\u0080-\uFFFF]/(string)) {
-    // Do RFC2047 mime encoded tokens.
+    // TODO: RFC2047 mime encoded tokens.
   }
-  if (/[ ()<>@,;:\\"\/\[\]?=]/(string)) {
+  if (/[ ()<>@,;:\\"\[\]?=]/(string)) {
     return '"' + string.replace(/([\\"])/g, '\\$1') + '"';
   }
   return string;

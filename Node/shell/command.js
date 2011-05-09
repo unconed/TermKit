@@ -1,10 +1,9 @@
 var EventEmitter = require("events").EventEmitter,
     outputFormatter = require('shell/formatter').formatter;
     spawn = require('child_process').spawn,
-    builtin = require('shell/builtin'),
     view = require('view/view'),
     meta = require('shell/meta'),
-
+    builtin = require('shell/builtin/builtin'),
     async = require('misc').async,
     whenDone = require('misc').whenDone,
     returnObject = require('misc').returnObject,
@@ -144,48 +143,54 @@ exports.commandUnit.builtinCommand.prototype = new exports.commandUnit();
 exports.commandUnit.builtinCommand.prototype.spawn = function () {
   var that = this,
       prefix = this.command[0];
-  if (this.handler = builtin.shellCommands[prefix]) {
-    
-    // Make fake process.
-    var fake    = new EventEmitter();
-    fake.stdin  = new EventEmitter();
-    fake.stdout = new EventEmitter();
-    fake.stderr = new EventEmitter();
 
-    // Helper for converting strings to buffers.
-    function buffer(data) {
-      if (data.constructor != Buffer) {
-        data = new Buffer(data, 'utf8');
-      }
-      return data;
-    }
+  if (!builtin.commands[prefix]) {
+    prefix = 'null';
+  }
 
-    // Set up fake stdin.
-    fake.stdin.write = function (data) {
-      fake.stdin.emit('data', buffer(data));
-    };
-    fake.stdin.end = function () {
-    };
+  // Load handler.
+  try {
+    this.handler = require('builtin/' + prefix);
+  } catch (e) {
+    process.stderr.write('exception ' + e);
+  }
   
-    // Set up fake stdout.
-    fake.stdout.write = function (data) {
-      fake.stdout.emit('data', buffer(data));
-    };
-    fake.stdout.end = function () {
-    };
+  // Make fake process.
+  var fake    = new EventEmitter();
+  fake.stdin  = new EventEmitter();
+  fake.stdout = new EventEmitter();
+  fake.stderr = new EventEmitter();
 
-    // Set up fake stderr.
-    fake.stderr.write = function (data) {
-      fake.stderr.emit('data', buffer(data));
-    };
-    fake.stderr.end = function () {
-    };
-    
-    this.process = fake;
+  // Helper for converting strings to buffers.
+  function buffer(data) {
+    if (data.constructor != Buffer) {
+      data = new Buffer(data, 'utf8');
+    }
+    return data;
   }
-  else {
-    throw "No such built-in command '" + prefix;
-  }
+
+  // Set up fake stdin.
+  fake.stdin.write = function (data) {
+    fake.stdin.emit('data', buffer(data));
+  };
+  fake.stdin.end = function () {
+  };
+
+  // Set up fake stdout.
+  fake.stdout.write = function (data) {
+    fake.stdout.emit('data', buffer(data));
+  };
+  fake.stdout.end = function () {
+  };
+
+  // Set up fake stderr.
+  fake.stderr.write = function (data) {
+    fake.stderr.emit('data', buffer(data));
+  };
+  fake.stderr.end = function () {
+  };
+  
+  this.process = fake;
 };
 
 exports.commandUnit.builtinCommand.prototype.go = function () {
@@ -206,7 +211,7 @@ exports.commandUnit.builtinCommand.prototype.go = function () {
   };
   
   async(function () {
-    that.handler.call(that, that.command, pipes, exit);
+    that.handler.main.call(that, that.command, pipes, exit);
   });
 };
 

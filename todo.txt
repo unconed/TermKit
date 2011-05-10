@@ -1,10 +1,10 @@
 Tasks:
-+[ ] run unix
++[:] run unix
   [X] split off builtins
   [X] make ls output list of files
   [X] ls output formatter
   [X] make universal grep
-  [ ] run pipeline test
+  [X] run pipeline test
   [ ] implement pipe token
   [ ] split command into subcommands
   [ ] refactor output formatter into reader.js

@@ -211,7 +211,6 @@ exports.commandUnit.builtinCommand.prototype.go = function () {
   // Wrap exit handler to allow fake process to emit an exit event.
   var exit = function (success, object) {
     // Close dangling pipes.
-    that.process.stdin && that.process.stdin.emit('end');
     that.process.stdout && that.process.stdout.emit('end');
 
     // Notify of exit and send back return code.

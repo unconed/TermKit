@@ -85,7 +85,7 @@ function mockShell(flow, callback) {
   setTimeout(track(function () {
     callback(messages, success);
     stdin.emit('end');
-  }), i * 100 + 500);
+  }), i * 100 + 1000);
 }
 
 /**
@@ -463,7 +463,7 @@ function testGrep(assert) {
   pipes.dataOut.on('data', function (data) {
     data = data.toString('utf-8');
     if (data.indexOf('\r\n\r\n') >= 0) return;
-    assert(data == '["xXx",{"foo":"XX","baz":"X"},{},["XX","XXX"]]',
+    assert(data == '["xXx",{"foo":"XX","baz":"X"},["XX","XXX"]]',
            "Grep complex JSON array/object");
   });
   
@@ -475,6 +475,43 @@ function testGrep(assert) {
   pipes.dataIn.emit('data', content);
   pipes.dataIn.emit('end');
 
+  // Complex JSON key grep.
+  pipes = mockPipes();
+  handler([ 'grep', '-k', 'a' ], pipes, exit);
+
+  pipes.dataOut.on('data', function (data) {
+    data = data.toString('utf-8');
+    if (data.indexOf('\r\n\r\n') >= 0) return;
+    assert(data == '[{"bar":"YY","baz":"X"},{"mah":"no"}]',
+           "Grep complex JSON array/object (keys)");
+  });
+  
+  headers = new meta.headers();
+  content = '[ "---", "xXx", { "foo": "XX", "bar": "YY", "baz": "X" }, { "mah": "no" }, [ {"foo":"bar"}, "XX", 3, "XXX" ]]';
+  headers.set('Content-Type', 'application/json');
+  headers.set('Content-Length', content.length);
+  pipes.dataIn.emit('data', headers.generate());
+  pipes.dataIn.emit('data', content);
+  pipes.dataIn.emit('end');
+
+}
+
+/**
+ * Test command pipelines.
+ */
+function testPipe(assert) {
+
+  mockShell([
+    { query: 8, method: 'shell.run', args: { tokens: [ [ 'ls' ], [ 'grep', '.js' ] ], ref: 7 } },
+  ], function (messages, success) {
+    for (i in messages) { 
+      console.log(messages[i]);
+      messages[i].args && messages[i].args.objects && console.log('Objects', messages[i].args.objects);
+    }
+    var last = messages[messages.length - 1];
+    assert(last.success && last.answer == 8, "Run pipelined command");
+  });
+  
 }
 
 // Run tests.
@@ -487,6 +524,7 @@ var tests = {
     misc: testMisc,
     parseArgs: testParseArgs,
     grep: testGrep,
+    pipe: testPipe,
 };
 for (i in tests) (function (i, test) {
   test(function (c, msg) {

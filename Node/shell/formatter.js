@@ -76,8 +76,10 @@ exports.formatter.prototype = {
   
   // Parse MIME headers for stream
   data: function (data) {
+
 //    process.stderr.write('CHUNK ' + data + "\n\n");
     if (!this.identified) {
+
       // Swallow data until we encounter the MIME header delimiter.
       this.lookahead += data.toString('ascii');
       if (this.lookahead.indexOf("\r\n\r\n") != -1) {

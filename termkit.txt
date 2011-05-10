@@ -64,6 +64,7 @@ Good desktop citizen:
   [X] inline image display
   [X] json pretty printer
   [X] json grep
+  [:] pipelined commands
   [ ] unix command execution
   [ ] http get/post data piping
   [ ] code syntax highlighting

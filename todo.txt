@@ -1,12 +1,12 @@
 Tasks:
-+[ ] run unix
++[:] run unix
   [X] split off builtins
   [X] make ls output list of files
   [X] ls output formatter
   [X] make universal grep
+  [X] run pipeline test
   [ ] implement pipe token
   [ ] split command into subcommands
-  [ ] run pipeline test
   [ ] refactor output formatter into reader.js
 [ ] cat/echo Piping + progress bar
 [ ] 5-pipe command execution
@@ -111,6 +111,7 @@ Prototype:
     [X] make ls / cd commands
     [X] simplify message format to raw json
     [X] viewstream integration
+    [X] data reader
 !    [ ] arrange pipes for command/view for unix processes
 ! [X] output formatter
     [X] full mime header parser/generator

@@ -30,30 +30,43 @@ exports.main = function (tokens, pipes, exit) {
     var json, tail = '';
     
     // In-place grepper
-    function grep(object, value) {
+    function grep(object, value, force) {
       if (object.constructor == String || object.constructor == Number) {
-        return (negative ^ !!(''+object).match(value)) ? object : null;
+        // Match strings.
+        return ((!matchKeys || force) && (negative ^ !!(''+object).match(value))) ? object : null;
       }
       if (object.constructor == Array) {
-        return object.map(function (key) {
+        // Keep only non-null items after grep.
+        object = object.map(function (key) {
           return grep(key, value);
         }).filter(function (x) { return x !== null; });
+
+        // Prune empties.
+        return object.length ? object : null;
       }
       for (i in object) {
         var item;
         if (matchKeys) {
-          item = (grep(i, value) !== null) ? object[i] : null
+          // Pass keys through grep.
+          item = (grep(i, value, true) !== null) ? object[i] : null
         }
         else {
+          // Pass values through grep.
           item = grep(object[i], value);
         }
         
-        if (!!item) {
+        // Keep non-null items.
+        if (item !== null) {
           object[i] = item;
         }
         else {
           delete object[i];
         }
+      }
+
+      // Prune empties.
+      if (JSON.stringify(object) == '{}') {
+        return null;
       }
       return object;
     }
@@ -81,21 +94,21 @@ exports.main = function (tokens, pipes, exit) {
         }
 
         // Remove content-length, output rest.
-        headers.set('Content-Length');
+        headers.set('Content-Length', null);
         pipes.dataOut.write(headers.generate());
       },
 
       /**
-       * Pipe data (buffered or unbuffered)
+       * Pipe data.
        */
       data: function (data) {
 
         if (json) {
-          // Process whole json object.
+          // Process whole json object (buffered).
           data = JSON.parse(data.toString('utf-8'));
         }
         else {
-          // Process line by line.
+          // Process line by line (unbuffered chunks).
           data = (tail + data).toString('utf-8').split("\n");
           tail = data.pop();
         }
@@ -119,12 +132,17 @@ exports.main = function (tokens, pipes, exit) {
       /**
        * Pipe closed.
        */
-      end: function () {
+      end: function (exit) {
         if (tail) {
           // Last dangling line.
           data = grep([tail], pattern);
-          pipes.dataOut.write(data);
+          if (data !== null) {
+            pipes.dataOut.write(data);
+          }
         }
+
+        // Quit.
+        exit();
       },
     };
     

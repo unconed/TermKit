@@ -18,6 +18,7 @@ var processor = require("shell/processor");
 var meta = require("shell/meta");
 var autocomplete = require("shell/autocomplete");
 var misc = require("misc");
+var grep = require("shell/builtin/grep");
 
 var asserts = [];
 function assert(condition, message) {
@@ -291,8 +292,8 @@ function testAutocomplete(assert) {
  * Test misc utilties.
  */
 function testMisc(assert) {
-  assert(misc.JSONPretty({}) == '{\n} ', 'Pretty print {}');
-  assert(misc.JSONPretty([]) == '[\n] ', 'Pretty print []');
+  assert(misc.JSONPretty({}) == '{ \n} ', 'Pretty print {}');
+  assert(misc.JSONPretty([]) == '[ \n] ', 'Pretty print []');
 
   assert(misc.JSONPretty({'foo':'bar', 'baz':'bam'})
          == '{ \n  "foo": "bar", \n  "baz": "bam"\n} ',
@@ -307,6 +308,175 @@ function testMisc(assert) {
          'Pretty print array');
 }
 
+function mockPipes() {
+
+  var fake    = new EventEmitter();
+  fake.stdin  = new EventEmitter();
+  fake.stdout = new EventEmitter();
+  fake.stderr = new EventEmitter();
+
+  // Helper for converting strings to buffers.
+  function buffer(data) {
+    if (data.constructor != Buffer) {
+      data = new Buffer(data, 'utf8');
+    }
+    return data;
+  }
+
+  // Set up fake stdin.
+  fake.stdin.write = function (data) {
+    fake.stdin.emit('data', buffer(data));
+  };
+  fake.stdin.end = function () {
+  };
+
+  // Set up fake stdout.
+  fake.stdout.write = function (data) {
+//    console.log('stdout.write', data.toString('utf-8'));
+    fake.stdout.emit('data', buffer(data));
+  };
+  fake.stdout.end = function () {
+  };
+
+  // Set up fake stderr.
+  fake.stderr.write = function (data) {
+    fake.stderr.emit('data', buffer(data));
+  };
+  fake.stderr.end = function () {
+  };
+
+  return {
+    dataIn: fake.stdin,
+    dataOut: fake.stdout,
+    errorOut: fake.stderr,
+    viewIn: new EventEmitter(),
+    viewOut: function (message, args) {
+    //  console.log('viewOut', message, args);
+    },
+  };
+};
+
+/**
+ * Test argument parsing.
+ */
+function testParseArgs(assert) {
+  
+  var args = misc.parseArgs([ 'grep', '-v', 'foo bar', '--magic', '7', '--a', '--b' ]);
+  assert(args.values.length == 1 && args.values[0] == 'foo bar', "Argument values");
+  assert(args.options.v && args.options.a && args.options.b && (args.options.magic == '7'),
+         "Argument options");
+  
+}
+
+/**
+ * Test grep.js
+ */
+function testGrep(assert) {
+  
+  var handler = grep.main,
+      exit = function () {},
+      headers, content, pipes;
+      
+
+  // Simple grep.
+  pipes = mockPipes();
+  handler([ 'grep', 'ba' ], pipes, exit);
+
+  pipes.dataOut.on('data', function (data) {
+    if (data.toString('utf-8').indexOf('\r\n\r\n') >= 0) return;
+    var lines = data.toString('utf-8').split("\n");
+    assert(lines.length == 3 && lines[0] == 'bar' &&
+           lines[1] == 'baz' && lines[2] == 'ccbacc',
+           "Grep plaintext lines");
+  });
+  
+  headers = new meta.headers();
+  content = "foo\nbar\nbaz\nbingo\nccbacc\n\n\nfffuuu\n";
+  headers.set('Content-Type', 'text/plain');
+  headers.set('Content-Length', content.length);
+  pipes.dataIn.emit('data', headers.generate());
+  pipes.dataIn.emit('data', content);
+  pipes.dataIn.emit('end');
+
+  // Simple grep (negative).
+  pipes = mockPipes();
+  handler([ 'grep', '-v', 'ba' ], pipes, exit);
+
+  pipes.dataOut.on('data', function (data) {
+    if (data.toString('utf-8').indexOf('\r\n\r\n') >= 0) return;
+    var lines = data.toString('utf-8').split("\n");
+    assert(lines.length == 5 && lines[0] == 'foo' &&
+           lines[1] == 'bingo' && lines[2] == '' && lines[3] == '' && lines[4] == 'fffuuu',
+           "Grep plaintext lines (negative)");
+  });
+  
+  headers = new meta.headers();
+  content = "foo\nbar\nbaz\nbingo\nccbacc\n\n\nfffuuu\n";
+  headers.set('Content-Type', 'text/plain');
+  headers.set('Content-Length', content.length);
+  pipes.dataIn.emit('data', headers.generate());
+  pipes.dataIn.emit('data', content);
+  pipes.dataIn.emit('end');
+  
+  // JSON grep.
+  pipes = mockPipes();
+  handler([ 'grep', 'ba' ], pipes, exit);
+
+  pipes.dataOut.on('data', function (data) {
+    data = data.toString('utf-8');
+    if (data.indexOf('\r\n\r\n') >= 0) return;
+    assert(data == '{"foo":"bar","baz":"bang"}',
+           "Grep JSON object");
+  });
+  
+  headers = new meta.headers();
+  content = '{"foo":"bar","baz":"bang","bingo":"fffuu"}';
+  headers.set('Content-Type', 'application/json');
+  headers.set('Content-Length', content.length);
+  pipes.dataIn.emit('data', headers.generate());
+  pipes.dataIn.emit('data', content);
+  pipes.dataIn.emit('end');
+
+  // JSON grep (negative).
+  pipes = mockPipes();
+  handler([ 'grep', '-v', 'ba' ], pipes, exit);
+
+  pipes.dataOut.on('data', function (data) {
+    data = data.toString('utf-8');
+    if (data.indexOf('\r\n\r\n') >= 0) return;
+    assert(data == '{"bingo":"fffuu"}',
+           "Grep JSON object (negative)");
+  });
+  
+  headers = new meta.headers();
+  content = '{"foo":"bar","baz":"bang","bingo":"fffuu"}';
+  headers.set('Content-Type', 'application/json');
+  headers.set('Content-Length', content.length);
+  pipes.dataIn.emit('data', headers.generate());
+  pipes.dataIn.emit('data', content);
+  pipes.dataIn.emit('end');
+
+  // Complex JSON grep.
+  pipes = mockPipes();
+  handler([ 'grep', 'X' ], pipes, exit);
+
+  pipes.dataOut.on('data', function (data) {
+    data = data.toString('utf-8');
+    if (data.indexOf('\r\n\r\n') >= 0) return;
+    assert(data == '["xXx",{"foo":"XX","baz":"X"},{},["XX","XXX"]]',
+           "Grep complex JSON array/object");
+  });
+  
+  headers = new meta.headers();
+  content = '[ "---", "xXx", { "foo": "XX", "bar": "YY", "baz": "X" }, { "meh": "no" }, [ 1, "XX", 3, "XXX" ]]';
+  headers.set('Content-Type', 'application/json');
+  headers.set('Content-Length', content.length);
+  pipes.dataIn.emit('data', headers.generate());
+  pipes.dataIn.emit('data', content);
+  pipes.dataIn.emit('end');
+
+}
+
 // Run tests.
 var tests = {
     handshake: testHandshake,
@@ -315,6 +485,8 @@ var tests = {
     meta: testMeta,
     autocomplete: testAutocomplete,
     misc: testMisc,
+    parseArgs: testParseArgs,
+    grep: testGrep,
 };
 for (i in tests) (function (i, test) {
   test(function (c, msg) {

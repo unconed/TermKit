@@ -86,6 +86,13 @@ exports.headers.prototype = {
     })
     */
     
+    // Remove key.
+    if (typeof paramValue == 'undefined' || typeof paramValue == 'null') {
+      delete this.fields[keyObject];
+      delete this.params[keyObject];
+      return;
+    }
+    
     // Set single key.
     if (isString(keyObject)) {
       

@@ -174,6 +174,8 @@ exports.commandUnit.builtinCommand.prototype.spawn = function () {
     fake.stdin.emit('data', buffer(data));
   };
   fake.stdin.end = function () {
+    fake.stdin.emit('end');
+    fake.stdin = null;
   };
 
   // Set up fake stdout.
@@ -181,6 +183,8 @@ exports.commandUnit.builtinCommand.prototype.spawn = function () {
     fake.stdout.emit('data', buffer(data));
   };
   fake.stdout.end = function () {
+    fake.stdout.emit('end');
+    fake.stdout = null;
   };
 
   // Set up fake stderr.
@@ -206,6 +210,11 @@ exports.commandUnit.builtinCommand.prototype.go = function () {
   
   // Wrap exit handler to allow fake process to emit an exit event.
   var exit = function (success, object) {
+    // Close dangling pipes.
+    that.process.stdin && that.process.stdin.emit('end');
+    that.process.stdout && that.process.stdout.emit('end');
+
+    // Notify of exit and send back return code.
     that.process.emit('exit', !success);
     that.exit(success, object);
   };

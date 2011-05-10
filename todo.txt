@@ -2,20 +2,12 @@ Tasks:
 +[ ] run unix
   [X] split off builtins
   [X] make ls output list of files
-+  [ ] ls output formatter
-  [ ] make universal grep
-
-    grep:
-      text/plain: line by line
-      application/json:
-        array -> grep each item 
-        string -> grep value
-        object -> grep values
-        object -k -> grep keys
-      
+  [X] ls output formatter
+  [X] make universal grep
   [ ] implement pipe token
   [ ] split command into subcommands
   [ ] run pipeline test
+  [ ] refactor output formatter into reader.js
 [ ] cat/echo Piping + progress bar
 [ ] 5-pipe command execution
 [ ] unix command execution
@@ -127,6 +119,7 @@ Prototype:
   [ ] sudo support (askpass env?)
 
 5) Command Suite
+[X] JSON grep
 ![:] code syntax highlighter
 [ ] make a script for git (arguments, file/dir, ...)
 [ ] basic top/w infographs + live update

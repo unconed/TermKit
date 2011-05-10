@@ -5,33 +5,20 @@ var fs = require('fs'),
     EventEmitter = require('events').EventEmitter,
     async = require('misc').async,
     meta = require('shell/meta'),
-    expandPath = require('misc').expandPath;
+    expandPath = require('misc').expandPath,
+    parseArgs = require('misc').parseArgs;
 
 exports.main = function (tokens, pipes, exit) {
   
   var out = new view.bridge(pipes.viewOut);
   
-  var hidden = false;
-
   // Parse out directory references to list.
-  var items = [];
-  for (i in tokens) if (i > 0) {
-    var m;
-    if (m = /-([aA])/(tokens[i])) {
-      switch (m[1]) {
-        case 'a':
-        case 'A':
-          hidden = true;
-          break;
-        default:
-          out.print('Unrecognized argument "'+ tokens[i] +'"');
-          exit(false);
-      }
-    }
-    else {
-      items.push(tokens[i]);
-    }
-  }
+  var args = parseArgs(tokens),
+      items = args.values,
+      options = args.options;
+
+  var hidden = options.a || options.A;
+                                                                                                                                                       
   // Default to working directory.
   if (!items.length) {
     items.push(process.cwd());

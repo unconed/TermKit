@@ -165,3 +165,37 @@ exports.JSONPretty = function (data) {
   
   return data.join("\n");
 }
+
+/**
+ * Parse command arguments.
+ *
+ * -x -> options[x] = true
+ * --foo -> options[foo] = true
+ * --foo bar -> options[foo] = 'bar'
+ */
+exports.parseArgs = function (tokens) {
+  var options = {},
+      values = [],
+      n = tokens.length,
+      i = 1, m;
+
+  for (; i < n; ++i) (function (token) {
+    if (m = /^-([A-Za-z0-9_-])$/(tokens[i])) {
+      options[m[1]] = true;
+    }
+    else if (m = /^--([A-Za-z0-9_-]+)$/(tokens[i])) {
+      if (typeof tokens[i + 1] != 'undefined' && tokens[i + 1][0] != '-') {
+        ++i;
+        options[m[1]] = tokens[i];
+      }
+      else {
+        options[m[1]] = true;
+      }
+    }
+    else {
+      values.push(tokens[i]);
+    }
+  })(tokens[i]);
+  
+  return { values: values, options: options };
+}

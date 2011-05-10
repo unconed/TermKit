@@ -2,6 +2,7 @@
 loc=0
 dirs="HTML Node"
 
+mv HTML/jquery.js .
 mv HTML/socket.io .
 mv Node/socket.io-node .
 mv HTML/external .
@@ -16,5 +17,6 @@ done
 mv socket.io HTML
 mv socket.io-node Node
 mv external HTML
+mv jquery.js HTML
 
 echo Lines of code: $loc

@@ -6,7 +6,12 @@ var fs = require('fs'),
     extend = require('misc').extend,
     JSONPretty = require('misc').JSONPretty,
     composePath = require('misc').composePath;
-    
+   
+
+var debug;
+debug = process.stderr.write;
+debug = console.log
+ 
 /**
  * Data reader for termkit-style stdI/O.
  *
@@ -68,20 +73,20 @@ exports.reader.prototype = {
     }
 
     this.handler.end(this.exit);
-    
+
   },
   
   parse: function (headers) {
     this.headers = new meta.headers();
     this.headers.parse(headers);
     for (i in this.headers.fields) {
-      //process.stderr.write('Header  ' + i +': ' + this.headers.fields[i] +"\n");
+//      debug('Header  ' + i +': ' + this.headers.fields[i] +"\n");
     }
   },
   
   // Parse MIME headers for stream
   data: function (data) {
-//    process.stderr.write('CHUNK ' + data + "\n\n");
+//    debug('CHUNK ' + data + "\n\n");
     if (!this.identified) {
       // Swallow data until we encounter the MIME header delimiter.
       this.lookahead += data.toString('ascii');
@@ -101,7 +106,7 @@ exports.reader.prototype = {
         if (this.buffered && !isNaN(length)) {
           // Allocate large buffer.
           this.buffer = new Buffer(length);
-          //process.stderr.write('allocated ' + this.length+" got " + this.buffer.length + "\n");
+          //debug('allocated ' + this.length+" got " + this.buffer.length + "\n");
         }
         else {
           this.length = 0;
@@ -119,7 +124,7 @@ exports.reader.prototype = {
       if (this.buffered) {
         // Collect output.
         if (this.buffer) {
-          //process.stderr.write('buffered, known size ' + this.length+", data size " + data.length +"\n");
+          //debug('buffered, known size ' + this.length+", data size " + data.length +"\n");
 
           // Append chunk to buffer.
           data.copy(this.buffer, this.offset, 0, data.length);
@@ -127,7 +132,7 @@ exports.reader.prototype = {
         }
         else {
 
-          //process.stderr.write('buffered, mystery size ' + this.length+", data size " + data.length +"\n");
+          //debug('buffered, mystery size ' + this.length+", data size " + data.length +"\n");
 
           // Size not known. Push chunk onto array to grow indefinitely.
           this.chunks.push(data);
@@ -137,7 +142,7 @@ exports.reader.prototype = {
         }
       }
       else {
-        //process.stderr.write('stream, packet size ' + data.length+"\n");
+        //debug('stream, packet size ' + data.length+"\n");
         // Stream out data.
         this.handler.data(data);
       }

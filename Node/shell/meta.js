@@ -87,7 +87,7 @@ exports.headers.prototype = {
     */
     
     // Remove key.
-    if (typeof paramValue == 'undefined' || typeof paramValue == 'null') {
+    if (isString(keyObject) && (typeof paramValue == 'undefined' || paramValue === null)) {
       delete this.fields[keyObject];
       delete this.params[keyObject];
       return;

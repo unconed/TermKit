@@ -123,7 +123,9 @@ exports.main = function (tokens, pipes, exit) {
         if (tail) {
           // Last dangling line.
           data = grep([tail], pattern);
-          pipes.dataOut.write(data);
+          if (data !== null) {
+            pipes.dataOut.write(data);
+          }
         }
       },
     };

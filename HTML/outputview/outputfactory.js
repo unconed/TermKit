@@ -122,25 +122,22 @@ widgets.icon.prototype = $.extend(new ov.outputNode(), {
   },
 
   setDefaultIcon: function (callback) {
-    var that = this;
-
     // Set default icon.
     var image = new Image(),
         extension = (this.properties.stats.mode & 0x4000) ? '...' : this.properties.name.split('.').pop(),
         defaultUrl = 'termkit-icon-default:///' + encodeURIComponent(extension);
 
     image.onload = function () {
-      if (!that.noDefault) {
-        that.$element.css({
-          background: 'url('+ defaultUrl +')',
-          backgroundSize: '32px 32px',
-        });
-      }
-
       callback && callback();
     };
 
     image.src = defaultUrl;
+    if (!this.noDefault) {
+      this.$element.css({
+        background: 'url('+ defaultUrl +')',
+        backgroundSize: '32px 32px',
+      });
+    }
   },
   
   setOwnIcon: function (callback) {

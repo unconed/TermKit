@@ -19,12 +19,18 @@ Addresses following problems:
 
 ### Warning: Alpha version, still under development. Nothing works yet.
 
-Some highlights:
+## Some cool features
 
 * Smart token-based input with inline autocomplete and automatic escaping
 * Rich output for common tasks and formats, using MIME types + sniffing
 * Asynchronous views for background / parallel tasks
 * Full separation between front/back-end
+
+## TermKit is not a...
+* ...Web application. It's a desktop app.
+* ...Scripting language like PowerShell or bash. It focuses on executing commands only.
+* ...Full terminal emulator. It does not aim to e.g. host 'vim'.
+* ...Reimplementation of the Unix toolchain. It replaces and/or enhances built-in commands and wraps external tools.
 
 ## How to use:
 

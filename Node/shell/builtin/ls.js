@@ -31,6 +31,7 @@ exports.main = function (tokens, pipes, exit) {
     
     // Format data.
     var data = JSON.stringify(output);
+    process.stderr.write(data);
     
     // Prepare headers.
     var headers = new meta.headers();

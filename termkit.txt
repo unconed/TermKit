@@ -404,7 +404,7 @@ bcat: browser cat tool
 terminator: java-based terminal++
 
 protocol:
- fastcgi
+ fastcgi, json-rpc
 
 command output:
 * rich output, consisting of an element tree
@@ -418,9 +418,8 @@ current widget model:
 more ideas:
 * autocorrection of mistyped commands
 * unified progress indicator during command
-* history access
-* don't execute if invalid command
-
+* autocompleted/predicted history access
+* guard if command is dangerous / doesn't make sense
 
 +++ -
 

@@ -27,7 +27,7 @@ Addresses following problems:
 * Full separation between front/back-end
 
 ## TermKit is not a...
-* ...Web application. It's a desktop app.
+* ...Web application. It runs as a regular desktop app.
 * ...Scripting language like PowerShell or bash. It focuses on executing commands only.
 * ...Full terminal emulator. It does not aim to e.g. host 'vim'.
 * ...Reimplementation of the Unix toolchain. It replaces and/or enhances built-in commands and wraps external tools.

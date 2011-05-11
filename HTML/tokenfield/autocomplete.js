@@ -41,7 +41,7 @@ tf.autocomplete.prototype = {
     this.token = this.caret.selection.anchor.token;
     this.prefix = this.token.contents.substring(0, this.caret.selection.anchor.offset);
     this.handler = this.token.autocomplete;
-  
+    
     // Sync state.
     this.updateContents();
   },
@@ -79,6 +79,9 @@ tf.autocomplete.prototype = {
     function updateState() {
       // Highlight active line, if any,
       if (that.items.length) {
+        // Remove token badge.
+        that.token.style = '';
+
         // Insert lines into box.
         var prefix = that.prefix;
         $e.empty();
@@ -115,7 +118,7 @@ tf.autocomplete.prototype = {
       }
       // Instant-apply single item popup if it matches what was typed.
       else if (that.items.length == 1 && that.items[0].label == prefix) {
-        that.onComplete(event || {});
+        that.onComplete(event || {}, true);
       }
     }
 
@@ -136,14 +139,14 @@ tf.autocomplete.prototype = {
     }
   },
   
-  onComplete: function (event) {
+  onComplete: function (event, local) {
     if (this.token && this.selected < this.items.length) {
       event.charCode = 10; // LF \n
 
       var item = this.items[this.selected];
 
       this.token.style = item.type;
-      this.caret.setContents(item.value, event);
+      !local && this.caret.setContents(item.value, event);
       this.remove();
     }
   },

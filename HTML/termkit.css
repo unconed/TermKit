@@ -342,22 +342,22 @@ body {
 }
 
 .termkitTokenField .token.style-command {
-  padding-left: 20px;
+  padding-left: 24px;
   background-image: url(../Images/command.png);
   background-repeat: no-repeat;
-  background-position: .5em 50%;
+  background-position: .4em 50%;
 }
 .termkitTokenField .token.style-file {
-  padding-left: 20px;
+  padding-left: 24px;
   background-image: url(../Images/file.png);
   background-repeat: no-repeat;
-  background-position: .5em 50%;
+  background-position: .4em 50%;
 }
 .termkitTokenField .token.style-folder {
-  padding-left: 20px;
+  padding-left: 24px;
   background-image: url(../Images/folder.png);
   background-repeat: no-repeat;
-  background-position: .5em 50%;
+  background-position: .4em 50%;
 }
 
 

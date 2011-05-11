@@ -20,7 +20,7 @@ body {
   width: 24px;
   height: 24px;
   margin: 10px;
-  background: #000 url('../Images/loading-black.gif');
+  background: #000 url('Images/loading-black.gif');
 }
 
 /************/
@@ -317,45 +317,45 @@ body {
 
 .termkitTokenField span.autocomplete .line.style-command .prefix {
   padding-left: 20px;
-  background: url(../Images/command.png) no-repeat 0 50%;
+  background: url(Images/command.png) no-repeat 0 50%;
 }
 .termkitTokenField span.autocomplete .line.style-file .prefix {
   padding-left: 20px;
-  background: url(../Images/file.png) no-repeat 0 50%;
+  background: url(Images/file.png) no-repeat 0 50%;
 }
 .termkitTokenField span.autocomplete .line.style-folder .prefix {
   padding-left: 20px;
-  background: url(../Images/folder.png) no-repeat 0 50%;
+  background: url(Images/folder.png) no-repeat 0 50%;
 }
 
 .termkitTokenField span#caret input.style-command {
   padding-left: 20px;
-  background: url(../Images/command.png) no-repeat 0 50%;
+  background: url(Images/command.png) no-repeat 0 50%;
 }
 .termkitTokenField span#caret input.style-file {
   padding-left: 20px;
-  background: url(../Images/file.png) no-repeat 0 50%;
+  background: url(Images/file.png) no-repeat 0 50%;
 }
 .termkitTokenField span#caret input.style-folder {
   padding-left: 20px;
-  background: url(../Images/folder.png) no-repeat 0 50%;
+  background: url(Images/folder.png) no-repeat 0 50%;
 }
 
 .termkitTokenField .token.style-command {
   padding-left: 24px;
-  background-image: url(../Images/command.png);
+  background-image: url(Images/command.png);
   background-repeat: no-repeat;
   background-position: .4em 50%;
 }
 .termkitTokenField .token.style-file {
   padding-left: 24px;
-  background-image: url(../Images/file.png);
+  background-image: url(Images/file.png);
   background-repeat: no-repeat;
   background-position: .4em 50%;
 }
 .termkitTokenField .token.style-folder {
   padding-left: 24px;
-  background-image: url(../Images/folder.png);
+  background-image: url(Images/folder.png);
   background-repeat: no-repeat;
   background-position: .4em 50%;
 }

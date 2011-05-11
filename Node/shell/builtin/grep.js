@@ -29,6 +29,8 @@ exports.main = function (tokens, pipes, exit) {
     
     // In-place grepper
     function grep(object, value, force) {
+      var i;
+      
       if (object.constructor == String || object.constructor == Number) {
         // Match strings.
         return ((!matchKeys || force) && (negative ^ !!(''+object).match(value))) ? object : null;
@@ -42,6 +44,8 @@ exports.main = function (tokens, pipes, exit) {
         // Prune empties.
         return object.length ? object : null;
       }
+      
+      var out = {};
       for (i in object) {
         var item;
         if (matchKeys) {
@@ -55,18 +59,15 @@ exports.main = function (tokens, pipes, exit) {
         
         // Keep non-null items.
         if (item !== null) {
-          object[i] = item;
-        }
-        else {
-          delete object[i];
+          out[i] = item;
         }
       }
 
       // Prune empties.
-      if (JSON.stringify(object) == '{}') {
+      if (JSON.stringify(out) == '{}') {
         return null;
       }
-      return object;
+      return out;
     }
 
     // Buffered mime reader handler.

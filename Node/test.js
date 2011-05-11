@@ -377,7 +377,7 @@ function testGrep(assert) {
       exit = function () {},
       headers, content, pipes;
       
-
+/*
   // Simple grep.
   pipes = mockPipes();
   handler([ 'grep', 'ba' ], pipes, exit);
@@ -493,7 +493,26 @@ function testGrep(assert) {
   pipes.dataIn.emit('data', headers.generate());
   pipes.dataIn.emit('data', content);
   pipes.dataIn.emit('end');
+*/
+  // Tricky object grep
+  pipes = mockPipes();
+  handler([ 'grep', 'lulz' ], pipes, exit);
 
+  pipes.dataOut.on('data', function (data) {
+    data = data.toString('utf-8');
+    if (data.indexOf('\r\n\r\n') >= 0) return;
+    console.log('tricky', data);
+    assert(data == '{"list":[{"lol":"lulz"}]}',
+           "Tricky object grep");
+  });
+
+  headers = new meta.headers();
+  content = '{"foo": "bar", "meh": "teh", "lol": "wai", "list": [ { "lol": "lulz", "fail": "json" } , "wtf" ] }';
+  headers.set('Content-Type', 'application/json');
+  headers.set('Content-Length', content.length);
+  pipes.dataIn.emit('data', headers.generate());
+  pipes.dataIn.emit('data', content);
+  pipes.dataIn.emit('end');
 }
 
 /**
@@ -516,6 +535,7 @@ function testPipe(assert) {
 
 // Run tests.
 var tests = {
+  /*
     handshake: testHandshake,
     session: testSession,
     commands: testCommands,
@@ -523,8 +543,9 @@ var tests = {
     autocomplete: testAutocomplete,
     misc: testMisc,
     parseArgs: testParseArgs,
-    grep: testGrep,
     pipe: testPipe,
+    */
+    grep: testGrep,
 };
 for (i in tests) (function (i, test) {
   test(function (c, msg) {

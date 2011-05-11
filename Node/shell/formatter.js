@@ -5,7 +5,8 @@ var fs = require('fs'),
     async = require('misc').async,
     extend = require('misc').extend,
     JSONPretty = require('misc').JSONPretty,
-    composePath = require('misc').composePath;
+    composePath = require('misc').composePath,
+    objectKeys = require('misc').objectKeys;
     
 /**
  * Output formatter.
@@ -328,10 +329,12 @@ exports.plugins.files.prototype = extend(new exports.plugin(), {
     data = JSON.parse(data);
     
     // Job tracker.
-    var track = whenDone(function () {
+    var track = this.track = whenDone(function () {
       for (i in output) {
         // Output one directory listing at a time.
-        that.out.print(view.list(i, output[i]));
+        if (output[i].length) {
+          that.out.print(view.list(i, output[i]));
+        }
       }
 
       that.exit(errors == 0);
@@ -363,6 +366,9 @@ exports.plugins.files.prototype = extend(new exports.plugin(), {
 
   end: function (exit) {
     this.exit = exit;
+
+    // Ping tracker in case of empty data.
+    this.track()();
   },
 
 });

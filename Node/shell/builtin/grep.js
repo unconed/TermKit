@@ -25,8 +25,6 @@ exports.main = function (tokens, pipes, exit) {
     return exit(false);
   }
   else {
-    out.print("Stdin grep");
-
     var json, tail = '';
     
     // In-place grepper

@@ -5,8 +5,8 @@ Tasks:
   [X] ls output formatter
   [X] make universal grep
   [X] run pipeline test
+  [X] split command into subcommands
   [ ] implement pipe token
-  [ ] split command into subcommands
   [ ] refactor output formatter into reader.js
 [ ] cat/echo Piping + progress bar
 [ ] 5-pipe command execution
@@ -75,7 +75,7 @@ Prototype:
   [X] autocomplete filesystem
   [X] autocomplete label / contents / icon
   [X] autocomplete dir / file distinction
-  [ ] badge tokens with icons
+!  [ ] badge tokens with icons
 
 3) Smart output with selectable things
   [X] research FastCGI socket protocol

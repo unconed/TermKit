@@ -315,30 +315,49 @@ body {
   background: #678 -webkit-gradient(linear, left top, left bottom, from(#678), to(#456));
 }
 
-.termkitTokenField span.autocomplete .line.match-command .prefix {
+.termkitTokenField span.autocomplete .line.style-command .prefix {
   padding-left: 20px;
   background: url(../Images/command.png) no-repeat 0 50%;
 }
-.termkitTokenField span.autocomplete .line.match-file .prefix {
+.termkitTokenField span.autocomplete .line.style-file .prefix {
   padding-left: 20px;
   background: url(../Images/file.png) no-repeat 0 50%;
 }
-.termkitTokenField span.autocomplete .line.match-folder .prefix {
+.termkitTokenField span.autocomplete .line.style-folder .prefix {
   padding-left: 20px;
   background: url(../Images/folder.png) no-repeat 0 50%;
 }
 
-.termkitTokenField span#caret input.match-command {
+.termkitTokenField span#caret input.style-command {
   padding-left: 20px;
   background: url(../Images/command.png) no-repeat 0 50%;
 }
-.termkitTokenField span#caret input.match-file {
+.termkitTokenField span#caret input.style-file {
   padding-left: 20px;
   background: url(../Images/file.png) no-repeat 0 50%;
 }
-.termkitTokenField span#caret input.match-folder {
+.termkitTokenField span#caret input.style-folder {
   padding-left: 20px;
   background: url(../Images/folder.png) no-repeat 0 50%;
+}
+
+.termkitTokenField .token.style-command {
+  padding-left: 20px;
+  background-image: url(../Images/command.png);
+  background-repeat: no-repeat;
+  background-position: .5em 50%;
+}
+.termkitTokenField .token.style-file {
+  padding-left: 20px;
+  background-image: url(../Images/file.png);
+  background-repeat: no-repeat;
+  background-position: .5em 50%;
+}
+.termkitTokenField .token.style-folder {
+  padding-left: 20px;
+  background-image: url(../Images/folder.png);
+  background-repeat: no-repeat;
+  background-position: .5em 50%;
 }
 
 
@@ -393,6 +412,15 @@ body {
   -webkit-box-shadow: 0px -1px 1px rgba(192,192,192,1);
   background: #777 -webkit-gradient(linear, left top, left bottom, from(#808080), to(#555));
   color: #eee;
+}
+
+.termkitTokenField > span.token-pipe {
+  padding: .6em .2em .45em .1em;
+  -webkit-border-radius: .25em;
+  margin: 0 5px 0 3px;
+  -webkit-box-shadow: 0px -1px 1px rgba(192,192,192,.6);
+  background: #333 -webkit-gradient(linear, left top, left 80%, from(#ffffff), to(#aaaaaa));
+  color: #ddd;
 }
 
 .termkitTokenField > span.token-regex {

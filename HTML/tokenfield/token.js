@@ -5,12 +5,13 @@ var tf = termkit.tokenField;
 /**
  * Represents a single token in the field.
  */
-tf.token = function (type, contents) {
+tf.token = function (type, contents, style) {
   this.$element = this.$markup();
 
   this.locked = false;
   this.type = type;
   this.contents = contents;
+  this.style = style;
   this.container = null;
   this.flags = {};
 
@@ -40,6 +41,13 @@ tf.token.prototype = {
     this.updateElement();
   },
 
+  // Style
+  get style() { return this._style; },
+  set style(style) {
+    this._style = style || '';
+    this.updateElement();
+  },
+
   // Text of contents
   get contents() { return this._contents; },
   set contents(contents) {
@@ -52,6 +60,9 @@ tf.token.prototype = {
   updateElement: function () {
     this.$element.data('controller', this);
     this.$element.attr('class', 'token token-' + this.type);
+    if (this._style) {
+      this.$element.addClass('style-' + this._style);
+    }
     if (!this.locked) {
       this.$element.html(escapeText(this.contents));
     }
@@ -153,10 +164,55 @@ tf.tokenEmpty.prototype = $.extend(new tf.token(), {});
 ///////////////////////////////////////////////////////////////////////////////
 
 /**
+ * Pipe token.
+ */
+tf.tokenPipe = function () {
+  tf.token.call(this, 'pipe', '');
+  this.allowEmpty = true;
+};
+
+/**
+ * Make token a pipe.
+ */
+tf.tokenPipe.triggerPipe = function (offset, event) {
+  console.log('triggerPipe', offset, event, this.contents, this);
+  if (this.contents.length > 1) {
+    var parts = this.contents.split('|'),
+        prefix = parts[0],
+        suffix = parts[1];
+    
+    return [
+      new (this.constructor)(prefix, this.style),
+      new tf.tokenPipe(),
+      new (this.constructor)(suffix)];
+  }
+  return [new tf.tokenPipe(), new tf.tokenEmpty()];
+};
+
+tf.tokenPipe.prototype = $.extend(new tf.token(), {
+
+  updateElement: function () {
+    tf.token.prototype.updateElement.apply(this, arguments);
+    this.$element.html(' ');
+  },
+
+  toCommand: function () {
+    return '|';
+  },
+  
+  checkSelf: function () {
+    console.log('pipe checkSelf', arguments);
+  },
+  
+});
+
+///////////////////////////////////////////////////////////////////////////////
+
+/**
  * Token containing plain text.
  */
-tf.tokenPlain = function (contents) {
-  tf.token.call(this, 'plain', contents);
+tf.tokenPlain = function (contents, style) {
+  tf.token.call(this, 'plain', contents, style);
 };
 
 tf.tokenPlain.prototype = $.extend(new tf.token(), {});
@@ -177,7 +233,7 @@ tf.tokenPlain.triggerComplete = function (offset, event) {
 
   // Special characters must be quoted.
   var type = /[ "'\\]/(test) ? tf.tokenQuoted : tf.tokenPlain;
-  out.unshift(new type(test));
+  out.unshift(new type(test, this.style));
 
   return out;
 };
@@ -186,7 +242,7 @@ tf.tokenPlain.triggerComplete = function (offset, event) {
  * Tokens with characters should become plain.
  */
 tf.tokenPlain.triggerCharacter = function (offset, event) {
-  return [new tf.tokenPlain(this.contents)];
+  return [new tf.tokenPlain(this.contents, this.style)];
 };
 
 /**
@@ -196,7 +252,7 @@ tf.tokenPlain.splitSpace = function (offset, event) {
   var before = this.contents.substring(0, offset - 1),
       after = this.contents.substring(offset);
   return [
-    new tf.tokenPlain(before),
+    new tf.tokenPlain(before, this.style),
     new tf.tokenPlain(after)
   ];
 };
@@ -206,8 +262,8 @@ tf.tokenPlain.splitSpace = function (offset, event) {
 /**
  * Token containing quoted text.
  */
-tf.tokenQuoted = function (contents) {
-  tf.token.call(this, 'quoted', contents);
+tf.tokenQuoted = function (contents, style) {
+  tf.token.call(this, 'quoted', contents, style);
   this.allowEmpty = true;
 };
 
@@ -240,7 +296,7 @@ tf.tokenQuoted.triggerComplete = function (offset, event) {
     out.push(new tf.tokenEmpty());
   }
   
-  out.unshift(new tf.tokenQuoted(test));
+  out.unshift(new tf.tokenQuoted(test, this.style));
 
   return out;
 };
@@ -274,7 +330,7 @@ tf.tokenQuoted.triggerQuote = function (offset, event) {
   if (before != '') {
     out.push(new tf.tokenPlain(before));
   }
-  out.push(new tf.tokenQuoted(after));
+  out.push(new tf.tokenQuoted(after, this.style));
 
   tf.tokenQuoted.setEscape();
 
@@ -292,7 +348,7 @@ tf.tokenQuoted.triggerUnquote = function (offset, event) {
 
   // Split off parts.
   if (before != '' || after == '') {
-    out.push(new tf.tokenQuoted(before));
+    out.push(new tf.tokenQuoted(before, this.style));
   }
   if (after != '') {
     out.push(new tf.tokenQuoted(after));
@@ -335,8 +391,8 @@ tf.tokenQuoted.triggerResetEscape = function (offset, event) {
 /**
  * Token containing a regex.
  */
-tf.tokenRegex = function (contents) {
-  tf.token.call(this, 'regex', contents);
+tf.tokenRegex = function (contents, style) {
+  tf.token.call(this, 'regex', contents, style);
   this.allowEmpty = true;
 };
 
@@ -424,6 +480,7 @@ tf.token.triggers = {
 //    { contents: /[\/]/,  callback: tf.tokenRegex.triggerRegex },
     { contents: /./,     callback: tf.tokenPlain.triggerCharacter },
     { contents: / /,     callback: tf.tokenPlain.triggerEmpty },
+    { contents: /\|/,    callback: tf.tokenPipe.triggerPipe },
   ],
   'plain': [
     { contents: / /,     callback: tf.tokenPlain.triggerComplete, keys: [ 9, 13 ] },
@@ -431,6 +488,7 @@ tf.token.triggers = {
     { changes: / /,      callback: tf.tokenPlain.splitSpace },
     { changes: /["']/,   callback: tf.tokenQuoted.triggerQuote },
 //    { changes: /[\/]/,   callback: tf.tokenRegex.triggerRegex },
+    { changes: /\|/,     callback: tf.tokenPipe.triggerPipe },
   ],
   'quoted': [
     { contents: / $/,    callback: tf.tokenQuoted.triggerComplete, keys: [ 9, 13 ] },

@@ -83,7 +83,7 @@ tf.autocomplete.prototype = {
         var prefix = that.prefix;
         $e.empty();
         $.each(that.items, function () {
-          $e.append($('<span>').addClass("line").addClass("match-" + this.type).html('<span class="prefix">' + escapeText(prefix) +'</span><span>'+ escapeText(this.label.substring(prefix.length)) +'</span>'));
+          $e.append($('<span>').addClass("line").addClass("style-" + this.type).html('<span class="prefix">' + escapeText(prefix) +'</span><span>'+ escapeText(this.label.substring(prefix.length)) +'</span>'));
         });
         $e.show();
 
@@ -103,20 +103,24 @@ tf.autocomplete.prototype = {
         that.animateTarget = offsetY;
         
         // Style caret to match line.
-        that.caret && that.caret.$input.removeClass().addClass('match-' + that.items[that.selected].type);
+        that.caret && that.caret.$input.removeClass().addClass('style-' + that.items[that.selected].type);
       }
       else {
         $e.empty().hide();
       }
 
-      // Don't show single item popup.
-      if (that.items.length == 0 || (that.items.length == 1 && that.items[0].label == prefix)) {
+      // No matches, remove..
+      if (that.items.length == 0) {
         that.remove();
+      }
+      // Instant-apply single item popup if it matches what was typed.
+      else if (that.items.length == 1 && that.items[0].label == prefix) {
+        that.onComplete(event || {});
       }
     }
 
     // Get list of suggestions.
-    if (!local && this.handler) {
+    if (!local && this.handler && this.token) {
       $e.hide();
       var last = token.contents;
       this.handler.call(this, tl.indexOf(token), event, tl.contents, function (items) {
@@ -135,7 +139,11 @@ tf.autocomplete.prototype = {
   onComplete: function (event) {
     if (this.token && this.selected < this.items.length) {
       event.charCode = 10; // LF \n
-      this.caret.setContents(this.items[this.selected].value, event);
+
+      var item = this.items[this.selected];
+
+      this.token.style = item.type;
+      this.caret.setContents(item.value, event);
       this.remove();
     }
   },

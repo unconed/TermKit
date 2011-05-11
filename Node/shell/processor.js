@@ -2,7 +2,11 @@ var command = require('shell/command'),
     returnMeta = require('misc').returnMeta,
     autocomplete = require('shell/autocomplete').autocomplete;
 
-// Set up worker command processor.
+/**
+ * Message processor.
+ *
+ * Reads messages and executes them, and routes back results.
+ */
 var workerProcessor = exports.processor = function (inStream, outStream) {
   // Set up stream callbacks.
   var that = this;

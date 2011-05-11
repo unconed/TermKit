@@ -93,9 +93,20 @@ cv.command.prototype = {
     
     // Convert tokens into strings.
     var command = tokens.map(function (t) { return t.toCommand(); });
+    
+    // Split command at pipes.
+    var commands = [], i = 0, j = 0, n = command.length;
+    for (; i < n; ++i) {
+      if (command[i] == '|') {
+        commands.push(command.slice(j, i));
+        j = i + 1;
+      }
+    }
+    commands.push(command.slice(j));
+    console.log('commands', commands);
 
     // Execute in current context.
-    this.context.shell.run(command, this.outputFrame, function (success, object, meta) {
+    this.context.shell.run(commands, this.outputFrame, function (success, object, meta) {
       // Set appropriate return state.
       that.state = {
         '1': 'ok',

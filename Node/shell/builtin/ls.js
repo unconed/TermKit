@@ -81,7 +81,7 @@ exports.main = function (tokens, pipes, exit) {
         } // isDirectory
         else {
           // Count errors.
-          errors += +error;
+          errors++;
 
           // Output message.
           out.print(error.message);

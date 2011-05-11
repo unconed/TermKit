@@ -64,7 +64,7 @@ exports.whenDone = function (done) {
     count++;
     // Decorate callback with exit-checker.
     return function () {
-      callback.apply(this, arguments);
+      callback && callback.apply(this, arguments);
       if (--count == 0) {
         done.apply(this, done_args);
       }
@@ -198,4 +198,13 @@ exports.parseArgs = function (tokens) {
   })(tokens[i]);
   
   return { values: values, options: options };
+}
+
+/**
+ * Return array of object keys.
+ */
+exports.objectKeys = function (object) {
+  var keys = [];
+  for (i in object) keys.push(i);
+  return keys;
 }

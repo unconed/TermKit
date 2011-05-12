@@ -98,9 +98,14 @@ tf.prototype = {
       $element.append(new tf.tokenEmpty().$element);
     }
   },
-
+  
   // Refresh the given token in response to input.
   updateToken: function (token, event) {
+    
+    // General refresh.
+    if (!token) {
+      return this.updateElement();
+    }
     
     // Apply own rules.
     var update = token.checkSelf(this.selection, event);

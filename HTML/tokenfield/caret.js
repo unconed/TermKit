@@ -205,6 +205,43 @@ tf.caret.prototype = {
           return false;
         }
         break;
+      case 9: // Tab
+        if (this.selection.anchor.offset == this.token.contents.length) {
+          
+          event.preventDefault();
+          event.stopPropagation();
+
+          // At end: move caret to next token
+          var token = this.selection.anchor.token,
+              index = this.tokenList.indexOf(token),
+              next = this.tokenList.next(index);
+
+          // Create new empty token if needed.
+          if (!next) {
+            this.tokenList.add(new tf.tokenEmpty(''));
+          }
+          
+          // Move to token.
+          async.call(this, function () {
+            var selection = this.selection,
+                token = this.token;
+            this.remove();
+
+            this.onChange(null, event);
+            selection.anchor = { token: this.tokenList.next(index), offset: 0 };
+            this.moveTo(selection, event);
+          });
+        }
+        else {
+          var value = this.$input.val(),
+              split = this.selection.anchor.offset;
+          this.setContents(value.substring(0, split) +' '+ value.substring(split), event);
+
+          event.preventDefault();
+          event.stopPropagation();
+          return false;
+        }
+        break;
       case 13: // Return
         async.call(this, function () {
           this.remove();

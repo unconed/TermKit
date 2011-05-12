@@ -1,4 +1,4 @@
-var debug = true;
+var debug = false;
 if (typeof exports == 'undefined') {
   exports = termkit;
   debug = true;

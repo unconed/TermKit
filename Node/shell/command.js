@@ -72,13 +72,12 @@ exports.commandList = function (processor, tokens, exit, rel) {
         returns = [ success, object ];
       }
     });
-    return new exports.commandFactory(command, views[i].emitter, views[i].invoke, exit);
+    return exports.commandFactory(command, views[i].emitter, views[i].invoke, exit);
   });
   
   // Spawn and link together.
   var last, i;
   for (i in this.units) (function (unit) {
-    unit.spawn();
     if (last && unit) {
       last.link(unit);
     }
@@ -104,15 +103,21 @@ exports.commandList.prototype = {
 exports.commandFactory = function (command, emitter, invoke, exit) {
   var unit;
   try {
+    // Try built-in.
     unit = new exports.commandUnit.builtinCommand(command, emitter, invoke, exit);
+    unit.spawn();
   }
   catch (e) {
     try {
+      // Try native command.
       unit = new exports.commandUnit.unixCommand(command, emitter, invoke, exit);
+      unit.spawn();
     }
     catch (e) {
-      command[0] = 'null';
+      // Execute null.js fallback.
       unit = new exports.commandUnit.builtinCommand(command, emitter, invoke, exit);
+      unit.override = 'null';
+      unit.spawn();
     }
   }
   
@@ -163,7 +168,7 @@ exports.commandUnit.builtinCommand.prototype = new exports.commandUnit();
 
 exports.commandUnit.builtinCommand.prototype.spawn = function () {
   var that = this,
-      prefix = this.command[0];
+      prefix = this.override || this.command[0];
 
   // Look up command.
   if (!builtin.commands[prefix]) {
@@ -229,7 +234,7 @@ exports.commandUnit.builtinCommand.prototype.go = function () {
     viewIn: this.emitter,
     viewOut: this.invoke,
   };
-  
+
   // Wrap exit handler to allow fake process to emit an exit event.
   var exit = function (success, object) {
     // Close dangling pipes.
@@ -248,7 +253,7 @@ exports.commandUnit.builtinCommand.prototype.go = function () {
 /**
  * UNIX command.
  */
-exports.commandUnit.unixCommand = function (emitter, command, invoke, exit) {
+exports.commandUnit.unixCommand = function (command, emitter, invoke, exit) {
   exports.commandUnit.apply(this, arguments);
 }
 
@@ -257,12 +262,12 @@ exports.commandUnit.unixCommand.prototype = new exports.commandUnit();
 exports.commandUnit.unixCommand.prototype.spawn = function () {
   var that = this,
       command = this.command,
-      prefix = this.prefix = command.shift();
+      prefix = (this.prefix = command.shift());
 
   this.process = spawn(prefix, command);
 
   this.process.on('exit', function (code) {
-    that.exit(code);
+    that.exit(!code);
   });
 };
 
@@ -271,9 +276,7 @@ exports.commandUnit.unixCommand.prototype.go = function () {
   // Add MIME headers to raw output from process.
   var headers = new meta.headers();
   headers.set('Content-Type', 'application/octet-stream');
-  headers.set('X-TermKit-Command', prefix);
-  headers.set('X-TermKit-Arguments', command);
-  this.process.stdout.write(headers.generate());
+  this.process.stdout.emit('data', headers.generate());
 
 };
 

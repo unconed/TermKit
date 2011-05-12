@@ -7,8 +7,24 @@ var fs = require('fs'),
     JSONPretty = require('misc').JSONPretty,
     composePath = require('misc').composePath,
     objectKeys = require('misc').objectKeys,
-    reader = require('reader');
-    
+    reader = require('reader'),
+    escapeBinary = require('misc').escapeBinary;
+
+/**
+ * Error logger.
+ */
+exports.logger = function (unit, viewOut) {
+
+  var out = new view.bridge(viewOut);
+
+  // Link up to stderr of process.
+  unit.process.stderr.on('data', function (data) {
+    var binary = escapeBinary(data);
+    this.out.add(null, view.code(null, binary, 'text/plain'));
+  });
+
+};
+
 /**
  * Output formatter.
  * Takes stdout from processing pipeline and turns it into visible view output.
@@ -47,7 +63,7 @@ exports.factory = function (headers, out) {
   if (selected) {
     return new exports.plugins[selected](headers, out);
   }
-  return new exports.plugins.fallback();
+  return new exports.plugins.fallback(headers, out);
 };
 
 /**
@@ -88,11 +104,11 @@ exports.plugins.fallback.supports = function (headers) {
   return false;
 };
 
-exports.plugins.fallback.prototype = {
+exports.plugins.fallback.prototype = extend(new exports.plugin(), {
   begin: function (headers) {
     this.out.add(null, view.code('output', headers.generate(), 'text/plain'));
   },
-};
+});
 
 /**
  * Text formatter.
@@ -103,15 +119,15 @@ exports.plugins.text = function (headers, out) {
 };
 
 exports.plugins.text.prototype = extend(new exports.plugin(), {
-  
+
   begin: function () {
     this.out.add(null, view.text('output'));
   },
-  
+
   data: function (data) {
     this.out.update('output', { contents: '' + data.toString('utf-8') }, true);
   },
-  
+
 });
 
 exports.plugins.text.supports = function (headers) {
@@ -128,7 +144,7 @@ exports.plugins.code = function (headers, out) {
 };
 
 exports.plugins.code.prototype = extend(new exports.plugins.text(), {
-  
+
   begin: function () {
     this.out.add(null, view.code('output', '', this.headers.get('Content-Type')));
 
@@ -143,7 +159,7 @@ exports.plugins.code.prototype = extend(new exports.plugins.text(), {
     }
     this.out.update('output', { contents: data }, true);
   },
-  
+
 });
 
 exports.plugins.code.supports = function (headers) {
@@ -169,12 +185,12 @@ exports.plugins.image.prototype = extend(new exports.plugin(), {
     // Buffered output.
     return true;
   },
-  
+
   data: function (data) {
     var url = 'data:' + this.headers.get('Content-Type') + ';base64,' + data.toString('base64');
     this.out.add(null, view.image('image', url));
   },
-  
+
 });
 
 exports.plugins.image.supports = function (headers) {
@@ -202,9 +218,9 @@ exports.plugins.image.supports = function (headers) {
 exports.plugins.files = function (headers, out) {
   // Inherit.
   exports.plugin.apply(this, arguments);
-  
+
   this.buffered = true;
-  
+
   process.stderr.write(headers.generate());
 };
 
@@ -217,7 +233,7 @@ exports.plugins.files.prototype = extend(new exports.plugin(), {
 
     // Parse JSON (termkit.files).
     data = JSON.parse(data);
-    
+
     // Job tracker.
     var track = this.track = whenDone(function () {
       for (i in output) {
@@ -229,7 +245,7 @@ exports.plugins.files.prototype = extend(new exports.plugin(), {
 
       that.exit(errors == 0);
     });
-    
+
     // Iterate over each list.
     var set = 0, j;
     for (key in data) (function (files, path) {
@@ -268,3 +284,30 @@ exports.plugins.files.supports = function (headers) {
       schema = headers.get('Content-Type', 'schema');
   return !!(/^application\/json$/(type) && (schema == 'termkit.files')) * 3;
 };
+
+/**
+ * Binary formatter.
+ */
+exports.plugins.binary = function (headers, out) {
+  // Inherit.
+  exports.plugin.apply(this, arguments);
+};
+
+exports.plugins.binary.prototype = extend(new exports.plugin(), {
+
+  begin: function () {
+    this.out.add(null, view.code('output', '', 'text/plain'));
+  },
+
+  data: function (data) {
+    var binary = escapeBinary(data);
+    this.out.update('output', { contents: binary }, true);
+  },
+
+});
+
+exports.plugins.binary.supports = function (headers) {
+  var type = headers.get('Content-Type');
+  return !!(/^application\/octet-stream/(type)) * 1;
+}
+

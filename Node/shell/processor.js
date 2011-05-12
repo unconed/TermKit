@@ -157,7 +157,11 @@ workerProcessor.handlers = {
       list.go();
     }
     catch (e) {
-      process.stderr.write('exception ' + e + "\n\n");
+      var out = ['exception ' + e];
+      for (i in e) out.push(i +': ' + e[i]);
+      out.push('');
+      out.push('');
+      process.stderr.write(out.join("\n"));
       exit(false);
     };
   },

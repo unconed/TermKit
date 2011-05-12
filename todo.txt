@@ -1,14 +1,5 @@
 Tasks:
-+[:] run unix
-  [X] split off builtins
-  [X] make ls output list of files
-  [X] ls output formatter
-  [X] make universal grep
-  [X] run pipeline test
-  [X] split command into subcommands
-  [X] implement pipe token
-  [X] refactor output formatter into reader.js
-  [ ] non-interactive unix command execution
+[:] code syntax highlighter
 [ ] cat/echo Piping + progress bar
 [ ] command decoration
 [ ] interactive execution
@@ -50,7 +41,7 @@ Prototype:
   [X] keyboard controls up/down
   [X] hit enter after autocomplete in empty token -> undefined
   [X] escape to close popup
-!  [ ] autocomplete icons, markup, widgets, etc
+  [X] autocomplete icons
   
 [:] command view
   [X] list of collapsible sections
@@ -75,7 +66,7 @@ Prototype:
   [X] autocomplete filesystem
   [X] autocomplete label / contents / icon
   [X] autocomplete dir / file distinction
-!  [ ] badge tokens with icons
+  [X] badge tokens with icons
 
 3) Smart output with selectable things
   [X] research FastCGI socket protocol
@@ -103,7 +94,7 @@ Prototype:
   [X] keep state of sessions
   [X] export environment
   [X] allow path navigation
-! [X] worker process
+  [X] worker process
     [X] refactor processor.js handler/return handling
     [X] spawn process
     [X] stream in/out json packets
@@ -112,16 +103,16 @@ Prototype:
     [X] simplify message format to raw json
     [X] viewstream integration
     [X] data reader
-!    [ ] arrange pipes for command/view for unix processes
-! [X] output formatter
+    [ ] arrange pipes for command/view for unix processes
+ [X] output formatter
     [X] full mime header parser/generator
+    [X] smart binary output
     [ ] handle encodings
-    [ ] smart binary output
   [ ] sudo support (askpass env?)
 
 5) Command Suite
 [X] JSON grep
-![:] code syntax highlighter
+[:] code syntax highlighter
 [ ] make a script for git (arguments, file/dir, ...)
 [ ] basic top/w infographs + live update
 [ ] robust unix basics

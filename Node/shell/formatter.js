@@ -6,7 +6,8 @@ var fs = require('fs'),
     extend = require('misc').extend,
     JSONPretty = require('misc').JSONPretty,
     composePath = require('misc').composePath,
-    objectKeys = require('misc').objectKeys;
+    objectKeys = require('misc').objectKeys,
+    reader = require('reader');
     
 /**
  * Output formatter.
@@ -17,130 +18,14 @@ exports.formatter = function (tail, viewOut, exit) {
 
   this.out = new view.bridge(viewOut);
 
-  // Header sniffing.
-  this.identified = false;
-  this.lookahead = '';
-  this.headers = null;
-
-  // Output buffering.
-  this.buffer = null;
-  this.chunks = [];
-  this.length = 0;
-  this.offset = 0;
-
-  // Link up to dataOut of last process.
-  tail.process.stdout.on('data', function (data) {
-    that.data(data);
-  });
-  
-  // Track process state.
-  tail.process.on('exit', function () {
-
-    if (that.plugin) {
-      // Send all buffered output to plug-in in one chunk.
-      if (that.plugin.buffered) {
-        //process.stderr.write('flushing ' + that.length +" @ "+ that.offset +"\n");
-
-        if (!that.buffer) {
-          that.buffer = new Buffer(that.length);
-
-          // Join chunks.
-          for (i in that.chunks) {
-            var data = that.chunks[i];
-            //process.stderr.write("chunk "+ i +" at "+ that.offset +" - " + data.length + "\n");
-            data.copy(that.buffer, that.offset, 0, data.length)
-            that.offset += data.length;
-          }
-        }
-        
-        that.plugin.data(that.buffer);
-      }
-
-      that.plugin.end(exit);
-    }
-    else {
-      exit();
-    }
+  // Start reading the output.
+  this.reader = new reader.reader(tail.process.stdout, function (headers) {
+    // Construct appropriate plugin for this type.
+    return that.plugin = exports.factory(headers, that.out);
+  }, function () {
+    exit(true);
   });
 
-};
-
-exports.formatter.prototype = {
-
-  parse: function (headers) {
-    this.headers = new meta.headers();
-    this.headers.parse(headers);
-    for (i in this.headers.fields) {
-      //process.stderr.write('Header  ' + i +': ' + this.headers.fields[i] +"\n");
-    }
-  },
-  
-  // Parse MIME headers for stream
-  data: function (data) {
-
-//    process.stderr.write('CHUNK ' + data + "\n\n");
-    if (!this.identified) {
-
-      // Swallow data until we encounter the MIME header delimiter.
-      this.lookahead += data.toString('ascii');
-      if (this.lookahead.indexOf("\r\n\r\n") != -1) {
-        
-        // Parse headers.
-        var chunk = this.lookahead.split("\r\n\r\n").shift();
-        this.parse(chunk);
-
-        // Create output plug-in.
-        this.identified = true;
-        this.plugin = exports.factory(this.headers, this.out);
-        this.plugin.begin();
-
-        // See if size is known ahead of time.
-        var length = this.length = parseInt(this.headers.get('Content-Length'));
-        if (this.plugin.buffered && !isNaN(length)) {
-          // Allocate large buffer.
-          this.buffer = new Buffer(length);
-          //process.stderr.write('allocated ' + this.length+" got " + this.buffer.length + "\n");
-        }
-        else {
-          this.length = 0;
-        }
-
-        // Emit left-over data.
-        var end = chunk.length + 4;
-        if (end < data.length) {
-          this.data(data.slice(end));
-        }
-      }
-    }
-    else {
-      // Send output to plugin.
-      if (this.plugin.buffered) {
-        // Collect output.
-        if (this.buffer) {
-          //process.stderr.write('buffered, known size ' + this.length+", data size " + data.length +"\n");
-
-          // Append chunk to buffer.
-          data.copy(this.buffer, this.offset, 0, data.length);
-          this.offset += data.length;
-        }
-        else {
-
-          //process.stderr.write('buffered, mystery size ' + this.length+", data size " + data.length +"\n");
-
-          // Size not known. Push chunk onto array to grow indefinitely.
-          this.chunks.push(data);
-
-          // Count size for final buffer.
-          this.length += data.length;
-        }
-      }
-      else {
-        //process.stderr.write('stream, packet size ' + data.length+"\n");
-        // Stream out data.
-        this.plugin.data(data);
-      }
-    }
-  },
 };
 
 /**
@@ -149,6 +34,7 @@ exports.formatter.prototype = {
 exports.factory = function (headers, out) {
   var max = 0, selected;
 
+  // Find plug-in with highest reported specificity.
   for (i in exports.plugins) {
     var supports = exports.plugins[i].supports;
     if (supports && (level = supports(headers))) {

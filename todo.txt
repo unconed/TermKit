@@ -7,7 +7,7 @@ Tasks:
   [X] run pipeline test
   [X] split command into subcommands
   [X] implement pipe token
-  [ ] refactor output formatter into reader.js
+  [X] refactor output formatter into reader.js
   [ ] unix command execution
 [ ] cat/echo Piping + progress bar
 [ ] command decoration

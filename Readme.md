@@ -34,16 +34,11 @@ Addresses following problems:
 
 ## How to use:
 
-1. Install node.js and npm.
-1. Run "npm install mime".
-1. Run NodeKit daemon:
-
-```
-cd Node
-node nodekit.js
-```
-
-4. Open the Cocoa app in Build/
+1. [Install node.js and npm](http://howtonode.org/how-to-install-nodejs).
+2. install node-mime: `npm install mime`
+3. Clone the TermKit repository: `git clone git@github.com:unconed/TermKit.git --recursive`
+4. Run the NodeKit daemon: `cd Node; node nodekit.js`
+5. Unzip and run the Cocoa app in Build/TermKit.zip
 
 *Tip:* Press ⌥⌘C to access the WebKit console.
 

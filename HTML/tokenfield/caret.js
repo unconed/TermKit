@@ -60,7 +60,7 @@ tf.caret.prototype = {
     // Examine target token.
     this.selection = selection;
     var token = selection.anchor.token;
-    var $token = token.$element;
+    var $token = token.$element.find('span.contents');
     var text = token.contents;
 
     if (text == '') {
@@ -73,7 +73,7 @@ tf.caret.prototype = {
       this.$input.val(text);
 
       // Split the text node at the given offset.
-      token.$element
+      $token
         .empty()
         .append(this.prefix)
         .append(this.$element)

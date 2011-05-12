@@ -244,14 +244,13 @@ body {
   display: inline-block;
   overflow: visible;
   width: 0;
-  line-height: 24px;
+  line-height: 22px;
   vertical-align: top;
-/*  top: -21px;*/
 }
 
 .termkitTokenField span.autocomplete .stretch {
   position: absolute;
-  margin-top: -.1em;
+  margin-top: 0em;
 }
 
 .termkitTokenField span.autocomplete .lines {
@@ -274,11 +273,12 @@ body {
   z-index: 2;
   display: block;
   white-space: nowrap;
-  height: 23px;
+  height: 20px;
   z-index: 5;
 }
 
 .termkitTokenField span.autocomplete .line span.prefix {
+  padding: 4px 0 3px;
   color: rgba(207, 207, 207, .65);
 }
 
@@ -316,48 +316,51 @@ body {
 }
 
 .termkitTokenField span.autocomplete .line.style-command .prefix {
-  padding-left: 20px;
+  margin-left: -1px;
+  padding-left: 21px;
   background: url(Images/command.png) no-repeat 0 50%;
 }
 .termkitTokenField span.autocomplete .line.style-file .prefix {
-  padding-left: 20px;
+  margin-left: -1px;
+  padding-left: 21px;
   background: url(Images/file.png) no-repeat 0 50%;
 }
 .termkitTokenField span.autocomplete .line.style-folder .prefix {
-  padding-left: 20px;
+  margin-left: -1px;
+  padding-left: 21px;
   background: url(Images/folder.png) no-repeat 0 50%;
 }
 
 .termkitTokenField span#caret input.style-command {
   padding-left: 20px;
+  height: 20px;
   background: url(Images/command.png) no-repeat 0 50%;
 }
 .termkitTokenField span#caret input.style-file {
   padding-left: 20px;
+  height: 20px;
   background: url(Images/file.png) no-repeat 0 50%;
 }
 .termkitTokenField span#caret input.style-folder {
   padding-left: 20px;
+  height: 20px;
   background: url(Images/folder.png) no-repeat 0 50%;
 }
 
-.termkitTokenField .token.style-command {
-  padding-left: 24px;
-  background-image: url(Images/command.png);
-  background-repeat: no-repeat;
-  background-position: .4em 50%;
+.termkitTokenField .token.style-command span.contents {
+  margin-left: -.1em;
+  padding-left: 21px;
+  background: url(Images/command.png) no-repeat 0 50%;
 }
-.termkitTokenField .token.style-file {
-  padding-left: 24px;
-  background-image: url(Images/file.png);
-  background-repeat: no-repeat;
-  background-position: .4em 50%;
+.termkitTokenField .token.style-file span.contents {
+  margin-left: -.1em;
+  padding-left: 21px;
+  background: url(Images/file.png) no-repeat 0 50%;
 }
-.termkitTokenField .token.style-folder {
-  padding-left: 24px;
-  background-image: url(Images/folder.png);
-  background-repeat: no-repeat;
-  background-position: .4em 50%;
+.termkitTokenField .token.style-folder span.contents {
+  margin-left: -.1em;
+  padding-left: 21px;
+  background: url(Images/folder.png) no-repeat 0 50%;
 }
 
 
@@ -367,6 +370,10 @@ body {
   white-space: pre-wrap;
   word-wrap: break-word;
   max-width: 100%;
+}
+
+.termkitTokenField > span.token > span.contents {
+  padding: 4px 0 3px;
 }
 
 .termkitTokenField > span.token input {

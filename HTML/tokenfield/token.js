@@ -64,7 +64,7 @@ tf.token.prototype = {
       this.$element.addClass('style-' + this._style);
     }
     if (!this.locked) {
-      this.$element.html(escapeText(this.contents));
+      this.$element.html('<span class="contents">'+ escapeText(this.contents) +'</span>');
     }
   },
 
@@ -176,7 +176,6 @@ tf.tokenPipe = function () {
  * Make token a pipe.
  */
 tf.tokenPipe.triggerPipe = function (offset, event) {
-  console.log('triggerPipe', offset, event, this.contents, this);
   if (this.contents.length > 1) {
     var parts = this.contents.split('|'),
         prefix = parts[0],
@@ -194,7 +193,7 @@ tf.tokenPipe.prototype = $.extend(new tf.token(), {
 
   updateElement: function () {
     tf.token.prototype.updateElement.apply(this, arguments);
-    this.$element.html(' ');
+    this.$element.html('<span class="contents"> </span>');
   },
 
   toCommand: function () {
@@ -202,7 +201,7 @@ tf.tokenPipe.prototype = $.extend(new tf.token(), {
   },
   
   checkSelf: function () {
-    console.log('pipe checkSelf', arguments);
+//    console.log('pipe checkSelf', arguments);
   },
   
 });

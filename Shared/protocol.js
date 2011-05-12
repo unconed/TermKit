@@ -1,7 +1,7 @@
-var debug = false;
+var debug = true;
 if (typeof exports == 'undefined') {
   exports = termkit;
-  debug = false;
+  debug = true;
 }
 
 exports.protocol = function (connection, handler, autoconnect) {
@@ -97,8 +97,13 @@ exports.protocol.prototype = {
   
   send: function (message) {
     if (typeof message == 'object') {
-      debug && console.log('sending', message.method, message.args && message.args.objects, message);
-      debug && console.log('sending objs', message.method, message.args && message.args.objects && message.args.objects[0] && message.args.objects[0].children, message);
+      if (debug) {
+        var out = ['sending'];
+        message.method && out.push(message.method);
+        message.args && out.push(message.args);
+        out.push(message);
+        console.log.apply(console, out);
+      }
       var json = JSON.stringify(message);
       this.connection.send(json);
     }
@@ -107,7 +112,19 @@ exports.protocol.prototype = {
   receive: function (data) {
     var message = JSON.parse(data);
     if (typeof message == 'object') {
-      debug && console.log('receiving', message.method, message.args && message.args.objects, message);
+      if (debug) {
+        var out = ['receiving'];
+        message.method && out.push(message.method);
+        message.args && out.push(message.args);
+        out.push(message);
+        console.log.apply(console, out);
+
+        if (message.args && message.args.objects) {
+          for (i in message.args.objects) {
+            console.log('object', message.args.objects[i]);
+          }
+        }
+      }
       this.process(message);
     }
   },

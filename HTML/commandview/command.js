@@ -103,7 +103,6 @@ cv.command.prototype = {
       }
     }
     commands.push(command.slice(j));
-    console.log('commands', commands);
 
     // Execute in current context.
     this.context.shell.run(commands, this.outputFrame, function (success, object, meta) {

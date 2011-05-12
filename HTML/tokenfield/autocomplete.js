@@ -114,6 +114,7 @@ tf.autocomplete.prototype = {
 
       // No matches, remove..
       if (that.items.length == 0) {
+        that.token.style = '';
         that.remove();
       }
       // Instant-apply single item popup if it matches what was typed.

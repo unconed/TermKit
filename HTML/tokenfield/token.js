@@ -73,6 +73,7 @@ tf.token.prototype = {
     if (force || this.contents == token.contents) {
       this.constructor = token.constructor;
       this.type = token.type;
+      this.style = token.style;
       this.allowEmpty = token.allowEmpty;
       this.__proto__ = token.__proto__;
       return true;

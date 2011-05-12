@@ -72,7 +72,7 @@ exports.commandList = function (processor, tokens, exit, rel) {
         returns = [ success, object ];
       }
     });
-    return new exports.commandUnit.builtinCommand(command, views[i].emitter, views[i].invoke, exit);
+    return new exports.commandFactory(command, views[i].emitter, views[i].invoke, exit);
   });
   
   // Spawn and link together.
@@ -96,6 +96,27 @@ exports.commandList.prototype = {
       unit.go();
     })(this.units[i]);
   },
+};
+
+/**
+ * Command unit factory.
+ */
+exports.commandFactory = function (command, emitter, invoke, exit) {
+  var unit;
+  try {
+    unit = new exports.commandUnit.builtinCommand(command, emitter, invoke, exit);
+  }
+  catch (e) {
+    try {
+      unit = new exports.commandUnit.unixCommand(command, emitter, invoke, exit);
+    }
+    catch (e) {
+      command[0] = 'null';
+      unit = new exports.commandUnit.builtinCommand(command, emitter, invoke, exit);
+    }
+  }
+  
+  return unit;
 };
 
 /**
@@ -144,15 +165,16 @@ exports.commandUnit.builtinCommand.prototype.spawn = function () {
   var that = this,
       prefix = this.command[0];
 
+  // Look up command.
   if (!builtin.commands[prefix]) {
-    prefix = 'null';
+    throw "Unknown command '"+ prefix +"'";
   }
 
   // Load handler.
   try {
     this.handler = require('builtin/' + prefix);
   } catch (e) {
-    process.stderr.write('exception ' + e);
+    throw "Error loading handler '"+ prefix +"': " + e;
   }
   
   // Make fake process.

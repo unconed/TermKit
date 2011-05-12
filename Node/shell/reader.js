@@ -53,6 +53,11 @@ exports.reader = function (dataIn, begin, exit) {
 exports.reader.prototype = {
   
   done: function () {
+    
+    // No data.
+    if (!this.handler) {
+      return this.exit();
+    }
 
     // Send all buffered output to plug-in in one chunk.
     if (this.buffered) {

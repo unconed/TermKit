@@ -60,7 +60,7 @@ exports.shell.prototype = {
   },
   
   error: function (data) {
-    console.log('worker error', data.toString());
+    console.log('worker: ', data.toString());
   },
   
   receive: function (data) {

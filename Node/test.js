@@ -376,8 +376,7 @@ function testGrep(assert) {
   var handler = grep.main,
       exit = function () {},
       headers, content, pipes;
-      
-/*
+
   // Simple grep.
   pipes = mockPipes();
   handler([ 'grep', 'ba' ], pipes, exit);
@@ -493,7 +492,7 @@ function testGrep(assert) {
   pipes.dataIn.emit('data', headers.generate());
   pipes.dataIn.emit('data', content);
   pipes.dataIn.emit('end');
-*/
+
   // Tricky object grep
   pipes = mockPipes();
   handler([ 'grep', 'lulz' ], pipes, exit);
@@ -535,7 +534,6 @@ function testPipe(assert) {
 
 // Run tests.
 var tests = {
-  /*
     handshake: testHandshake,
     session: testSession,
     commands: testCommands,
@@ -544,7 +542,6 @@ var tests = {
     misc: testMisc,
     parseArgs: testParseArgs,
     pipe: testPipe,
-    */
     grep: testGrep,
 };
 for (i in tests) (function (i, test) {

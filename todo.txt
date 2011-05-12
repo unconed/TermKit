@@ -6,11 +6,10 @@ Tasks:
   [X] make universal grep
   [X] run pipeline test
   [X] split command into subcommands
-  [ ] implement pipe token
+  [X] implement pipe token
   [ ] refactor output formatter into reader.js
+  [ ] unix command execution
 [ ] cat/echo Piping + progress bar
-[ ] 5-pipe command execution
-[ ] unix command execution
 [ ] command decoration
 [ ] interactive execution
 [ ] inline man-pages tips
@@ -36,7 +35,7 @@ Prototype:
   [X] fix event bindings lost when clicking inside textfield
   [X] Unify tokenlist and commandlist into collection class, derive from.
   [X] fix backspacing around edges of tokens
-!  [ ] add icon/spinner support to tokens
+  [X] add icon/spinner support to tokens
   [ ] caret positions around allowempty tokens and ^/$
   [ ] | and >> token support
   [ ] caret.remove() shouldn't need to touch tokenList when pruning empties -> let triggers do it

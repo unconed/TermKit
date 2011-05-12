@@ -8,13 +8,14 @@ Tasks:
   [X] split command into subcommands
   [X] implement pipe token
   [X] refactor output formatter into reader.js
-  [ ] unix command execution
+  [ ] non-interactive unix command execution
 [ ] cat/echo Piping + progress bar
 [ ] command decoration
 [ ] interactive execution
 [ ] inline man-pages tips
 [ ] version control
 [ ] interactive quicklook
+[ ] interactive unix command attempt
 
 
 Prototype:

@@ -162,7 +162,7 @@ tf.autocomplete.prototype = {
       case 13: // Enter
         this.onComplete(event);
         break;
-      case 9: // TAB
+      case 9: // Tab
         this.onComplete(event);
         event.preventDefault();
         event.stopPropagation();

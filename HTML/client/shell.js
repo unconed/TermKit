@@ -104,8 +104,9 @@ tc.shell.prototype = {
       rel: rel,
     }, callback);
 
-    // Anonymous usage logging. Note: the fragment/anchor is never sent over HTTP.
-    $('#usage').attr('src', 'http://usage.termkit.org/#' + encodeURIComponent(this.anonymize(tokens)));
+    // Anonymized usage/command logging. HTTPS is used for privacy.
+    // Note the URL fragment is only sent to Google Analytics SSL through JS, not to usage.termkit.org.
+    $('#usage').attr('src', 'https://usage.termkit.org/#' + encodeURIComponent(this.anonymize(tokens)));
   },
   
   anonymize: function (commands) {

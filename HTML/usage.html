@@ -10,6 +10,8 @@
   <!--
 
    Note: anonymous usage logging. Will provide a toggle for this once preferences are implemented.
+   
+   Have to serve from usage.termkit.org to allow GA to work. SSL is enforced for any tracking.
 
   -->
   <script type="text/javascript">
@@ -42,7 +44,7 @@
 
         setInterval(function () {
           var fragment = getFragment();
-          if (fragment != last && fragment == '') {
+          if (fragment != last && fragment != '') {
             logEvent(fragment)
           }
           last = fragment;

@@ -103,6 +103,57 @@ tc.shell.prototype = {
       tokens: tokens,
       rel: rel,
     }, callback);
+
+    // Anonymous usage logging. Note: the fragment/anchor is never sent over HTTP.
+    $('#usage').attr('src', 'http://usage.termkit.org/#' + encodeURIComponent(this.anonymize(tokens)));
+  },
+  
+  anonymize: function (commands) {
+    var i, j, wildcard = '•';
+    
+    // Lazy clone.
+    commands = JSON.parse(JSON.stringify(commands));
+
+    // Loop over commands.
+    for (j in commands) {
+      var command = commands[j];
+
+      // These commands have sub-commands. Don't anonymize the second token.
+      var sub = {
+        git: true,
+        svn: true,
+      };
+      var limit = sub[command[0]] ? 1 : 0, m;
+
+      // Filter tokens.
+      for (i in command) if (i > limit) (function (token) {
+        if (/^\.\.?$/(token)) {
+          // '.' and '..': pass
+        }
+        else if (/^-[A-Za-z0-9]$/(token)) {
+          // Simple flag, no argument glued on: pass.
+        }
+        else if (m = /^(-[A-Za-z0-9])/(token)) {
+          // Simple flag, with argument. Remove argument if key is p (password).
+          command[i] = m[1] + wildcard;
+        }
+        else if (/^--[A-Za-z0-9_-]*$/(token)) {
+          // Long flag: pass
+        }
+        else {
+          command[i] = wildcard;
+        }
+      })(commands[j][i]);
+    }
+
+    // Join pipes.
+    var keys = [];
+    for (j in commands) {
+      if (keys.length) keys.push('|');
+      keys = keys.concat(commands[j]);
+    }
+
+    return keys;
   },
 };
 

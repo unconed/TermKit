@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Usage Stats Reporting</title>
+</head>
+<body>
+
+  <div>
+  <!--
+
+   Note: anonymous usage logging. Will provide a toggle for this once preferences are implemented.
+
+  -->
+  <script type="text/javascript">
+
+      // Track each session as a pageview.
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-288349-5']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        // Inject Analytics.
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ((true || ('https:' == document.location.protocol)) ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+
+
+        function logEvent(key) {  
+          _gaq.push('_trackEvent', 'shell', key);
+        }
+
+        function getFragment() {
+          var split = location.href.split('#');
+          if (split.length > 1) {
+            return split[1];
+          }
+          return '';
+        }
+
+        var last = '';
+
+        setInterval(function () {
+          var fragment = getFragment();
+          if (fragment != last && fragment == '') {
+            logEvent(fragment)
+          }
+          last = fragment;
+        }, 2000);
+
+      })();
+
+
+  </script>
+  </div>
+
+</body>
+</html>

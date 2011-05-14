@@ -12,9 +12,9 @@ var http = require('http'),
 
 // Set up http server.
 var server = http.createServer(function (request, result) { 
- result.writeHeader(200, {'Content-Type': 'text/html'}); 
- result.writeBody('<h1>TermKit</h1>');
- result.finish(); 
+//  result.writeHeader(200, {'Content-Type': 'text/html'}); 
+//  result.writeBody('<h1>TermKit</h1>');
+//  result.finish(); 
 });
 
 server.listen(2222);

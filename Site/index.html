@@ -12,13 +12,18 @@
 	    margin: 0;
 	    background: #000;
 	  }
-	  #coming-soon {
+	  #teaser {
 	    position: absolute;
-	    top: 0;
-	    bottom: 0;
-	    left: 0;
-	    right: 0;
-	    background: url(coming-soon.png) 50% 50% no-repeat;
+	    top: 50%;
+	    left: 50%;
+	    width: 512px;
+	    height: 600px;
+	    margin-left: -256px;
+	    margin-top: -300px;
+	    text-align: center;
+	  }
+	  img {
+	    display: block;
 	  }
 	  a {
 	    color: #333;
@@ -33,7 +38,10 @@
 
 <body>
 
-<div id="coming-soon"><span>coming soon</span></div>
+<div id="teaser">
+  <img src="https://github.com/unconed/TermKit/raw/master/Illustrator/TermKit%20Icon%20512.png" width="512" height="512">
+  <img src="coming-soon.png">
+</div>
 
 <a href="https://github.com/unconed/TermKit/">github</a>
 

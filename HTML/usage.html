@@ -30,7 +30,7 @@
          * Log an event.
          */
         function logEvent(key) {
-          var parts = key.split(/---/),
+          var parts = key.split('--@--');
               version = parts[0],
               tokens = parts[1];
           

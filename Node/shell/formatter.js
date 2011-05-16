@@ -121,6 +121,7 @@ exports.plugins.text = function (headers, out) {
 exports.plugins.text.prototype = extend(new exports.plugin(), {
 
   begin: function () {
+    this.out.add(null, view.code('output', this.headers.generate(), 'text/plain'));
     this.out.add(null, view.text('output'));
   },
 
@@ -146,6 +147,7 @@ exports.plugins.code = function (headers, out) {
 exports.plugins.code.prototype = extend(new exports.plugins.text(), {
 
   begin: function () {
+    this.out.add(null, view.code('output', this.headers.generate(), 'text/plain'));
     this.out.add(null, view.code('output', '', this.headers.get('Content-Type')));
 
     // Buffered output.
@@ -167,6 +169,8 @@ exports.plugins.code.supports = function (headers) {
   var supported = {
     'application/json': true,
     'application/javascript': true,
+    'application/x-php': true,
+    'text/javascript': true,
   };
   return !!supported[type] * 2;
 }
@@ -296,6 +300,7 @@ exports.plugins.binary = function (headers, out) {
 exports.plugins.binary.prototype = extend(new exports.plugin(), {
 
   begin: function () {
+    this.out.add(null, view.code('output', this.headers.generate(), 'text/plain'));
     this.out.add(null, view.code('output', '', 'text/plain'));
   },
 

@@ -1,5 +1,4 @@
 Tasks:
-[:] code syntax highlighter
 [ ] cat/echo Piping + progress bar
 [ ] command decoration
 [ ] interactive execution
@@ -113,7 +112,7 @@ Prototype:
 
 5) Command Suite
 [X] JSON grep
-[:] code syntax highlighter
+[X] code syntax highlighter
 [ ] make a script for git (arguments, file/dir, ...)
 [ ] basic top/w infographs + live update
 [ ] robust unix basics

@@ -1,5 +1,9 @@
 var mime = require('mime');
 
+mime.define({
+  'application/x-php': ['php'],
+});
+
 function isObject(x) {
   return typeof x == 'object';
 }
@@ -406,8 +410,9 @@ exports.sniff = function (file, data) {
   var parts = file.split('.'),
       extension = parts.pop();
 
-  if (mime.types[extension]) {
-    return mime.types[extension];
+  if ((type = mime.lookup(file)) && (type != 'application/octet-stream')){
+    process.stderr.write('sniff ' + type + "\n");
+    return type;
   }
 
   if (/[^\u0001-\uFFFF]/('' + data)) {

@@ -68,5 +68,5 @@ tc.prototype = {
 
 };
 
-})();
+})(jQuery);
 

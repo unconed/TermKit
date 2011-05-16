@@ -29,7 +29,7 @@ Prototype:
   [X] fix backspacing around edges of tokens
   [X] add icon/spinner support to tokens
   [ ] caret positions around allowempty tokens and ^/$
-  [ ] | and >> token support
+  [.] | and >> token support
   [ ] caret.remove() shouldn't need to touch tokenList when pruning empties -> let triggers do it
   [ ] mouseclick caret is off by ~8px, but only in first token 
   [ ] switch between inline and block tokens -> input vs textarea.
@@ -103,11 +103,12 @@ Prototype:
     [X] simplify message format to raw json
     [X] viewstream integration
     [X] data reader
-    [ ] arrange pipes for command/view for unix processes
- [X] output formatter
+    [ ] arrange view pipes for command/view for unix processes
+  [X] output formatter
     [X] full mime header parser/generator
     [X] smart binary output
     [ ] handle encodings
+  [ ] preferences
   [ ] sudo support (askpass env?)
 
 5) Command Suite

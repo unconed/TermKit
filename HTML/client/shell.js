@@ -105,8 +105,15 @@ tc.shell.prototype = {
     }, callback);
 
     // Anonymized usage/command logging. HTTPS is used for privacy.
-    // Note the URL fragment is only sent to Google Analytics SSL through JS, not to usage.termkit.org.
-    $('#usage').attr('src', 'https://usage.termkit.org/#' + encodeURIComponent(this.anonymize(tokens)));
+    var url;
+    if (window.preferences && parseInt(window.preferences.get('usageLogging'))) {
+      // Note the URL fragment is only sent to Google Analytics SSL through JS, not to usage.termkit.org.
+      url = 'https://usage.termkit.org/#' + encodeURIComponent(this.anonymize(tokens));
+    }
+    else {
+      url = 'about:blank';
+    }
+    $('#usage').attr('src', url);
   },
   
   /**
@@ -164,5 +171,5 @@ tc.shell.prototype = {
   },
 };
 
-})();
+})(jQuery);
 

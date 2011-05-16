@@ -3,6 +3,8 @@ var fs = require('fs'), net = require('net');
 var spawn = require('child_process').spawn,
     exec = require('child_process').exec;
 
+var config = require('config').getConfig();
+
 exports.shell = function (args, router) {
 
   this.router = router;
@@ -19,7 +21,7 @@ exports.shell = function (args, router) {
   // Determine user identity.
   if (user == process.env.USER) {
     // Spawn regular worker.
-    p = this.process = spawn('/usr/local/bin/node', [ path ], {
+    p = this.process = spawn('node', [ path ], {
       cwd: process.cwd(),
     });
   }
@@ -43,9 +45,17 @@ exports.shell = function (args, router) {
   else {
     throw "Error spawning worker.js.";
   }
+  
+  // Sync up configuration.
+  this.sync();
+  config.on('change', function () { that.sync(); });
 };
 
 exports.shell.prototype = {
+  sync: function () {
+    this.send(null, 'shell.config', config.get());
+  },
+  
   dispatch: function (query, method, args, exit) {
     this.send(query, method, args);
   },
@@ -72,6 +82,12 @@ exports.shell.prototype = {
 
       // Parse message.
       var message = JSON.parse(chunk);
+
+      // Intercept config changes.
+      if (message.method == 'shell.config') {
+        config.replace(message.args);
+        return;
+      }
 
       // Lock message to this session and forward.
       message.session = this.id;

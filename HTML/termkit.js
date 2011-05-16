@@ -1,4 +1,4 @@
-var termkit = {};
+var termkit = window.termkit || {};
 
 (function ($) {
   

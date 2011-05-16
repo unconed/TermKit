@@ -10,6 +10,8 @@ var http = require('http'),
     io = require('socket.io')
     router = require("router");
 
+var config = require('config').getConfig();
+
 // Set up http server.
 var server = http.createServer(function (request, result) { 
 //  result.writeHeader(200, {'Content-Type': 'text/html'}); 

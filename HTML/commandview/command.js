@@ -222,6 +222,7 @@ cv.commandAutocomplete.handler = function (offset, event, tokens, callback) {
     cwd: shell.environment.cwd,
     tokens: command,
     offset: offset,
+    ignoreCase: !!(window.preferences && parseInt(window.preferences.get('ignoreCase'))),
   }, function (message) {
     if (message.args.matches) {
       callback(message.args.matches);

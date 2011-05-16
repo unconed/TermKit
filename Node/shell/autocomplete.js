@@ -41,7 +41,7 @@ exports.autocomplete.prototype = {
   /**
    * Return autocompletion for given command context.
    */
-  process: function (cwd, paths, tokens, offset, callback) {
+  process: function (cwd, paths, tokens, offset, callback, ignoreCase) {
     var prefix = tokens[offset],
         matches = [],
         that = this;
@@ -66,23 +66,23 @@ exports.autocomplete.prototype = {
         
     if (offset == 0) {
       // Match built-in commands.
-      var matches = this.builtin(prefix);
+      var matches = this.builtin(prefix, ignoreCase);
 
       // Scan current dir for executables.
-      this.filesystem(cwd, prefix, { executable: true }, track(function (files) {
+      this.filesystem(cwd, prefix, { ignoreCase: ignoreCase, executable: true }, track(function (files) {
         matches = matches.concat(files);
       }));
 
       // Scan search paths for executables.
       for (i in paths) (function (path) {
-        that.filesystem(path, prefix, { executable: true }, track(function (files) {
+        that.filesystem(path, prefix, { ignoreCase: ignoreCase, executable: true }, track(function (files) {
           matches = matches.concat(files);
         }));
       })(paths[i]);      
     }
     else {
       // Scan current dir for files.
-      this.filesystem(cwd, prefix, {  }, track(function (files) {
+      this.filesystem(cwd, prefix, { ignoreCase: ignoreCase }, track(function (files) {
         matches = files;
       }));      
     }
@@ -92,10 +92,17 @@ exports.autocomplete.prototype = {
   /**
    * Complete built-in commands.
    */
-  builtin: function (prefix) {
+  builtin: function (prefix, ignoreCase) {
     var matches = [];
+    if (ignoreCase) {
+      prefix = prefix.toLowerCase();
+    }
     for (i in builtin.commands) {
-      if (prefix == '' || i.indexOf(prefix) === 0) {
+      var key = i;
+      if (ignoreCase) {
+        key = key.toLowerCase();
+      }
+      if (prefix == '' || key.indexOf(prefix) === 0) {
         matches.push(exports.autocomplete.match(i, i + ' ', 'command'));
       }
     }
@@ -153,6 +160,7 @@ exports.autocomplete.prototype = {
     // Set options.
     options = extend({
       type: '*',
+      ignoreCase: false,
     }, options || {});
     
     // Completion callback.
@@ -160,11 +168,23 @@ exports.autocomplete.prototype = {
         track = whenDone(function () {
       callback(matches);
     });
+    
+    // Case handling.
+    if (options.ignoreCase) {
+      prefix = prefix.toLowerCase();
+    }
 
     // Scan directory.
     fs.readdir(path, track(function (err, files) {
       if (!err) {
         for (i in files) (function (file) {
+          
+          // Case handling.
+          var key = file;
+          if (options.ignoreCase) {
+            key = key.toLowerCase();
+          }
+          
           // Prefix match.
           if (prefix == '' || file.indexOf(prefix) === 0) {
             

@@ -22,6 +22,7 @@
         [[self window] setTitle:title];
 
         [self newTerminal:self];
+        [title autorelease];
     }
     return self;
 }
@@ -39,6 +40,8 @@
     [terminalView setFrame:contentRect];
     
     [contentView addSubview:terminalView];
+    
+    [terminalController retain];
 }
 
 @end

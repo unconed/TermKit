@@ -8,16 +8,33 @@
 
 #import "TermKitAppDelegate.h"
 #import "TermKitWindowController.h"
+#import "TermKitPrefsController.h"
 
 @implementation TermKitAppDelegate
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+    NSUserDefaults *defaults;
+    
+    defaults = [NSUserDefaults standardUserDefaults];
+    [defaults registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
+                                @"YES", @"ignoreCase",
+                                @"YES", @"usageLogging",
+                                @"YES", @"WebKitDeveloperExtras",
+                                nil]];
+    
     [self newWindow:self];
+}
+
+- (IBAction) openPreferences: sender {
+    id prefsController = [[TermKitPrefsController alloc] init]; 
+    [prefsController showWindow:self];
+    [prefsController retain];
 }
 
 - (IBAction) newWindow: sender {
     id windowController = [[TermKitWindowController alloc] init]; 
     [windowController showWindow:self];
+    [windowController retain];
 }
 
 @end

@@ -16,6 +16,7 @@ var workerProcessor = exports.processor = function (inStream, outStream) {
   
   this.buffer = '';
   this.views = {};
+  this.config = {};
 };
 
 exports.processor.prototype = {
@@ -112,6 +113,14 @@ exports.processor.prototype = {
 };
 
 workerProcessor.handlers = {
+  
+  /**
+   * Set/update worker configuration.
+   */
+  "shell.config": function (args, exit) {
+    process.stderr.write('config @' + JSON.stringify(args) + '@');
+    this.config = args;
+  },
 
   /**
    * Return environment state/variables.
@@ -126,15 +135,17 @@ workerProcessor.handlers = {
   "shell.autocomplete": function (args, exit) {
     var tokens = args.tokens,
         offset = args.offset,
-        cwd = args.cwd;
+        cwd = args.cwd,
+        ignoreCase = !!args.ignoreCase;
     
     if (offset >= tokens.length) return exit(false);
 
     var auto = new autocomplete(),
         path = process.env.PATH.split(':');
+
     auto.process(cwd, path, tokens, offset, function (matches) {
       exit(true, { matches: matches });
-    });
+    }, ignoreCase);
     
   },
   

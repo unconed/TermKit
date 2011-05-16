@@ -12,9 +12,11 @@
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+		B029D87A1380E4430033B680 /* TermKitPrefsController.m in Sources */ = {isa = PBXBuildFile; fileRef = B029D8791380E4430033B680 /* TermKitPrefsController.m */; };
 		B041C7F6127AA36F0098469B /* Window.xib in Resources */ = {isa = PBXBuildFile; fileRef = B041C7F4127AA36F0098469B /* Window.xib */; };
 		B041C8DD127AA9AD0098469B /* TermKitWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = B041C8DC127AA9AD0098469B /* TermKitWindowController.m */; };
 		B090FFFC11E1CE7800AC604B /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B090FFFB11E1CE7800AC604B /* WebKit.framework */; };
+		B092CBE6137BFAFE006B52CB /* Preferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = B092CBE4137BFAFE006B52CB /* Preferences.xib */; };
 		B0965B7D11DB375E00350D83 /* Terminal.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0965B7B11DB375E00350D83 /* Terminal.xib */; };
 		B0965B8211DB380600350D83 /* TermKitWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = B0965B8111DB380600350D83 /* TermKitWebView.m */; };
 		B0B02B2711E2CDA4004C960F /* TermKitTerminalController.m in Sources */ = {isa = PBXBuildFile; fileRef = B0B02B2611E2CDA4004C960F /* TermKitTerminalController.m */; };
@@ -40,11 +42,14 @@
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		8D1107310486CEB800E47090 /* TermKit-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "TermKit-Info.plist"; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* TermKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TermKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B029D8781380E4430033B680 /* TermKitPrefsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TermKitPrefsController.h; sourceTree = "<group>"; };
+		B029D8791380E4430033B680 /* TermKitPrefsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TermKitPrefsController.m; sourceTree = "<group>"; };
 		B041C7F5127AA36F0098469B /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/Window.xib; sourceTree = "<group>"; };
 		B041C8DB127AA9AD0098469B /* TermKitWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TermKitWindowController.h; sourceTree = "<group>"; };
 		B041C8DC127AA9AD0098469B /* TermKitWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TermKitWindowController.m; sourceTree = "<group>"; };
 		B061E2A0136AB12000F4632D /* WebInspector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebInspector.h; sourceTree = "<group>"; };
 		B090FFFB11E1CE7800AC604B /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = /System/Library/Frameworks/WebKit.framework; sourceTree = "<absolute>"; };
+		B092CBE5137BFAFE006B52CB /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/Preferences.xib; sourceTree = "<group>"; };
 		B0965B7C11DB375E00350D83 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/Terminal.xib; sourceTree = "<group>"; };
 		B0965B8011DB380600350D83 /* TermKitWebView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TermKitWebView.h; sourceTree = "<group>"; };
 		B0965B8111DB380600350D83 /* TermKitWebView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TermKitWebView.m; sourceTree = "<group>"; };
@@ -83,6 +88,8 @@
 				B0CAB03A12685FE50085604B /* NSImage+QuickLook.m */,
 				256AC3D80F4B6AC300CF3369 /* TermKitAppDelegate.h */,
 				256AC3D90F4B6AC300CF3369 /* TermKitAppDelegate.m */,
+				B029D8781380E4430033B680 /* TermKitPrefsController.h */,
+				B029D8791380E4430033B680 /* TermKitPrefsController.m */,
 				B0CAB03D12686AF70085604B /* TermKitIconProtocol.h */,
 				B0CAB03E12686AF70085604B /* TermKitIconProtocol.m */,
 				B0CAB04412686D220085604B /* TermKitIconLoadDelegate.h */,
@@ -150,9 +157,10 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				B0C532821352271300A92633 /* Shared */,
 				B0B02B5D11E31B55004C960F /* HTML */,
+				B0C532821352271300A92633 /* Shared */,
 				1DDD58140DA1D0A300B32029 /* MainMenu.xib */,
+				B092CBE4137BFAFE006B52CB /* Preferences.xib */,
 				B0965B7B11DB375E00350D83 /* Terminal.xib */,
 				B041C7F4127AA36F0098469B /* Window.xib */,
 				8D1107310486CEB800E47090 /* TermKit-Info.plist */,
@@ -224,6 +232,7 @@
 			files = (
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
 				1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */,
+				B092CBE6137BFAFE006B52CB /* Preferences.xib in Resources */,
 				B0965B7D11DB375E00350D83 /* Terminal.xib in Resources */,
 				B041C7F6127AA36F0098469B /* Window.xib in Resources */,
 				B0B02B7111E31B56004C960F /* HTML in Resources */,
@@ -263,6 +272,7 @@
 				B0CAB03F12686AF70085604B /* TermKitIconProtocol.m in Sources */,
 				B0CAB04612686D220085604B /* TermKitIconLoadDelegate.m in Sources */,
 				B041C8DD127AA9AD0098469B /* TermKitWindowController.m in Sources */,
+				B029D87A1380E4430033B680 /* TermKitPrefsController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -293,6 +303,14 @@
 			name = Window.xib;
 			sourceTree = "<group>";
 		};
+		B092CBE4137BFAFE006B52CB /* Preferences.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B092CBE5137BFAFE006B52CB /* English */,
+			);
+			name = Preferences.xib;
+			sourceTree = "<group>";
+		};
 		B0965B7B11DB375E00350D83 /* Terminal.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -315,9 +333,11 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = TermKit_Prefix.pch;
+				GENERATE_PROFILING_CODE = YES;
 				INFOPLIST_FILE = "TermKit-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
 				PRODUCT_NAME = TermKit;
+				RUN_CLANG_STATIC_ANALYZER = YES;
 			};
 			name = Debug;
 		};

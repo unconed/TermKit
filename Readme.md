@@ -39,7 +39,7 @@ Addresses following problems:
 2. install node-mime: `npm install mime`
 3. Clone the TermKit repository: `git clone git@github.com:unconed/TermKit.git --recursive`
 4. Run the NodeKit daemon: `cd Node; node nodekit.js`
-5. Unzip and run the Cocoa app in Build/TermKit.zip
+5. Unzip and run the Mac app in Build/TermKit.zip
 
 *Tip:* Press ⌥⌘C to access the WebKit console.
 

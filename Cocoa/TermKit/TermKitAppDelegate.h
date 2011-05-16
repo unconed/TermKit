@@ -11,6 +11,7 @@
 @interface TermKitAppDelegate : NSObject <NSApplicationDelegate> {
 }
 
+- (IBAction) openPreferences: sender;
 - (IBAction) newWindow: sender;
 
 @end

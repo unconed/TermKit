@@ -12,9 +12,16 @@
 #import "TermKitIconLoadDelegate.h"
 
 @interface TermKitWebView : WebView {
-
+    id delegate;
+    id config;
 }
 
 - (void)awakeFromNib;
+- (void)webView:(WebView*)webView windowScriptObjectAvailable:(WebScriptObject*)windowScriptObject;
+- (void)dealloc;
 
++ (NSString *)webScriptNameForSelector:(SEL)selector;
++ (BOOL)isSelectorExcludedFromWebScript:(SEL)selector;
+- (id)get:(NSString*)key;
+ 
 @end

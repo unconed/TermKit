@@ -47,7 +47,6 @@ function loadScript(url, callback) {
   
 	var script = document.createElement('script'),
 		  done = false;
-      console.log('brush loading', url);
 
 	script.type = 'text/javascript';
 	script.language = 'javascript';
@@ -60,6 +59,7 @@ function loadScript(url, callback) {
 			script.onload = script.onreadystatechange = null;
 			script.parentNode.removeChild(script);
 			
+      delete SyntaxHighlighter.vars.discoveredBrushes;
 			callback();
 		}
 	};
@@ -76,15 +76,11 @@ var h = SyntaxHighlighter.highlight;
 SyntaxHighlighter.highlight = function (p, e) {
   var m, that = this;
   if (m = /brush: ([a-z]+)/(e.className)) {
-    loadScript(urls[m[1]], function () {
-      console.log('callback');
-
-      for (i in SyntaxHighlighter.brushes) {
-        console.log(i, SyntaxHighlighter.brushes[i]);
-      }
-      
-      h.call(that, p, e);
-    });
+    if (urls[m[1]]) {
+      loadScript(urls[m[1]], function () {
+        h.call(that, p, e);
+      });
+    }
   }
 };
 

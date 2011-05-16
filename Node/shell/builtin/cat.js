@@ -52,11 +52,12 @@ exports.main = function (tokens, pipes, exit) {
               var slice = buffer.slice(0, bytesRead);
 
               if (position == 0) {
-                var headers = new meta.headers();
+                var headers = new meta.headers(),
+                    keys = file.split('/');
                 headers.set({
                   'Content-Type': meta.sniff(file, slice),
                   'Content-Length': stats.size,
-                  'Content-Disposition': [ 'attachment', { 'filename': file } ],
+                  'Content-Disposition': [ 'attachment', { 'filename': keys.pop() } ],
                 });
 
                 pipes.dataOut.write(headers.generate());

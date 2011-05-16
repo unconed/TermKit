@@ -1,7 +1,7 @@
 var debug = false;
 if (typeof exports == 'undefined') {
   exports = termkit;
-  debug = true;
+  debug = false;
 }
 
 exports.protocol = function (connection, handler, autoconnect) {

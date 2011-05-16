@@ -167,10 +167,28 @@ exports.plugins.code.prototype = extend(new exports.plugins.text(), {
 exports.plugins.code.supports = function (headers) {
   var type = headers.get('Content-Type');
   var supported = {
+    'text/javascript': true,
+    'text/x-applescript': true,
+    'text/x-actionscript': true,
+    'text/x-shellscript': true,
+    'text/x-c': true,
+    'text/x-c++': true,
+    'text/x-csharpsrc': true,
+    'text/css': true,
+    'text/x-diff': true,
+    'text/x-erlang': true,
+    'text/x-groovy': true,
+    'text/x-java-source': true,
     'application/json': true,
     'application/javascript': true,
+    'application/x-perl': true,
     'application/x-php': true,
-    'text/javascript': true,
+    'text/x-python': true,
+    'text/x-ruby': true,
+    'text/x-sass': true,
+    'text/x-scala': true,
+    'text/x-sql': true,
+    'text/xml': true,
   };
   return !!supported[type] * 2;
 }

@@ -307,10 +307,29 @@ widgets.code = function (properties) {
   this.$pre = this.$contents.find('pre');
   
   var brushes = {
+    'text/x-applescript': 'applescript',
+    'text/x-actionscript': 'as3',
+    'text/x-shellscript': 'sh',
+    'text/x-c': 'c',
+    'text/x-c++': 'cpp',
+    'text/x-csharpsrc': 'c#',
+    'text/css': 'css',
+    'text/x-diff': 'diff',
+    'text/x-erlang': 'erl',
+    'text/x-groovy': 'groovy',
+    'text/x-java-source': 'java',
     'application/javascript': 'js',
     'application/json': 'js',
     'text/javascript': 'js',
+    'application/x-perl': 'pl',
     'application/x-php': 'php',
+    'text/x-python': 'py',
+    'text/x-ruby': 'rb',
+    'text/x-sass': 'sass',
+    'text/x-scala': 'scala',
+    'text/x-sql': 'sql',
+    'text/xml': 'xml',
+    
   };
   this.brush = brushes[properties.language];
   
@@ -328,6 +347,9 @@ widgets.code.prototype = $.extend(new widgets.text(), {
 
   // Update markup to match.
   updateElement: function () {
+    this.$contents.html('<pre></pre>');
+    this.$pre = this.$contents.find('pre');
+    
     this.$pre.text(this.properties.contents);
     this.$pre.attr('className', 'brush: ' + this.brush);
 

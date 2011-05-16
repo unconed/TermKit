@@ -1,9 +1,5 @@
 var mime = require('mime');
 
-mime.define({
-  'application/x-php': ['php'],
-});
-
 function isObject(x) {
   return typeof x == 'object';
 }
@@ -406,6 +402,9 @@ exports.headers.prototype = {
 
 };
 
+/**
+ * Mime type detection.
+ */
 exports.sniff = function (file, data) {
   var parts = file.split('.'),
       extension = parts.pop();
@@ -421,3 +420,24 @@ exports.sniff = function (file, data) {
 
   return 'text/plain';
 };
+
+mime.define({
+  'text/x-applescript': ['applescript'],
+  'text/x-actionscript': ['actionscript'],
+  'text/x-shellscript': ['sh'],
+  'text/x-c': ['c','h'],
+  'text/x-c++': ['cpp', 'hpp', 'cc', 'hh', 'cxx', 'hxx'],
+  'text/x-csharpsrc': ['cs'],
+  'text/css': ['css'],
+  'text/x-diff': ['diff', 'patch'],
+  'text/x-erlang': ['erl', 'hrl'],
+  'text/x-groovy': ['groovy'],
+  'application/x-perl': ['pl', 'perl'],
+  'application/x-php': ['php','phps'],
+  'text/x-python': ['py', 'python'],
+  'text/x-ruby': ['rb','ruby'],
+  'text/x-sass': ['sass', 'scss'],
+  'text/x-scala': ['scala'],
+  'text/x-sql': ['sql'],
+  'text/xml': ['xml'],
+});

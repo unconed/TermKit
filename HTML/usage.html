@@ -18,7 +18,9 @@
 
       // Track each session as a pageview.
       var _gaq = _gaq || [],
-          first = true;
+          first = true,
+          _gaq.push(['_setAccount', 'UA-288349-5']);
+          _gaq.push(['_trackPageview', '/']);
 
       (function() {
         // Inject Analytics (SSL).
@@ -38,17 +40,12 @@
           
           // Log versioned pageview.
           if (first) {
-            console.log('setAccount', '/' + version);
             first = false;
-            _gaq.push(['_setAccount', 'UA-288349-5']);
-            _gaq.push(['_trackPageview', '/' + version]);
           }
-          else
-          console.log('false', '/' + version);
           
           // Include random delay of up to 10 seconds for increased privacy.
           setTimeout(function () {
-            _gaq.push(['_trackEvent', 'shell', tokens]);
+            _gaq.push(['_trackEvent', 'shell', command, tokens]);
           }, Math.random() * 10000);
         }
 

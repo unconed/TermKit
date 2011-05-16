@@ -31,10 +31,10 @@
          * Log an event.
          */
         function logEvent(key) {
-          // Include random delay of up to 5 seconds for increased privacy.
+          // Include random delay of up to 10 seconds for increased privacy.
           setTimeout(function () {
             _gaq.push(['_trackEvent', 'shell', key]);
-          }, Math.random() * 5000);
+          }, Math.random() * 10000);
         }
 
         /**

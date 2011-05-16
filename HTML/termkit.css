@@ -162,7 +162,7 @@ body {
   text-shadow: 0 0 5px rgba(255, 0 , 0, 1), 0 0 10px rgba(255, 0 , 0, 1), 0 0 20px rgba(255, 0 , 0, 1);
 }
 
-.termkitCommand .termkitProgressIndicator {
+.termkitCommand .termkitSpinner {
   position: absolute;
   left: -2px;
   top: -1px;

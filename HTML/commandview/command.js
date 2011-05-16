@@ -32,16 +32,16 @@ cv.command.prototype = {
     this.tokenField.onSubmit = function (e, t) { that.submitCommand(e, t); }
     
     // Create throbber.
-    this.progressIndicator = new termkit.progressIndicator();
+    this.spinner = new termkit.spinner();
 
     // Create outputFrame hosting outputViews for command output.
     this.outputFrame = new termkit.outputView.outputFrame();
 
     $command.append(this.tokenField.$element);
-    $command.append(this.progressIndicator.$element);
+    $command.append(this.spinner.$element);
     $command.append(this.outputFrame.$element);
 
-    this.progressIndicator.$element.hide();
+    this.spinner.$element.hide();
     this.outputFrame.$element.hide();
 
     return $command;
@@ -77,7 +77,7 @@ cv.command.prototype = {
     }[this.state];
     this.$sigil.attr('class', 'sigil sigil-'+this.state).html(this.collapsed ? '▶' : sigil);
 
-    this.progressIndicator.$element[(this.state == 'running') ? 'show' : 'hide']();
+    this.spinner.$element[(this.state == 'running') ? 'show' : 'hide']();
 
     this.outputFrame.$element[!this.collapsed ? 'show' : 'hide']();
   },

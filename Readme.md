@@ -44,4 +44,7 @@ Addresses following problems:
 
 *Tip:* Press ⌥⌘C to access the WebKit console.
 
-Includes “NSImage+QuickLook” code by Matt Gemmell (http://mattgemmell.com/source).
+Includes:
+* “NSImage+QuickLook” by Matt Gemmell (http://mattgemmell.com/source).
+* SyntaxHighlighter by Alex Gorbatchev (http://alexgorbatchev.com/SyntaxHighlighter/)
+* jQuery and jQuery UI

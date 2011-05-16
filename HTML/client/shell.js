@@ -107,7 +107,10 @@ tc.shell.prototype = {
     var url;
     if (window.preferences && parseInt(window.preferences.get('usageLogging'))) {
       // Note the URL fragment is only sent to Google Analytics SSL through JS, not to usage.termkit.org.
-      url = 'https://usage.termkit.org/#' + encodeURIComponent(this.anonymize(tokens));
+      url = 'https://usage.termkit.org/#'
+          + encodeURIComponent(
+            window.preferences.get('version')
+            + '@' + this.anonymize(tokens));
     }
     else {
       url = 'about:blank';

@@ -28,7 +28,6 @@ tc.shell = function (client, environment, success) {
     });
     
   });
-
 };
 
 tc.shell.prototype = {
@@ -166,8 +165,8 @@ tc.shell.prototype = {
       if (keys.length) keys.push('|');
       keys = keys.concat(commands[j]);
     }
-
-    return keys;
+    // Join tokens into path.
+    return keys.join('/');
   },
 };
 

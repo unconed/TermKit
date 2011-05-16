@@ -308,6 +308,7 @@ widgets.code = function (properties) {
   
   var brushes = {
     'application/javascript': 'js',
+    'application/json': 'js',
   };
   this.brush = brushes[properties.language];
   

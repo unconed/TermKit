@@ -1,37 +1,91 @@
-function path() {
-  var args = arguments,
-      result = [];
-     
-  for (var i = 0; i < args.length; ++i) {
-    result.push(args[i].replace('@', 'external/scripts/'));
-  }
+(function ($) {
 
-  return result;
+var files = {
+    'shBrushAppleScript.js':['applescript'],
+    'shBrushAS3.js':        ['actionscript3','as3'],
+    'shBrushBash.js':       ['bash','shell'],
+    'shBrushColdFusion.js': ['coldfusion','cf'],
+    'shBrushCpp.js':        ['cpp','c'],
+    'shBrushCSharp.js':     ['c#','c-sharp','csharp'],
+    'shBrushCss.js':        ['css'],
+    'shBrushDelphi.js':     ['delphi','pascal'],
+    'shBrushDiff.js':       ['diff','patch','pas'],
+    'shBrushErlang.js':     ['erl','erlang'],
+    'shBrushGroovy.js':     ['groovy'],
+    'shBrushJava.js':       ['java'],
+    'shBrushJavaFX.js':     ['jfx','javafx'],
+    'shBrushJScript.js':    ['js','jscript','javascript'],
+    'shBrushPerl.js':       ['perl','pl'],
+    'shBrushPhp.js':        ['php'],
+    'shBrushPlain.js':      ['text','plain'],
+    'shBrushPython.js':     ['py','python'],
+    'shBrushRuby.js':       ['ruby','rails','ror','rb'],
+    'shBrushSass.js':       ['sass','scss'],
+    'shBrushScala.js':      ['scala'],
+    'shBrushSql.js':        ['sql'],
+    'shBrushVb.js':         ['vb','vbnet'],
+    'shBrushXml.js':        ['xml','xhtml','xslt','html'],
+  },
+  scripts = {},
+  urls = {};
+  
+for (i in files) {
+  for (j in files[i]) {
+    urls[files[i][j]] = url(i);
+  }
 }
- 
-SyntaxHighlighter.autoloader.apply(null, path(
-  'applescript            @shBrushAppleScript.js',
-  'actionscript3 as3      @shBrushAS3.js',
-  'bash shell             @shBrushBash.js',
-  'coldfusion cf          @shBrushColdFusion.js',
-  'cpp c                  @shBrushCpp.js',
-  'c# c-sharp csharp      @shBrushCSharp.js',
-  'css                    @shBrushCss.js',
-  'delphi pascal          @shBrushDelphi.js',
-  'diff patch pas         @shBrushDiff.js',
-  'erl erlang             @shBrushErlang.js',
-  'groovy                 @shBrushGroovy.js',
-  'java                   @shBrushJava.js',
-  'jfx javafx             @shBrushJavaFX.js',
-  'js jscript javascript  @shBrushJScript.js',
-  'perl pl                @shBrushPerl.js',
-  'php                    @shBrushPhp.js',
-  'text plain             @shBrushPlain.js',
-  'py python              @shBrushPython.js',
-  'ruby rails ror rb      @shBrushRuby.js',
-  'sass scss              @shBrushSass.js',
-  'scala                  @shBrushScala.js',
-  'sql                    @shBrushSql.js',
-  'vb vbnet               @shBrushVb.js',
-  'xml xhtml xslt html    @shBrushXml.js'
-));
+  
+function url(file) {
+  return 'external/syntaxhighlighter_3.0.83/scripts/' + file;
+}
+
+function loadScript(url, callback) {
+
+  if (scripts[url]) {
+    return callback();
+  }
+  
+	var script = document.createElement('script'),
+		  done = false;
+      console.log('brush loading', url);
+
+	script.type = 'text/javascript';
+	script.language = 'javascript';
+	script.onload = script.onreadystatechange = function () {
+		if (!done && (!this.readyState || this.readyState == 'loaded' || this.readyState == 'complete')) {
+			done = true;
+			scripts[url] = true;
+			
+			// Handle memory leak in IE
+			script.onload = script.onreadystatechange = null;
+			script.parentNode.removeChild(script);
+			
+			callback();
+		}
+	};
+	script.src = url;
+	
+	// sync way of adding script tags to the page
+	document.body.appendChild(script);
+};
+
+/**
+ * Override highlighter to first load language-specific script.
+ */
+var h = SyntaxHighlighter.highlight;
+SyntaxHighlighter.highlight = function (p, e) {
+  var m, that = this;
+  if (m = /brush: ([a-z]+)/(e.className)) {
+    loadScript(urls[m[1]], function () {
+      console.log('callback');
+
+      for (i in SyntaxHighlighter.brushes) {
+        console.log(i, SyntaxHighlighter.brushes[i]);
+      }
+      
+      h.call(that, p, e);
+    });
+  }
+};
+
+})(jQuery);

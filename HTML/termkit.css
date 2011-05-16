@@ -57,6 +57,10 @@ body {
   word-wrap: break-word;
 }
 
+.termkitOutputView .widgetCode div.syntaxhighlighter > div.toolbar {
+  display: none;
+}
+
 .termkitOutputView .widgetFile {
   padding: .5em;
   clear: left;

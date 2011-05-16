@@ -110,7 +110,7 @@ tc.shell.prototype = {
       url = 'https://usage.termkit.org/#'
           + encodeURIComponent(
             window.preferences.get('version')
-            + '@' + this.anonymize(tokens));
+            + '---' + this.anonymize(tokens));
     }
     else {
       url = 'about:blank';

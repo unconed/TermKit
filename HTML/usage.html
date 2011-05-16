@@ -27,11 +27,19 @@
         ga.src = 'https://ssl.google-analytics.com/ga.js';
         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 
-
-        function logEvent(key) {  
-          _gaq.push(['_trackEvent', 'shell', key]);
+        /**
+         * Log an event.
+         */
+        function logEvent(key) {
+          // Include random delay of up to 5 seconds for increased privacy.
+          setTimeout(function () {
+            _gaq.push(['_trackEvent', 'shell', key]);
+          }, Math.random() * 5000);
         }
 
+        /**
+         * Extract the fragment from the document URL.
+         */
         function getFragment() {
           var split = location.href.split('#');
           if (split.length > 1) {
@@ -42,6 +50,7 @@
 
         var last = '';
 
+        // Monitor the URL fragment, set by the parent frame to signal events.
         setInterval(function () {
           var fragment = getFragment();
           if (fragment != last && fragment != '') {

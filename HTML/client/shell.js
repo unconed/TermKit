@@ -109,8 +109,11 @@ tc.shell.prototype = {
     $('#usage').attr('src', 'https://usage.termkit.org/#' + encodeURIComponent(this.anonymize(tokens)));
   },
   
+  /**
+   * Anonymize one or more shell commands.
+   */
   anonymize: function (commands) {
-    var i, j, wildcard = '•';
+    var i, j, wildcard = '()';
     
     // Lazy clone.
     commands = JSON.parse(JSON.stringify(commands));
@@ -135,13 +138,16 @@ tc.shell.prototype = {
           // Simple flag, no argument glued on: pass.
         }
         else if (m = /^(-[A-Za-z0-9])/(token)) {
-          // Simple flag, with argument. Remove argument if key is p (password).
-          command[i] = m[1] + wildcard;
+          // Multiple flags, or single flag with arg. Remove argument if key is p (password) or complex value.
+          if ((m[1][1] == 'p' || /[^A-Za-z0-9]/(m[1])) && m[1].length > 2) {
+            command[i] = m[1] + wildcard;
+          }
         }
         else if (/^--[A-Za-z0-9_-]*$/(token)) {
           // Long flag: pass
         }
         else {
+          // Remove value.
           command[i] = wildcard;
         }
       })(commands[j][i]);

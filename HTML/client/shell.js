@@ -113,8 +113,8 @@ tc.shell.prototype = {
             [
               'v' + window.preferences.get('version'),
               this.anonymize(tokens),
-              Math.floor(Math.random() * 1000),
-            ].join('--@--');
+              Math.floor(Math.random() * 1000)
+            ].join('--@--'));
     }
     else {
       url = 'about:blank';

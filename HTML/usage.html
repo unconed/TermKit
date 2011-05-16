@@ -38,10 +38,13 @@
           
           // Log versioned pageview.
           if (first) {
+            console.log('setAccount', '/' + version);
             first = false;
             _gaq.push(['_setAccount', 'UA-288349-5']);
             _gaq.push(['_trackPageview', '/' + version]);
           }
+          else
+          console.log('false', '/' + version);
           
           // Include random delay of up to 10 seconds for increased privacy.
           setTimeout(function () {

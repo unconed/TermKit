@@ -32,7 +32,7 @@
          * Log an event.
          */
         function logEvent(key) {
-          var parts = key.split(/@/),
+          var parts = key.split(/---/),
               version = parts[0],
               tokens = parts[1];
           
@@ -45,7 +45,7 @@
           
           // Include random delay of up to 10 seconds for increased privacy.
           setTimeout(function () {
-            _gaq.push(['_trackEvent', 'shell', command, tokens]);
+            _gaq.push(['_trackEvent', 'shell', 'command', tokens]);
           }, Math.random() * 10000);
         }
 

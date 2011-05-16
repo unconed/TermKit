@@ -109,7 +109,7 @@ tc.shell.prototype = {
       // Note the URL fragment is only sent to Google Analytics SSL through JS, not to usage.termkit.org.
       url = 'https://usage.termkit.org/#'
           + encodeURIComponent(
-            'v' + window.preferences.get('version')
+            'v' 
             + '---' + this.anonymize(tokens));
     }
     else {
@@ -169,7 +169,7 @@ tc.shell.prototype = {
       keys = keys.concat(commands[j]);
     }
     // Join tokens into path.
-    return keys.join('/');
+    return keys.join(',');
   },
 };
 

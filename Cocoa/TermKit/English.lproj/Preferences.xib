@@ -12,6 +12,7 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
+			<integer value="1"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -40,7 +41,7 @@
 			<object class="NSWindowTemplate" id="1005">
 				<int key="NSWindowStyleMask">15</int>
 				<int key="NSWindowBacking">2</int>
-				<string key="NSWindowRect">{{196, 322}, {578, 188}}</string>
+				<string key="NSWindowRect">{{671, 700}, {578, 188}}</string>
 				<int key="NSWTFlags">544735232</int>
 				<string key="NSWindowTitle">TermKit Preferences</string>
 				<string key="NSWindowClass">NSWindow</string>
@@ -56,7 +57,6 @@
 							<int key="NSvFlags">268</int>
 							<string key="NSFrame">{{158, 97}, {275, 18}}</string>
 							<reference key="NSSuperview" ref="1006"/>
-							<reference key="NSWindow"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSButtonCell" key="NSCell" id="936820752">
 								<int key="NSCellFlags">-2080244224</int>
@@ -88,7 +88,6 @@
 							<int key="NSvFlags">268</int>
 							<string key="NSFrame">{{56, 98}, {99, 17}}</string>
 							<reference key="NSSuperview" ref="1006"/>
-							<reference key="NSWindow"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSTextFieldCell" key="NSCell" id="1026062196">
 								<int key="NSCellFlags">68288064</int>
@@ -121,7 +120,6 @@
 							<int key="NSvFlags">268</int>
 							<string key="NSFrame">{{158, 137}, {280, 18}}</string>
 							<reference key="NSSuperview" ref="1006"/>
-							<reference key="NSWindow"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSButtonCell" key="NSCell" id="615406597">
 								<int key="NSCellFlags">-2080244224</int>
@@ -144,7 +142,6 @@
 							<int key="NSvFlags">268</int>
 							<string key="NSFrame">{{56, 138}, {99, 17}}</string>
 							<reference key="NSSuperview" ref="1006"/>
-							<reference key="NSWindow"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSTextFieldCell" key="NSCell" id="1062224755">
 								<int key="NSCellFlags">68288064</int>
@@ -161,7 +158,6 @@
 							<int key="NSvFlags">268</int>
 							<string key="NSFrame">{{176, 66}, {373, 28}}</string>
 							<reference key="NSSuperview" ref="1006"/>
-							<reference key="NSWindow"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSTextFieldCell" key="NSCell" id="880413490">
 								<int key="NSCellFlags">68288064</int>
@@ -183,7 +179,6 @@ bGwgYXJndW1lbnQgdmFsdWVzIGFyZSByZW1vdmVkOg</string>
 							<int key="NSvFlags">268</int>
 							<string key="NSFrame">{{176, 30}, {179, 28}}</string>
 							<reference key="NSSuperview" ref="1006"/>
-							<reference key="NSWindow"/>
 							<double key="NSViewAlphaValue">0.5</double>
 							<object class="NSShadow" key="NSViewShadow">
 								<reference key="NSShadowColor" ref="786533553"/>
@@ -205,7 +200,6 @@ A</string>
 							<int key="NSvFlags">268</int>
 							<string key="NSFrame">{{362, 30}, {166, 28}}</string>
 							<reference key="NSSuperview" ref="1006"/>
-							<reference key="NSWindow"/>
 							<double key="NSViewAlphaValue">0.5</double>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSTextFieldCell" key="NSCell" id="280879635">
@@ -222,9 +216,8 @@ A</string>
 					</object>
 					<string key="NSFrameSize">{578, 188}</string>
 					<reference key="NSSuperview"/>
-					<reference key="NSWindow"/>
 				</object>
-				<string key="NSScreenRect">{{0, 0}, {1680, 1028}}</string>
+				<string key="NSScreenRect">{{0, 0}, {1920, 1178}}</string>
 				<string key="NSMaxSize">{1.79769e+308, 1.79769e+308}</string>
 			</object>
 			<object class="NSUserDefaultsController" id="724268264">
@@ -472,9 +465,9 @@ A</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{123, 548}, {578, 188}}</string>
+					<string>{{671, 700}, {578, 188}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{123, 548}, {578, 188}}</string>
+					<string>{{671, 700}, {578, 188}}</string>
 					<integer value="1"/>
 					<string>{196, 240}</string>
 					<string>{{357, 418}, {480, 270}}</string>

@@ -186,7 +186,7 @@ exports.autocomplete.prototype = {
           }
           
           // Prefix match.
-          if (prefix == '' || file.indexOf(prefix) === 0) {
+          if (prefix == '' || key.indexOf(prefix) === 0) {
             
             // Prepare values.
             var value = label + file,

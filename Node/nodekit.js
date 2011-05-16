@@ -10,6 +10,7 @@ var http = require('http'),
     io = require('socket.io')
     router = require("router");
 
+// Load config file.
 var config = require('config').getConfig();
 
 // Set up http server.

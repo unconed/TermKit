@@ -19,7 +19,6 @@
       // Track each session as a pageview.
       var _gaq = _gaq || [],
           first = true;
-      _gaq.push(['_setAccount', 'UA-288349-5']);
 
       (function() {
         // Inject Analytics (SSL).
@@ -40,6 +39,7 @@
           // Log versioned pageview.
           if (first) {
             first = false;
+            _gaq.push(['_setAccount', 'UA-288349-5']);
             _gaq.push(['_trackPageview', '/' + version]);
           }
           

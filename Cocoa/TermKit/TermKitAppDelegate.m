@@ -20,7 +20,7 @@
                                 @"YES", @"ignoreCase",
                                 @"YES", @"usageLogging",
                                 @"YES", @"WebKitDeveloperExtras",
-                                [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"], "@version",
+                                [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"], @"version",
                                 nil]];
     
     [self newWindow:self];

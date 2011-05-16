@@ -75,7 +75,7 @@ function loadScript(url, callback) {
 var h = SyntaxHighlighter.highlight;
 SyntaxHighlighter.highlight = function (p, e) {
   var m, that = this;
-  if (m = /brush: ([a-z]+)/(e.className)) {
+  if (m = /brush: ([a-z]+)/(e.getAttribute('class'))) {
     if (urls[m[1]]) {
       loadScript(urls[m[1]], function () {
         h.call(that, p, e);

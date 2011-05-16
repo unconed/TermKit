@@ -351,7 +351,7 @@ widgets.code.prototype = $.extend(new widgets.text(), {
     this.$pre = this.$contents.find('pre');
     
     this.$pre.text(this.properties.contents);
-    this.$pre.attr('className', 'brush: ' + this.brush);
+    this.$pre.attr('class', 'brush: ' + this.brush);
 
   	SyntaxHighlighter.highlight({}, this.$pre[0]);
 

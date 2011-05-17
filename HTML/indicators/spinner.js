@@ -3,7 +3,7 @@
 /**
  * Controller for spinner.
  */
-var pi = termkit.spinner = function (stream) {
+var pi = termkit.spinner = function () {
   var that = this;
 
   this.$element = this.$markup();

@@ -283,7 +283,7 @@ widgets.list.prototype = $.extend(new ov.outputNode(), {
   
   // Return active markup for this widget.
   $markup: function () {
-    var $outputNode = $('<div class="termkitOutputNode list termkitLimitHeight"><div class="children"></div></div>').data('controller', this);
+    var $outputNode = $('<div class="termkitOutputNode widgetList termkitLimitHeight"><div class="children"></div></div>').data('controller', this);
     var that = this;
     return $outputNode;
   },
@@ -360,5 +360,37 @@ widgets.code.prototype = $.extend(new widgets.text(), {
   
 });
 
+/**
+ * Widget: Progress bar
+ */
+widgets.progress = function (properties) {
+  
+  // Initialize node.
+  ov.outputNode.call(this, properties);
+
+  this.bar = new termkit.progress();
+  this.$element.append(this.bar.$element);
+  
+  this.updateElement();
+};
+
+widgets.progress.prototype = $.extend(new ov.outputNode(), {
+  
+  // Return active markup for this widget.
+  $markup: function () {
+    var $outputNode = $('<div class="termkitOutputNode widgetProgress"></div>').data('controller', this);
+    return $outputNode;
+  },
+  
+  // Update markup to match.
+  updateElement: function () {
+    this.bar.min = this.properties.min || 0;
+    this.bar.max = this.properties.min || 100;
+    this.bar.value = this.properties.value || 0;
+
+    this.bar.updateElement();
+  },
+  
+});
 
 })(jQuery);

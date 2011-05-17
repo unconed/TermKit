@@ -278,7 +278,7 @@ exports.plugins.files.prototype = extend(new exports.plugin(), {
         // Stat each file.
         fs.stat(composePath(file, path), track(function (error, stats) {
           if (!error) {
-            output[i][j] = view.file(file, path, stats);
+            output[i][j] = view.file(null, file, path, stats);
           }
           else {
             errors++;

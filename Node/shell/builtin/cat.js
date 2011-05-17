@@ -8,6 +8,10 @@ exports.main = function (tokens, pipes, exit) {
   var out = new view.bridge(pipes.viewOut);
   var chunkSize = 16384;
 
+  out.print('Unicorns');
+
+  out.add(null, view.progress(null, 33));
+
   // "cat <file> [file ...]" syntax.
   if (tokens.length < 2) {
     out.print('Usage: cat <file> [file] ...');

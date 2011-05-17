@@ -34,7 +34,7 @@ Prototype:
   [ ] switch between inline and block tokens -> input vs textarea.
   [ ] fix wrapping of tokens
     
-[:] inline autocomplete
+[X] inline autocomplete
   [X] panel overlayed on token
   [X] alignment
   [X] keyboard controls up/down
@@ -80,6 +80,7 @@ Prototype:
   [X] file icons
   [X] implement view DOM v2 with path targeting
   [X] auto-layout mechanism w/ padded max-height on view
+  [ ] unified viewcontroller class w/ self-dom insertion
   [ ] intercontrol focus / caret, set up global manager
   [ ] tab, switch between widgets.
   [ ] working widget callbacks

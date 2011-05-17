@@ -137,10 +137,11 @@ exports.code = function (id, contents, language) {
 /**
  * Widget: file reference.
  */
-exports.file = function (name, path, stats) {
+exports.file = function (id, name, path, stats) {
   
   return {
     type: 'file',
+    id: id || null,
     name: name,
     path: path,
     stats: stats,
@@ -150,12 +151,25 @@ exports.file = function (name, path, stats) {
 /**
  * Widget: image reference.
  */
-exports.image = function (name, url) {
+exports.image = function (id, url) {
   
   return {
     type: 'image',
-    name: name,
+    id: id || null,
     url: url,
+  };
+};
+
+/**
+ * Widget: progress bar.
+ */
+exports.progress = function (id, value, min, max) {
+  
+  return {
+    type: 'progress',
+    value: value || 0,
+    min: min || 0,
+    max: max || 100,
   };
 };
 

@@ -75,7 +75,6 @@ Good desktop citizen:
   [ ] interactive quicklook
   [ ] wildcard handling
   [ ] regexp hinter
-  
 
 0.4: Network & Modularity
   [ ] SSH tunneling
@@ -89,6 +88,7 @@ Good desktop citizen:
 0.5: Interactive & Unix Upgrades
   [ ] widget system
   [ ] graphing suite
+  [ ] tear off tabs
   [ ] alt view for LS with usable permissions, dates, etc
   [ ] active 'top' monitor
   [ ] gnu parallel integration/clone

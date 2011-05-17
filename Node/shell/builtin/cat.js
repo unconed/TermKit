@@ -39,7 +39,7 @@ exports.main = function (tokens, pipes, exit) {
           }
           
           // See if we need a progress bar.
-          var progress = stats.size > 128 * 1024; // yes, this is arbitrary
+          var progress = stats.size > 64 * 1024; // yes, this is arbitrary
           var position = 0;
           
           if (progress) {

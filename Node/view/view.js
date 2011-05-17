@@ -185,3 +185,14 @@ exports.progress = function (id, value, min, max) {
   };
 };
 
+/**
+ * Widget: spinner.
+ */
+exports.spinner = function (id) {
+  
+  return {
+    type: 'spinner',
+    id: id || null,
+  };
+};
+

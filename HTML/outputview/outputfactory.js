@@ -423,4 +423,33 @@ widgets.progress.prototype = $.extend(new ov.outputNode(), {
   
 });
 
+/**
+ * Widget: Spinner
+ */
+widgets.spinner = function (properties) {
+  
+  // Initialize node.
+  ov.outputNode.call(this, properties);
+
+  this.spinner = new termkit.spinner();
+  this.$element.append(this.spinner.$element);
+
+  this.updateElement();
+};
+
+widgets.spinner.prototype = $.extend(new ov.outputNode(), {
+  
+  // Return active markup for this widget.
+  $markup: function () {
+    var $outputNode = $('<div class="termkitOutputNode widgetSpinner"></div>').data('controller', this);
+    return $outputNode;
+  },
+  
+  // Update markup to match.
+  updateElement: function () {
+    this.spinner.updateElement();
+  },
+  
+});
+
 })(jQuery);

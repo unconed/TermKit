@@ -63,7 +63,7 @@ exports.headers.prototype = {
     }
   },
 
-  set: function (keyObject, paramValue, value) {
+  set: function (keyObject, paramValue, value, raw) {
     var i, j;
     /*
     // Single setters
@@ -85,6 +85,12 @@ exports.headers.prototype = {
       key: [ [ value, { param: value, param: value } ], [ value, { param: value, param: value } ] ],
     })
     */
+    
+    // Raw set to parse individual value from other source.
+    if (raw) {
+      var spec = this.hints[keyObject] || {};
+      this.set(keyObject, this.parseValue(paramValue, spec.params));
+    }
     
     // Remove key.
     if (isString(keyObject) && (typeof paramValue == 'undefined' || paramValue === null)) {

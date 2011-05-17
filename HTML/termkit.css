@@ -104,7 +104,7 @@ body {
 }
 
 .termkitOutputView .widgetProgress .ui-progressbar-value {
-  -webkit-transition: width 0.3s ease-in-out;
+  -webkit-transition: width 0.15s ease-in-out;
 }
 
 .termkitOutputView .widgetHTML .contents {

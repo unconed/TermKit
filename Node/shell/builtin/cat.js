@@ -76,7 +76,7 @@ exports.main = function (tokens, pipes, exit) {
                 read();
               }
 
-              out.update('progress', { value: position });
+              progress && out.update('progress', { value: position });
             })); // fs.read
           })(); // read
         })); // fs.open

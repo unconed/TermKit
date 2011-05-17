@@ -123,6 +123,17 @@ exports.text = function (id, contents) {
 }
 
 /**
+ * Widget: html output
+ */
+exports.html = function (id, contents) {
+  return {
+    type: 'html',
+    id: id || null,
+    contents: contents || '',
+  };
+}
+
+/**
  * Widget: code output
  */
 exports.code = function (id, contents, language) {

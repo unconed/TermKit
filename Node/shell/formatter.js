@@ -137,6 +137,40 @@ exports.plugins.text.supports = function (headers) {
 }
 
 /**
+ * HTML formatter.
+ */
+exports.plugins.html = function (headers, out) {
+  // Inherit.
+  exports.plugin.apply(this, arguments);
+};
+
+exports.plugins.html.prototype = extend(new exports.plugin(), {
+
+  begin: function () {
+//    this.out.add(null, view.code('output', this.headers.generate(), 'text/plain'));
+    this.out.add(null, view.html('output'));
+    
+    // Buffered.
+    return true;
+  },
+
+  data: function (data) {
+    
+    // We wrap the HTML in an iframe for isolation.
+    var url = 'data:text/html;base64,' + data.toString('base64');
+        html = '<iframe class="termkitLimitHeight" src="'+ url +'"></iframe>';
+    
+    this.out.update('output', { contents: html }, true);
+  },
+
+});
+
+exports.plugins.html.supports = function (headers) {
+  var type = headers.get('Content-Type');
+  return !!(/^text\/html/(type)) * 2;
+}
+
+/**
  * Code formatter.
  */
 exports.plugins.code = function (headers, out) {

@@ -81,7 +81,36 @@ widgets.text.prototype = $.extend(new ov.outputNode(), {
     this.$contents.text(this.properties.contents);
     this.$element.data('controller', this);
     
-    this.notify('view.callback', { raw: 'foo' });
+//    this.notify('view.callback', { raw: 'foo' });
+  },
+  
+});
+
+/**
+ * Widget: HTML output
+ */
+widgets.html = function (properties) {
+  
+  // Initialize node.
+  ov.outputNode.call(this, properties);
+  
+  this.$contents = this.$element.find('.contents');
+  this.updateElement();
+};
+
+widgets.html.prototype = $.extend(new ov.outputNode(), {
+  
+  // Return active markup for this widget.
+  $markup: function () {
+    var $outputNode = $('<div class="termkitOutputNode widgetHTML"><div class="contents"></div></div>').data('controller', this);
+    var that = this;
+    return $outputNode;
+  },
+
+  // Update markup to match.
+  updateElement: function () {
+    this.$contents.html(this.properties.contents);
+    this.$element.data('controller', this);
   },
   
 });

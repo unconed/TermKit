@@ -108,7 +108,7 @@ ov.outputNode.prototype = {
     if (node) {
       // Remove from child list.
       this.children.splice(index, 0);
-      that.detach(node);
+      this.detach(node);
 
       // Remove element.
       node.$element.detach();

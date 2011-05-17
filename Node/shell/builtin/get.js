@@ -70,11 +70,13 @@ exports.main = function (tokens, pipes, exit) {
       });
 
       res.on('end', function () {
+        out.remove('progress');
         exit(true);
       });
     });
 
     request.on('error', function () {
+      out.remove('progress');
       exit(false);
     });
     

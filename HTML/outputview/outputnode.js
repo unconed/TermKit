@@ -89,6 +89,8 @@ ov.outputNode.prototype = {
 
     // Add elements.
     [].splice.apply(this.children, args);
+
+    console.log('add', this.map);
   },
 
   // Remove node.
@@ -152,7 +154,6 @@ ov.outputNode.prototype = {
    * Keys can be integers (node index) or strings (node IDs).
    */
   getNode: function (target) {
-
     if ((target == null) || (typeof target != 'object') || (target.constructor != [].constructor)) {
       target = [target];
     }
@@ -168,6 +169,7 @@ ov.outputNode.prototype = {
     };
     
     var node, hash = types[typeof key];
+
     if (hash) {
       node = this[hash][key];
     }

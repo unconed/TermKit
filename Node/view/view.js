@@ -167,6 +167,7 @@ exports.progress = function (id, value, min, max) {
   
   return {
     type: 'progress',
+    id: id || null,
     value: value || 0,
     min: min || 0,
     max: max || 100,

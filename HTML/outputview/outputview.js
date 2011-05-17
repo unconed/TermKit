@@ -49,6 +49,8 @@ ov.prototype = {
     var target = this.tree.getNode(args.target);
     var nodes = args.objects && this.factory.tree(args.objects);
 
+    console.log('dispatch', method, target, args);
+
     if (!target) return;
 
     switch (method) {

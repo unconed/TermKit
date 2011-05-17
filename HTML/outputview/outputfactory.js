@@ -370,7 +370,7 @@ widgets.progress = function (properties) {
 
   this.bar = new termkit.progress();
   this.$element.append(this.bar.$element);
-  
+
   this.updateElement();
 };
 
@@ -384,8 +384,9 @@ widgets.progress.prototype = $.extend(new ov.outputNode(), {
   
   // Update markup to match.
   updateElement: function () {
+
     this.bar.min = this.properties.min || 0;
-    this.bar.max = this.properties.min || 100;
+    this.bar.max = this.properties.max || 100;
     this.bar.value = this.properties.value || 0;
 
     this.bar.updateElement();

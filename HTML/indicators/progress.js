@@ -30,7 +30,7 @@ pi.prototype = {
   
   updateElement: function () {
     this.value = this.value;
-    this.$element.empty().progressbar({ value: (this._value - this.min) / (this.max - this.min) * 100 });
+    this.$element.progressbar({ value: (this._value - this.min) / (this.max - this.min) * 100 });
   },
 
 };

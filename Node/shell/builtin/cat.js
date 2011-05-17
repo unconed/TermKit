@@ -8,10 +8,6 @@ exports.main = function (tokens, pipes, exit) {
   var out = new view.bridge(pipes.viewOut);
   var chunkSize = 16384;
 
-  out.print('Unicorns');
-
-  out.add(null, view.progress(null, 33));
-
   // "cat <file> [file ...]" syntax.
   if (tokens.length < 2) {
     out.print('Usage: cat <file> [file] ...');
@@ -41,8 +37,14 @@ exports.main = function (tokens, pipes, exit) {
             out.print("Unable to open file (" + file + ")");
             return;
           }
-
+          
+          // See if we need a progress bar.
+          var progress = stats.size > 128 * 1024; // yes, this is arbitrary
           var position = 0;
+          
+          if (progress) {
+            out.add(null, view.progress('progress', 0, 0, stats.size));
+          }
 
           (function read() {
             var buffer = new Buffer(chunkSize);
@@ -73,6 +75,8 @@ exports.main = function (tokens, pipes, exit) {
               if (position < stats.size) {
                 read();
               }
+
+              out.update('progress', { value: position });
             })); // fs.read
           })(); // read
         })); // fs.open

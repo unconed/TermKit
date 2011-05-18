@@ -3,7 +3,7 @@ var fs = require('fs'), net = require('net');
 var spawn = require('child_process').spawn,
     exec = require('child_process').exec;
 
-var config = require('config').getConfig();
+var config = require('../config').getConfig();
 
 exports.shell = function (args, router) {
 

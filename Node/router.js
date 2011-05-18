@@ -1,5 +1,5 @@
-var shell = require("shell/shell");
-var returnMeta = require('misc').returnMeta;
+var shell = require('./shell');
+var returnMeta = require('./misc').returnMeta;
 var protocol = require('protocol');
 
 /**

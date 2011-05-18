@@ -137,6 +137,40 @@ exports.plugins.text.supports = function (headers) {
 }
 
 /**
+ * PDF formatter.
+ */
+exports.plugins.pdf = function (headers, out) {
+  // Inherit.
+  exports.plugin.apply(this, arguments);
+};
+
+exports.plugins.pdf.prototype = extend(new exports.plugin(), {
+
+  begin: function () {
+//    this.out.add(null, view.code('output', this.headers.generate(), 'text/plain'));
+    this.out.add(null, view.html('output'));
+    
+    // Buffered.
+    return true;
+  },
+
+  data: function (data) {
+    
+    // We wrap the HTML in an iframe for isolation.
+    var url = 'data:application/pdf;base64,' + data.toString('base64');
+        html = '<iframe class="termkitLimitHeight" src="'+ url +'"></iframe>';
+    
+    this.out.update('output', { contents: html }, true);
+  },
+
+});
+
+exports.plugins.pdf.supports = function (headers) {
+  var type = headers.get('Content-Type');
+  return !!(/^application\/pdf/(type)) * 2;
+}
+
+/**
  * HTML formatter.
  */
 exports.plugins.html = function (headers, out) {

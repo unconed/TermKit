@@ -90,6 +90,7 @@ exports.headers.prototype = {
     if (raw) {
       var spec = this.hints[keyObject] || {};
       this.set(keyObject, this.parseValue(paramValue, spec.params));
+      return;
     }
     
     // Remove key.
@@ -175,7 +176,8 @@ exports.headers.prototype = {
         this.set(i, keyObject[i]);
       }
     }
-  },
+
+  },
   
   /**
    * Parse headers from a MIME stream.
@@ -416,7 +418,6 @@ exports.sniff = function (file, data) {
       extension = parts.pop();
 
   if ((type = mime.lookup(file)) && (type != 'application/octet-stream')){
-    process.stderr.write('sniff ' + type + "\n");
     return type;
   }
 

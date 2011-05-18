@@ -38,11 +38,12 @@ exports.main = function (tokens, pipes, exit) {
       port: parsed.port || 80,
       path: path,
     };
-    var request = http.get(options), received = 0;
+    var request = http.get(options), received = 0, length = 0;
     request.on('response', function (res) {
       var headers = res.headers;
+      process.stderr.write('headers '+ JSON.stringify(res.headers) + "\n\n");
       
-      var length = headers['content-length'];
+      length = headers['content-length'];
       if (length !== null) {
         progress = length > 16 * 1024; // yes, this is arbitrary
         if (progress) {
@@ -55,7 +56,6 @@ exports.main = function (tokens, pipes, exit) {
         var key = i.replace(/(^|-)(.)/g, function (x,a,b) { return a + b.toUpperCase(); });
         mime.set(key, headers[i].toString('utf8'), null, true);
       }
-      process.stderr.write(mime.generate());
       
       // Write headers straight through.
       pipes.dataOut.write(mime.generate());
@@ -70,6 +70,7 @@ exports.main = function (tokens, pipes, exit) {
       });
 
       res.on('end', function () {
+        process.stderr.write('received ' + received + ' length ' + length);
         out.remove('progress');
         exit(true);
       });

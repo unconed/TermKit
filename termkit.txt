@@ -4,7 +4,7 @@ Goal: next gen terminal / command application
 
 Addresses following problems:
 1) Monospace character grid with ansi colors is not rich enough to display modern files / media / visualizations / metadata. Cannot effectively handle large output, long/wide tables or direct interaction.
-2) Piping binary or text streams between apps is bad for everyone:
+2) Piping raw/untyped binary or text streams between apps is bad for everyone:
    * Humans have to suffer syntax, cannot reflow/manipulate output in real-time
    * Computers have to suffer ambiguities
 3) Synchronous input/output makes you wait. SSH keystroke latency is frustrating.

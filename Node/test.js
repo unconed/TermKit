@@ -128,8 +128,8 @@ function testSession(assert) {
     console.log(messages);
     assert(messages[1].success && messages[1].args.session == 1 &&
            messages[2].success && messages[2].args.session == 2, "Open shell session x2");
-    assert(messages[3].success && messages[3].args.cwd &&
-           messages[4].success && messages[4].args.cwd, "Environment is set x2");
+    assert(messages[3].success && messages[3].args && messages[3].args.cwd &&
+           messages[4].success && messages[4].args && messages[4].args.cwd, "Environment is set x2");
     assert(messages[5].success && messages[6].success, "Close shell session x2");
   });
 
@@ -252,6 +252,15 @@ function testMeta(assert) {
   assert(/^Foo: bar\r\n/m, 'Foo correct');
   assert(/^Accept: application\/xml,application\/xhtml\+xml,text\/html;q=0.9,text\/plain;q=0.8,image\/png,\*\/\*;q=0.5\r\n/m, 'Accept correct');
   assert(/^X-Unknown: "this \"value does not follow, \(mime syntax"\r\n/m, 'X-Unknown correct');
+
+  // Test raw set from mime-like source.
+  headers = new meta.headers();
+  
+  headers.set('Content-Type', 'text/plain; charset=utf-8', null, true);
+  console.log(headers.fields);
+  console.log(headers.params);
+  assert(headers.get('Content-Type') == 'text/plain', 'Raw getter/setter');
+  assert(headers.get('Content-Type', 'charset') == 'utf-8', 'Raw param getter/setter');
 }
 
 /**
@@ -534,15 +543,15 @@ function testPipe(assert) {
 
 // Run tests.
 var tests = {
-    handshake: testHandshake,
-    session: testSession,
-    commands: testCommands,
-    meta: testMeta,
-    autocomplete: testAutocomplete,
-    misc: testMisc,
-    parseArgs: testParseArgs,
-    pipe: testPipe,
-    grep: testGrep,
+  handshake: testHandshake,
+  session: testSession,
+  commands: testCommands,
+  autocomplete: testAutocomplete,
+  meta: testMeta,
+  misc: testMisc,
+  parseArgs: testParseArgs,
+  pipe: testPipe,
+  grep: testGrep,
 };
 for (i in tests) (function (i, test) {
   test(function (c, msg) {

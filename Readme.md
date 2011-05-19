@@ -4,16 +4,12 @@
 
 ### Goal: next gen terminal / command application
 
-Addresses following problems:
+Built out of WebKit and Node.js.
 
-1. Monospace character grid with ansi colors is not rich enough to display modern files / media / visualizations / metadata. Cannot effectively handle large output, long/wide tables or direct interaction.
-1. Relying on anonymous pipes to transfer data around is error-prone
- * Human-friendly text results in ambiguities
- * Need to match formats at pipe ends
- * Confusion between data output and notification output
-1. Synchronous input/output makes you wait. SSH keystroke latency is frustrating.
-1. String-based command line requires arcane syntax, results in mistakes, repeated attempts at escaping, etc.
-1. Unix commands are "useless by default", and when asked, will only tell you raw data, not useful facts. e.g. "rwxr-xr-x" instead of "You can't edit this file."
+Runs in a Mac/Cocoa app, and can be hacked into any WebKit browser (Chrome, Safari).
+
+For the background and architecture, please read and comment on:
+http://acko.net/blog/on-termkit
 
 ![TermKit 0.3 alpha](https://github.com/unconed/TermKit/raw/master/Mockups/Shot-0.3.png)
 ![TermKit 0.3 alpha](https://github.com/unconed/TermKit/raw/master/Mockups/Shot-Self-Commit.png)
@@ -34,13 +30,20 @@ Addresses following problems:
 * ...Full terminal emulator. It does not aim to e.g. host 'vim'.
 * ...Reimplementation of the Unix toolchain. It replaces and/or enhances built-in commands and wraps external tools.
 
+(but you could make it do most of those things with plug-ins)
+
 ## How to use:
 
-1. [Install node.js and npm](http://howtonode.org/how-to-install-nodejs).
-2. install node-mime: `npm install mime`
-3. Clone the TermKit repository: `git clone git@github.com:unconed/TermKit.git --recursive`
-4. Run the NodeKit daemon: `cd Node; node nodekit.js`
-5. Unzip and run the Mac app in Build/TermKit.zip
+Unfortunately, TermKit currently requires some assembly.
+
+1. Acquire the Mac development tools.
+2. [Install node.js](https://github.com/joyent/node/wiki/Installation).
+3. If not covered in #2, install npm: `curl http://npmjs.org/install.sh | sh`
+4. Install node-mime: `npm install mime`
+5. Clone the TermKit repository: `git clone git@github.com:unconed/TermKit.git --recursive`
+6. Users of older git versions will need to type: `git submodule update --init`
+7. Run the NodeKit daemon: `cd TermKit/Node; node nodekit.js`
+8. Unzip and run the Mac app in Build/TermKit.zip
 
 *Tip:* Press ⌥⌘C to access the WebKit console.
 

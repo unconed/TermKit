@@ -36,7 +36,7 @@ http://acko.net/blog/on-termkit
 
 Unfortunately, TermKit currently requires some assembly.
 
-1. Acquire the Mac development tools.
+1. Install the Mac development tools (Xcode and friends).
 2. [Install node.js](https://github.com/joyent/node/wiki/Installation).
 3. If not covered in #2, install npm: `curl http://npmjs.org/install.sh | sh`
 4. Install node-mime: `npm install mime`

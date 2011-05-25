@@ -21,7 +21,7 @@ of.prototype = {
   },
 
   // Get the n'th view in the frame.
-  get: function (i, callback) {
+  get: function (i) {
     this.allocate(i + 1);
     return this.views[i];
   },
@@ -41,6 +41,8 @@ of.prototype = {
 
   // Update the element's markup in response to internal changes.
   allocate: function (views) {
+    var that = this;
+    
     if (this.views.length < views) {
       views -= this.views.length;
       while (views--) {

@@ -95,6 +95,8 @@ exports.main = function (tokens, pipes, exit) {
         // Remove content-length, output rest.
         headers.set('Content-Length', null);
         pipes.dataOut.write(headers.generate());
+        
+        return buffered;
       },
 
       /**

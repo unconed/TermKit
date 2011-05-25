@@ -62,6 +62,8 @@ tc.shell.prototype = {
           frame.allocate(args.views.length);
           for (i in args.views) (function (id) {
             view = frame.get(+i);
+
+            // Set callback for notifying back-end.
             view.callback(function (method, args) {
               // Lock callback to this view.
               args.view = id;

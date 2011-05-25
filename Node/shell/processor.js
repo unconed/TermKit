@@ -39,7 +39,7 @@ exports.processor.prototype = {
   // Parse JSON command.
   receive: function (data) {
     try {
-      var message = JSON.parse(data);
+      var message = JSON.parse(data), view;
       if (typeof message == 'object') {
         var that = this,
             exit, returned;
@@ -54,7 +54,7 @@ exports.processor.prototype = {
             
             if (!returned) {
               meta = meta || {};
-              meta.success = !!success;
+              meta.success = success;
 
               meta.answer = message.query;
               meta.args = object;
@@ -71,7 +71,14 @@ exports.processor.prototype = {
           return;
         }
 
-        handler && handler.call(this, message.args, exit);
+        // Handle internal events.
+        if (handler) {
+          handler.call(this, message.args, exit);
+        }
+        // Dispatch to process viewIn.
+        else if (args.view && (view = this.views[args.view])) {
+          view.emit(message);
+        }
       }
     }
     catch (e) {
@@ -79,13 +86,13 @@ exports.processor.prototype = {
   },
   
   // Establish a view stream.
-  attach: function (view, emitter) {
-    this.views[view] = emitter;
+  attach: function (view) {
+    this.views[view.id] = view;
   },
   
   // Drop a view stream.
   detach: function (view) {
-    delete this.views[view];
+    delete this.views[view.id];
   },
   
   // Invoke an asynchronous method.
@@ -177,8 +184,4 @@ workerProcessor.handlers = {
     };
   },
   
-  "view.callback": function (args, exit) {
-    
-  },
-
 };

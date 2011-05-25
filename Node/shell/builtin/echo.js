@@ -1,10 +1,22 @@
-var view = require('view/view');
+var meta = require('shell/meta');
 
 exports.main = function (tokens, pipes, exit) {
-  var out = new view.bridge(pipes.viewOut);
 
+  // Prepare text.
   tokens.shift();
-  out.print(tokens.join(' '));
+  var data = tokens.join(' ');
 
-  exit(true);
+  // Write headers.
+  var headers = new meta.headers();
+  headers.set({
+    'Content-Type': [ 'text/plain', { charset: 'utf-8' } ],
+    'Content-Length': data.length,
+  });
+  pipes.dataOut.write(headers.generate());
+
+  // Write data.
+  pipes.dataOut.write(data);
+
+  exit(-1);
 };
+

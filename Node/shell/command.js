@@ -17,9 +17,13 @@ exports.outputView = function (processor) {
   var id = this.id = outputViewCounter++;
 
   // Generate 'view in' emitter for this view.
+  // Fires 'message' events on pipes.viewIn.
   this.emitter = new EventEmitter();
+  this.emit = function (message) {
+    this.emitter.emit('message', message.method, message.args);
+  };
 
-  // Generate 'view out' invoke method locked to one view.
+  // Generate 'view out' invoke method pipes.viewOut(), locked to one view.
   this.invoke = function (method, args) {
     args = args || {};
     args.view = id;
@@ -40,15 +44,16 @@ exports.commandList = function (processor, tokens, exit, rel) {
   for (var i = 0; i <= n; ++i) {
     view = new exports.outputView(processor);
     views.push(view);
-
-    // Attach view's emitter to viewstream.
-    processor.attach(view.id, view.emitter);
   }
 
   // Allocate view streams on client side.
   processor.notify('view.open', {
     rel: rel,
-    views: views.map(function (v) { return v.id; }),
+    views: views.map(function (view) {
+      // Attach view's emitter to viewstream.
+      processor.attach(view);
+      return view.id;
+    }),
   });
 
   // Track exit of processes.
@@ -56,7 +61,11 @@ exports.commandList = function (processor, tokens, exit, rel) {
       track = whenDone(function () {
         // Detach all views.
         processor.notify('view.close', {
-          views: views.map(function (v) { return v.id; }),
+          views: views.map(function (view) {
+            // Detach view's emitter from viewstream.
+            processor.detach(view);
+            return view.id;
+          }),
         });
 
         // Return the last exit info to the shell.

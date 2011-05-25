@@ -163,7 +163,7 @@ body {
 .termkitCommand > span.sigil {
   position: absolute;
   left: 15px;
-  top: 12px;
+  top: 11px;
   color: #ccc;
   font-size: 12px;
 }
@@ -174,7 +174,12 @@ body {
 }
 
 .termkitCommand > span.sigil-warning {
-  color: #ff9;
+  top: 9px;
+  font-size: 14px;
+  color: #fd3;
+  text-shadow: 0 0 5px rgba(255, 200, 0, 1),
+               0 0 10px rgba(255, 100, 0, 1),
+               0 0 20px rgba(255, 0, 0, 1);
 }
 
 .termkitCommand > span.sigil-error {

@@ -122,7 +122,7 @@ var handler = {
     // Decide on buffered vs unbuffered operation.
   
     return true; // Buffered stream.
-    return true; // Unbuffered stream.
+    return false; // Unbuffered stream.
   },
 
   /**

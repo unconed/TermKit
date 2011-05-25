@@ -73,7 +73,7 @@ cv.command.prototype = {
     var sigil = {
       'ok': '✔',
       'error': '✖',
-      'warning': '⚠',
+      'warning': '✔',
     }[this.state];
     this.$sigil.attr('class', 'sigil sigil-'+this.state).html(this.collapsed ? '▶' : sigil);
 

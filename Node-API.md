@@ -10,6 +10,7 @@ exports.main = function (tokens, pipes, exit) {
   exit(true); // Success
   exit(false); // Error
   exit(true, { ... }); // Success with meta data.
+  exit(-1); // Success with warnings
 };
 ```
 

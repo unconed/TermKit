@@ -7,6 +7,9 @@
 ```
 exports.main = function (tokens, pipes, exit) {
 
+  exit(true); // Success
+  exit(false); // Error
+  exit(true, { ... }); // Success with meta data.
 };
 ```
 
@@ -20,7 +23,7 @@ exports.main = function (tokens, pipes, exit) {
  
 `pipes` is an object with the 5 TermKit pipes: Data In/Out, View In/Out, and Error Out.
 
-`exit` is a function to call when ending the process. This call can be nested inside asynchronous closures.
+`exit` is a function to call when ending the process. This call can be nested inside asynchronous closures. Pass `true` for success, `false` for error. You can pass out additional meta-data in the second argument, though this is currently not used for anything.
 
 ## Pipes 
 

@@ -52,6 +52,10 @@ Unfortunately, TermKit currently requires some assembly.
 Preliminary instructions on how to write TermKit native commands can be found here:
 https://github.com/unconed/TermKit/blob/master/Node-API.md
 
+## Credits
+
+TermKit by Steven Wittens.
+
 Includes:
 
 * “NSImage+QuickLook” by Matt Gemmell (http://mattgemmell.com/source).

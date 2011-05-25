@@ -20,7 +20,7 @@ There is no plug-in system yet, so you'll have to:
 
 ### Arguments
 
-`tokens` is an array of strings representing the arguments including the executable itself.
+`tokens` is an array of strings representing the arguments including the executable itself, i.e. classic 'argv'.
  e.g. [ 'echo', 'Hello world!' ].
  
 `pipes` is an object with the 5 TermKit pipes: Data In/Out, View In/Out, and Error Out.

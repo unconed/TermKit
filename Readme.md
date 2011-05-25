@@ -8,6 +8,8 @@ Built out of WebKit and Node.js.
 
 Runs in a Mac/Cocoa app, and can be hacked into any WebKit browser (Chrome, Safari).
 
+[Follow TermKit on Twitter](https://twitter.com/TermKit) for the latest news and updates.
+
 For the background and architecture, please read and comment on:
 http://acko.net/blog/on-termkit
 
@@ -34,6 +36,12 @@ http://acko.net/blog/on-termkit
 
 ## How to use:
 
+Detailed instructions are available from these sources:
+
+* [Mac OS X (OS X Daily)](http://osxdaily.com/2011/05/19/termkit-terminal-reimagined-how-to-install/)
+* [Windows (Redpoint blog)](http://blog.redpointsoftware.com.au/termkit/)
+* [Linux, Chrome only (Easytech blog)](http://blog.easytech.com.ar/2011/05/21/playing-with-termkit-with-chrome/) 
+
 Unfortunately, TermKit currently requires some assembly.
 
 1. Install the Mac development tools (Xcode and friends).
@@ -54,7 +62,9 @@ https://github.com/unconed/TermKit/blob/master/Node-API.md
 
 ## Credits
 
-TermKit by Steven Wittens.
+TermKit by [Steven Wittens](http://acko.net) ([@unconed](https://twitter.com/unconed)).
+
+Windows port by James Rhodes ([@hachque](https://twitter.com/hachque)).
 
 Includes:
 

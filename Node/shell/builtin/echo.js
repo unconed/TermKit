@@ -17,6 +17,6 @@ exports.main = function (tokens, pipes, exit) {
   // Write data.
   pipes.dataOut.write(data);
 
-  exit(-1);
+  exit(true);
 };
 

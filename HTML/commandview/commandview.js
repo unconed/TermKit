@@ -7,6 +7,7 @@ var cv = termkit.commandView = function (shell) {
   var that = this;
 
   this.shell = shell;
+  this.shell.commandView = this;
 
   this.$element = this.$markup();
 
@@ -50,6 +51,19 @@ cv.prototype = {
     this.resize();
   },
   
+  clear: function () {
+    var contents = this.commandList.contents;
+
+    var i = 0, j = 0, n = this.commandList.length, that = this;
+    for (; j < n; ++i, ++j) (function (command) {
+      if (command.state != 'running') {
+        command.$element.remove();
+        that.commandList.remove(i);
+        i--;
+      }
+    })(contents[j]);
+  },
+  
   resize: function () {
     // Measure view.
     var height = $('body').height() - this.$context[0].offsetHeight - (22 + 13) * 2 - 5;
@@ -73,7 +87,5 @@ cv.prototype = {
   //},
 
 };
-
-///////////////////////////////////////////////////////////////////////////////
 
 })(jQuery);

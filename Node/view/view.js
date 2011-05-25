@@ -196,3 +196,16 @@ exports.spinner = function (id) {
   };
 };
 
+/**
+ * Widget: link.
+ */
+exports.link = function (id, url, label) {
+  
+  return {
+    type: 'link',
+    id: id || null,
+    url: url || null,
+    label: label || url || null,
+  };
+};
+

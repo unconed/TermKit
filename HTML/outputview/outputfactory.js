@@ -198,12 +198,11 @@ widgets.icon.prototype = $.extend(new ov.outputNode(), {
   // Process the icon update.
   process: function () {
     function yield() {
+      widgets.icon.limit++;
       widgets.icon.process();
     }
     
-    this.setOwnIcon(yield);
-    
-    widgets.icon.limit++;
+    this.setOwnIcon(yield);    
   },
   
   // Update markup to match.

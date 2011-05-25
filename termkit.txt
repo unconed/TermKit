@@ -72,7 +72,11 @@ Good desktop citizen:
   [ ] interactive execution
   [ ] inline man-pages tips
   [ ] version control
+  [ ] termkit:// link handler for executing commands (intra-shell only)
+    (idea: Allan Tan)
   [ ] interactive quicklook
+    (tip: mikey_p on hackernews)
+    qlmanage -p "$@" >& /dev/null
   [ ] wildcard handling
   [ ] regexp hinter
 
@@ -421,33 +425,10 @@ more ideas:
 * autocompleted/predicted history access
 * guard if command is dangerous / doesn't make sense
 
-+++ -
++++  To read
 
-Code base on May 9th 2011
+http://ripple.fortytwo.net/
 
-front
-1200 tokenfield + autocomplete
-690  output view
-393  command handling
-184  shell client
-181  misc
-465  CSS
-55   HTML
-= 3168
+http://directwebremoting.org/blog/joe/2009/05/27/command_lines.html
 
-back
-204  builtin commands
-214  autocomplete
-255  output formatter
-250  command handling
-103  router
-166  misc
-162  view bridge
-160  processor
-83   shell
-= 1597
-
-tests = 162
-
-4927 lines of code
- + jquery + socket.io + syntax highlighter + node + node-mime 
+http://kkovacs.eu/cool-but-obscure-unix-tools

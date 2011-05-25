@@ -21,6 +21,7 @@ exports.outputView = function (processor) {
 
   // Generate 'view out' invoke method locked to one view.
   this.invoke = function (method, args) {
+    args = args || {};
     args.view = id;
     processor.notify(method, args);
   };

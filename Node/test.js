@@ -541,6 +541,14 @@ function testPipe(assert) {
   
 }
 
+/**
+ * Test binary handling.
+ */
+function testBinary(assert) {
+  test = misc.escapeBinary("\u0000\u0001\u0002\u0003 xxx \r\n \u1fff \ufffd");
+  assert(test == "\\u0000\\u0001\\u0002\\u0003 xxx \r\n \u1fff \ufffd", "Binary escaping");
+}
+
 // Run tests.
 var tests = {
   handshake: testHandshake,
@@ -552,6 +560,7 @@ var tests = {
   parseArgs: testParseArgs,
   pipe: testPipe,
   grep: testGrep,
+  binary: testBinary,
 };
 for (i in tests) (function (i, test) {
   test(function (c, msg) {

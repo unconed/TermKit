@@ -216,7 +216,7 @@ exports.escapeBinary = function (data) {
   var binary = data.toString('utf-8'), n = binary.length, i = 0;
   return binary.replace(/([\u0000-\u001F])/g, function (x, char) {
     if (/[^\r\n\t]/(char)) {
-      var num = char.charAt(0).toString(16);
+      var num = char.charCodeAt(0).toString(16);
       while (num.length < 4) num = '0' + num;
       return '\\u' + num;
     }

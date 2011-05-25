@@ -8,6 +8,7 @@ var tc = termkit.client;
 tc.shell = function (client, environment, success) {
   var that = this;
   
+  this.commandView = null;
   this.client = client;
   this.environment = environment;
   this.id = null;
@@ -47,6 +48,11 @@ tc.shell.prototype = {
     var that = this;
     
     switch (method) {
+      
+      case 'view.clear':
+        this.commandView && this.commandView.clear();
+        break;
+      
       case 'view.open':
         var frame = this.frames[args.rel];
 

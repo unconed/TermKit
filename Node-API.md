@@ -13,6 +13,8 @@ exports.main = function (tokens, pipes, exit) {
 };
 ```
 
+There is no plug-in system yet, so you'll have to:
+
 * Place it in Node/shell/builtin/.
 * Add your command to the list in `Node/shell/builtin/builtin.js`.
 

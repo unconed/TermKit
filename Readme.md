@@ -6,7 +6,7 @@
 
 Built out of WebKit and Node.js.
 
-Runs in a Mac/Cocoa app, and can be hacked into any WebKit browser (Chrome, Safari).
+Runs as a desktop app on Mac and Windows, and can be hacked into any WebKit browser (Chrome, Safari).
 
 [Follow TermKit on Twitter](https://twitter.com/TermKit) for the latest news and updates.
 

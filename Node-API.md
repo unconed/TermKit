@@ -67,6 +67,7 @@ exports.main = function (tokens, pipes, exit) {
 ```
 
 Meta.headers has a nice getter/setter API for manipulating MIME fields and their parameters:
+
 ```
 // Single setters
 set(key, value)
@@ -94,12 +95,14 @@ get('key', 'parameter');
 
 To handle headers on dataIn, you can use the built-in `reader.js`. To use it, create a helper object with a begin, data and end method. The reader will invoke each method as needed.
 
+```
 // Attach reader to dataIn pipe.
 var pipe = new reader.reader(pipes.dataIn,
   function () { return handler; },
   function () {
     exit(true);
   });
+```
 
 Reader.js has two modes. It can do unbuffered I/O, where data is streamed in immediately. In this case, the begin and end handlers will each fire once, and the data handler will be fired any number of times between them (or not at all).
 

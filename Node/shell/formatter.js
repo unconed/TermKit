@@ -386,7 +386,7 @@ exports.plugins.binary = function (headers, out) {
 exports.plugins.binary.prototype = extend(new exports.plugin(), {
 
   begin: function () {
-    this.out.add(null, view.code('output', this.headers.generate(), 'text/plain'));
+//    this.out.add(null, view.code('output', this.headers.generate(), 'text/plain'));
     this.out.add(null, view.code('output', '', 'text/plain'));
   },
 

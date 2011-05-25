@@ -25,7 +25,7 @@ There is no plug-in system yet, so you'll have to:
  
 `pipes` is an object with the 5 TermKit pipes: Data In/Out, View In/Out, and Error Out.
 
-`exit` is a function to call when ending the process. This call can be nested inside asynchronous closures. Pass `true` for success, `false` for error. You can pass out additional meta-data in the second argument, though this is currently not used for anything.
+`exit` is a function to call when ending the process. This call can be nested inside asynchronous closures. Pass `true` for success, `false` for error, -1 for success with warnings. You can pass out additional meta-data in the second argument, though this is currently not used for anything.
 
 ## Pipes 
 

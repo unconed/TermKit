@@ -60,8 +60,7 @@ exports.processor.prototype = {
               meta.answer = message.query;
               meta.args = object;
 
-              // Log status and send to front-end.
-              that.status(success, object);
+              // Send answer back.
               that.send(meta);
 
               // Only return once.
@@ -175,7 +174,10 @@ workerProcessor.handlers = {
         tokens = args.tokens,
         rel = args.rel;
 
+    // Wrap exit callback to pass back updated environment.
     var shellExit = function (success, object, meta) {
+      that.status(success, object);
+
       meta = meta || {};
       meta.environment = that.environment();
       exit(success, object, meta);

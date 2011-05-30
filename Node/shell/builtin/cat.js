@@ -4,7 +4,7 @@ var fs = require('fs'),
     meta = require('shell/meta'),
     expandPath = require('misc').expandPath;
 
-exports.main = function (tokens, pipes, exit) {
+exports.main = function (tokens, pipes, exit, environment) {
   var out = new view.bridge(pipes.viewOut);
   var chunkSize = 16384;
 

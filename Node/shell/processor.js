@@ -59,6 +59,7 @@ exports.processor.prototype = {
               meta.answer = message.query;
               meta.args = object;
 
+              that.status(success, object);
               that.send(meta);
               returned = true;
             }
@@ -103,6 +104,11 @@ exports.processor.prototype = {
     };
     this.send(message);
   },
+
+  // Store command status in environment.
+  status: function (success, object) {
+    this.status = { success: success, data: object };
+  },
   
   // Return the environment.
   environment: function () {
@@ -115,6 +121,7 @@ exports.processor.prototype = {
       path: process.env.PATH.split(':'),
       manPath: process.env.MANPATH,
       defaultShell: process.env.SHELL,
+      command: this.status,
     };
   },
 };

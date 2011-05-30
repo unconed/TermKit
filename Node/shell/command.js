@@ -73,7 +73,8 @@ exports.commandList = function (processor, tokens, exit, rel) {
       });
 
   // Create command units.
-  var that = this;
+  var that = this,
+      environment = processor.environment();
   this.units = tokens.map(function (command, i) {
     // Track exit invocation.
     var exit = track(function (success, object) {
@@ -82,7 +83,7 @@ exports.commandList = function (processor, tokens, exit, rel) {
         returns = [ success, object ];
       }
     });
-    return exports.commandFactory(command, views[i].emitter, views[i].invoke, exit);
+    return exports.commandFactory(command, views[i].emitter, views[i].invoke, exit, environment);
   });
   
   // Spawn and link together.
@@ -110,22 +111,22 @@ exports.commandList.prototype = {
 /**
  * Command unit factory.
  */
-exports.commandFactory = function (command, emitter, invoke, exit) {
+exports.commandFactory = function (command, emitter, invoke, exit, environment) {
   var unit;
   try {
     // Try built-in.
-    unit = new exports.commandUnit.builtinCommand(command, emitter, invoke, exit);
+    unit = new exports.commandUnit.builtinCommand(command, emitter, invoke, exit, environment);
     unit.spawn();
   }
   catch (e) {
     try {
       // Try native command.
-      unit = new exports.commandUnit.unixCommand(command, emitter, invoke, exit);
+      unit = new exports.commandUnit.unixCommand(command, emitter, invoke, exit, environment);
       unit.spawn();
     }
     catch (e) {
       // Execute null.js fallback.
-      unit = new exports.commandUnit.builtinCommand(command, emitter, invoke, exit);
+      unit = new exports.commandUnit.builtinCommand(command, emitter, invoke, exit, environment);
       unit.override = 'null';
       unit.spawn();
     }
@@ -137,11 +138,12 @@ exports.commandFactory = function (command, emitter, invoke, exit) {
 /**
  * A single command in a pipeline.
  */
-exports.commandUnit = function (command, emitter, invoke, exit) {
+exports.commandUnit = function (command, emitter, invoke, exit, environment) {
   this.command = command;
   this.emitter = emitter;
   this.invoke = invoke;
   this.exit = exit;
+  this.environment = environment;
 };
 
 exports.commandUnit.prototype = {
@@ -170,7 +172,7 @@ exports.commandUnit.prototype = {
 /**
  * Built-in command.
  */
-exports.commandUnit.builtinCommand = function (command, emitter, invoke, exit) {
+exports.commandUnit.builtinCommand = function (command, emitter, invoke, exit, environment) {
   exports.commandUnit.apply(this, arguments);
 }
 
@@ -256,14 +258,14 @@ exports.commandUnit.builtinCommand.prototype.go = function () {
   };
   
   async(function () {
-    that.handler.main.call(that, that.command, pipes, exit);
+    that.handler.main.call(that, that.command, pipes, exit, this.environment);
   });
 };
 
 /**
  * UNIX command.
  */
-exports.commandUnit.unixCommand = function (command, emitter, invoke, exit) {
+exports.commandUnit.unixCommand = function (command, emitter, invoke, exit, environment) {
   exports.commandUnit.apply(this, arguments);
 }
 
@@ -277,7 +279,7 @@ exports.commandUnit.unixCommand.prototype.spawn = function () {
   this.process = spawn(prefix, command);
 
   this.process.on('exit', function (code) {
-    that.exit(!code);
+    that.exit(!code, { code: code });
   });
 };
 

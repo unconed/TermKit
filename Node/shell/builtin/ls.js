@@ -8,7 +8,7 @@ var fs = require('fs'),
     expandPath = require('misc').expandPath,
     parseArgs = require('misc').parseArgs;
 
-exports.main = function (tokens, pipes, exit) {
+exports.main = function (tokens, pipes, exit, environment) {
   
   var out = new view.bridge(pipes.viewOut);
   

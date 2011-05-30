@@ -1,7 +1,7 @@
 var view = require('view/view'),
     expandPath = require('misc').expandPath;
 
-exports.main = function (tokens, pipes, exit) {
+exports.main = function (tokens, pipes, exit, environment) {
 
   var out = new view.bridge(pipes.viewOut);
   

@@ -2,7 +2,7 @@ var view = require('view/view'),
     reader = require('shell/reader'),
     parseArgs = require('misc').parseArgs;
 
-exports.main = function (tokens, pipes, exit) {
+exports.main = function (tokens, pipes, exit, environment) {
   var out = new view.bridge(pipes.viewOut);
 
   var args = parseArgs(tokens),

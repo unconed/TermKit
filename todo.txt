@@ -1,5 +1,7 @@
 Tasks:
+[X] return process meta-data in environment
 [ ] backgrounding / new command trigger
+[ ] command aliases
 [ ] command decoration
 [ ] interactive execution
 [ ] inline man-pages tips
@@ -109,6 +111,7 @@ Prototype:
     [X] smart binary output
     [ ] handle encodings
   [ ] backgrounding / new command trigger
+  [ ] command aliases
   [X] preferences
   [ ] sudo support (askpass env?)
 

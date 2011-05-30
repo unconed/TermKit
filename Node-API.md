@@ -5,7 +5,7 @@
 * Make a .js file that exports a `main` function:
 
 ```
-exports.main = function (tokens, pipes, exit) {
+exports.main = function (tokens, pipes, exit, environment) {
 
   exit(true); // Success
   exit(false); // Error
@@ -27,6 +27,8 @@ There is no plug-in system yet, so you'll have to:
 `pipes` is an object with the 5 TermKit pipes: Data In/Out, View In/Out, and Error Out.
 
 `exit` is a function to call when ending the process. This call can be nested inside asynchronous closures. Pass `true` for success, `false` for error, -1 for success with warnings. You can pass out additional meta-data in the second argument, though this is currently not used for anything.
+
+`environment` is a read-only object with name-value pairs containing the execution environment.
 
 ## Pipes 
 

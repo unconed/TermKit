@@ -156,14 +156,14 @@ out.print('Hello world');
 
 // 'Print' a progressbar with ID 'progress', value 0% and range 0-100%.
 var progressBar = view.progress('progress', 0, 0, 100);
-out.add(null, progressBar);
+out.print(progressBar);
 
 // Change progress bar to 50%.
 out.update('progress', { value: 50 });
 
 // Create an empty list with ID 'list' and print it.
 var list = view.list('list');
-out.add(null, list);
+out.print(list);
 
 // Add two images to the list 'list'.
 var item;

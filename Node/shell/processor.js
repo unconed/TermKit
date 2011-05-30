@@ -53,14 +53,18 @@ exports.processor.prototype = {
           exit = function (success, object, meta) {
             
             if (!returned) {
+              // Format return value.
               meta = meta || {};
               meta.success = success;
 
               meta.answer = message.query;
               meta.args = object;
 
+              // Log status and send to front-end.
               that.status(success, object);
               that.send(meta);
+
+              // Only return once.
               returned = true;
             }
           };
@@ -68,7 +72,7 @@ exports.processor.prototype = {
         }
 
         if (typeof message.answer == 'number') {
-          // unsupported. worker can't make queries.
+          // Unsupported. worker can't make queries.
           return;
         }
 

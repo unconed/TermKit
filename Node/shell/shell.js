@@ -5,11 +5,17 @@ var spawn = require('child_process').spawn,
 
 var config = require('config').getConfig();
 
+/**
+ * Interface to shell worker.
+ *
+ * Spawns worker.js and sends messages to it.
+ */
 exports.shell = function (args, router) {
 
   this.router = router;
   this.buffer = "";
 
+  // Get user
   var user = args.user || process.env.USER;
   var that = this;
   
@@ -33,13 +39,12 @@ exports.shell = function (args, router) {
   if (p) {
     // Bind exit.
     p.on('exit', function (code) {
-//      console.log('shell worker exited with code ' + code);
     });
 
-    // Bind receiver.
+    // Bind stdout receiver.
     p && p.stdout.on('data', function (data) { that.receive(data); });
 
-    // Bind receiver.
+    // Bind stderr receiver.
     p && p.stderr.on('data', function (data) { that.error(data); });
   }
   else {
@@ -52,27 +57,33 @@ exports.shell = function (args, router) {
 };
 
 exports.shell.prototype = {
+  // Send configuration to worker.
   sync: function () {
     this.send(null, 'shell.config', config.get());
   },
   
+  // Dispatch message from router to worker.
   dispatch: function (query, method, args, exit) {
     this.send(query, method, args);
   },
 
+  // Close worker.
   close: function () {
     this.process.stdin.end();
   },
   
+  // Send query to worker.
   send: function (query, method, args) {
     var json = JSON.stringify({ query: query, method: method, args: args });
     this.process.stdin.write(json + "\u0000");
   },
   
+  // Log error.
   error: function (data) {
     console.log('worker: ', data.toString());
   },
   
+  // Receive message from worker.
   receive: function (data) {
     this.buffer += data;
     while (this.buffer.indexOf("\u0000") >= 0) {

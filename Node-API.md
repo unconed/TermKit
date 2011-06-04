@@ -96,13 +96,19 @@ get('key');
 get('key', 'parameter');
 ```
 
-To handle headers on dataIn, you can use the built-in `reader.js`. To use it, create a helper object with a begin, data and end method. The reader will invoke each method as needed.
+To handle headers on dataIn, you can use the built-in `reader.js`. To use it, create a handler object with a begin, data and end method. The reader will invoke each method as needed.
 
 ```
+var handler = { ... };
+
 // Attach reader to dataIn pipe.
 var pipe = new reader.reader(pipes.dataIn,
-  function () { return handler; },
+  function (headers) {
+    // Inspect headers, return appropriate handler
+    return handler;
+  },
   function () {
+    // Pipe was closed
     exit(true);
   });
 ```

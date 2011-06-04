@@ -2,6 +2,8 @@ Tasks:
 [X] return process meta-data in environment
 [ ] backgrounding / new command trigger
 [ ] command aliases
+[ ] autocomplete history
+[ ] async popup / completion keystroke buffering
 [ ] command decoration
 [ ] interactive execution
 [ ] inline man-pages tips

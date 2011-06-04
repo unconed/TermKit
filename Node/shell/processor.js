@@ -110,7 +110,7 @@ exports.processor.prototype = {
 
   // Store command status in environment.
   status: function (success, object) {
-    this.status = { success: success, data: object };
+    this._status = { success: success, data: object };
   },
   
   // Return the environment.
@@ -124,7 +124,7 @@ exports.processor.prototype = {
       path: process.env.PATH.split(':'),
       manPath: process.env.MANPATH,
       defaultShell: process.env.SHELL,
-      command: this.status,
+      command: this._status,
     };
   },
 };

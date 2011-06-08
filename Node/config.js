@@ -1,6 +1,6 @@
 var EventEmitter = require('events').EventEmitter,
-    extend = require('misc').extend,
-    composePath = require('misc').composePath,
+    extend = require('./misc').extend,
+    composePath = require('./misc').composePath,
     fs = require('fs'),
     singleton;
 

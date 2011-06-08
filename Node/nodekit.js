@@ -1,17 +1,16 @@
 var termkit = {
   version: 1,
 };
-require.paths.unshift('./socket.io-node/lib');
-require.paths.unshift('.');
-require.paths.unshift('../Shared/');
+
+require.paths.unshift(__dirname + '/../Shared/');
 
 // Load requirements.
 var http = require('http'),  
-    io = require('socket.io')
-    router = require("router");
+    io = require('./socket.io-node'),
+    router = require("./router");
 
 // Load config file.
-var config = require('config').getConfig();
+var config = require('./config').getConfig();
 
 // Set up http server.
 var server = http.createServer(function (request, result) { 

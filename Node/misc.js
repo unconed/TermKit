@@ -183,6 +183,12 @@ exports.parseArgs = function (tokens) {
     if (m = /^-([A-Za-z0-9_-])$/(tokens[i])) {
       options[m[1]] = true;
     }
+    else if (m = /^-([A-Za-z0-9_-]+)$/(tokens[i])) {
+      var flags = m[1].split(), j;
+      for (j in flags) {
+        options[flags[i]] = true;
+      }
+    }
     else if (m = /^--([A-Za-z0-9_-]+)$/(tokens[i])) {
       if (typeof tokens[i + 1] != 'undefined' && tokens[i + 1][0] != '-') {
         ++i;

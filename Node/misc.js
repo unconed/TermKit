@@ -180,13 +180,13 @@ exports.parseArgs = function (tokens) {
       i = 1, m;
 
   for (; i < n; ++i) (function (token) {
-    if (m = /^-([A-Za-z0-9_-])$/(tokens[i])) {
+    if (m = /^-([A-Za-z0-9_])$/(tokens[i])) {
       options[m[1]] = true;
     }
-    else if (m = /^-([A-Za-z0-9_-]+)$/(tokens[i])) {
-      var flags = m[1].split(), j;
+    else if (m = /^-([A-Za-z0-9_][A-Za-z0-9_-]*)$/(tokens[i])) {
+      var flags = m[1].split(''), j;
       for (j in flags) {
-        options[flags[i]] = true;
+        options[flags[j]] = true;
       }
     }
     else if (m = /^--([A-Za-z0-9_-]+)$/(tokens[i])) {

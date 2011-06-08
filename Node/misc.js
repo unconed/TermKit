@@ -216,11 +216,33 @@ exports.objectKeys = function (object) {
 }
 
 /**
- * Escape binary data for display.
+ * Escape binary data for display as HTML.
  */
 exports.escapeBinary = function (data) {
   var binary = data.toString('utf-8'), n = binary.length, i = 0;
-  return binary.replace(/([\u0000-\u001F])/g, function (x, char) {
+
+  // Escape HTML characters.
+  binary = binary.replace(/[<&]/g, function (x) {
+    return { '<': '&lt;', '&': '&amp;' };
+  });
+
+  // Handle antique italic escapes used by grotty -c.
+  binary = binary.replace(/_\u0008(.)\u0008\1/g, function (x, char) {
+    return '<b><i>' + char + '</i></b>';
+  });
+
+  // Handle antique bold escapes used by grotty -c.
+  binary = binary.replace(/(.)\u0008\1/g, function (x, char) {
+    return '<b>' + char + '</b>';
+  });
+
+  // Handle antique italic escapes used by grotty -c.
+  binary = binary.replace(/_\u0008(.)/g, function (x, char) {
+    return '<i>' + char + '</i>';
+  });
+
+  // Escape non-printables
+  binary = binary.replace(/([\u0000-\u001F\u0080-\u009F])/g, function (x, char) {
     if (/[^\r\n\t]/(char)) {
       var num = char.charCodeAt(0).toString(16);
       while (num.length < 4) num = '0' + num;
@@ -228,4 +250,6 @@ exports.escapeBinary = function (data) {
     }
     return char;
   });
+
+  return binary;
 }

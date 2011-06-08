@@ -387,11 +387,11 @@ exports.plugins.binary.prototype = extend(new exports.plugin(), {
 
   begin: function () {
 //    this.out.add(null, view.code('output', this.headers.generate(), 'text/plain'));
-    this.out.add(null, view.code('output', '', 'text/plain'));
+    this.out.add(null, view.html('output', ''));
   },
 
   data: function (data) {
-    var binary = escapeBinary(data);
+    var binary = '<pre>'+ escapeBinary(data) + '</pre>';
     this.out.update('output', { contents: binary }, true);
   },
 

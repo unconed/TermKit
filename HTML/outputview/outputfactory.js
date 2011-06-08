@@ -337,7 +337,7 @@ widgets.code = function (properties) {
   var brushes = {
     'text/x-applescript': 'applescript',
     'text/x-actionscript': 'as3',
-    'text/x-shellscript': 'sh',
+    'text/x-shellscript': 'text',
     'text/x-c': 'c',
     'text/x-c++': 'cpp',
     'text/x-csharpsrc': 'c#',
@@ -357,7 +357,8 @@ widgets.code = function (properties) {
     'text/x-scala': 'scala',
     'text/x-sql': 'sql',
     'text/xml': 'xml',
-    
+    'text/html': 'text',
+    'text/plain': 'text',
   };
   this.brush = brushes[properties.language];
   

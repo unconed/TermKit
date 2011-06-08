@@ -63,7 +63,7 @@ exports.reader.prototype = {
     if (this.buffered) {
 
       if (!this.buffer) {
-        this.buffer = new Buffer(that.length);
+        this.buffer = new Buffer(this.length);
 
         // Join chunks.
         for (i in this.chunks) {

@@ -1,4 +1,4 @@
 #!/bin/bash
 rm -rf TermKit.*
-cp -R ../Cocoa/TermKit/Build/Release/TermKit.app .
+cp -R ../Cocoa/TermKit/build/Release/TermKit.app .
 zip -r TermKit.zip TermKit.app

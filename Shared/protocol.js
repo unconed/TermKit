@@ -104,13 +104,11 @@ exports.protocol.prototype = {
         out.push(message);
         console.log.apply(console, out);
       }
-      var json = JSON.stringify(message);
-      this.connection.send(json);
+      this.connection.send(message);
     }
   },
   
-  receive: function (data) {
-    var message = JSON.parse(data);
+  receive: function (message) {
     if (typeof message == 'object') {
       if (debug) {
         var out = ['receiving'];

@@ -16,6 +16,7 @@ var EventEmitter = require("events").EventEmitter;
 var router = require("router");
 var processor = require("shell/processor");
 var meta = require("shell/meta");
+var reader = require("shell/reader");
 var autocomplete = require("shell/autocomplete");
 var misc = require("misc");
 var grep = require("shell/builtin/grep");
@@ -143,10 +144,12 @@ function testCommands(assert) {
 //    { query: 5, method: 'shell.run', args: { tokens: [ 'pwd' ], ref: 7 } },
     { query: 5, method: 'shell.run', args: { tokens: [ 'cat', 'test.js' ], ref: 4 } },
   ], function (messages, success) {
+    /*
     for (i in messages) { 
       console.log(messages[i]);
       messages[i].args && messages[i].args.objects && console.log('Objects', messages[i].args.objects);
     }
+    */
     var last = messages[messages.length - 1];
     assert(last.success && last.answer == 5, "Run single command");
   });
@@ -285,9 +288,10 @@ function testAutocomplete(assert) {
   });
   
   auto.process(process.cwd(), [], [ 'c' ], 0, function (m) {
-    assert(m && m.length == 2 &&
-           m[0].label == 'cat' && m[0].type == 'command' &&
-           m[1].label == 'cd'  && m[1].type == 'command', "Autocomplete c command");
+    assert(m && m.length == 3 &&
+           m[0].label == 'cat'    && m[0].type == 'command' &&
+           m[1].label == 'cd'     && m[1].type == 'command' &&
+           m[2].label == 'clear'  && m[2].type == 'command', "Autocomplete c command");
   });
 
   auto.process(process.cwd(), [], [ 'cat', 'test.j' ], 1, function (m) {
@@ -374,6 +378,11 @@ function testParseArgs(assert) {
   assert(args.values.length == 1 && args.values[0] == 'foo bar', "Argument values");
   assert(args.options.v && args.options.a && args.options.b && (args.options.magic == '7'),
          "Argument options");
+
+   var args = misc.parseArgs([ 'grep', '-vab', 'foo bar', '--magic', '7' ]);
+   assert(args.values.length == 1 && args.values[0] == 'foo bar', "Argument values");
+   assert(args.options.v && args.options.a && args.options.b && (args.options.magic == '7'),
+          "Compact argument options");
   
 }
 
@@ -385,6 +394,14 @@ function testGrep(assert) {
   var handler = grep.main,
       exit = function () {},
       headers, content, pipes;
+
+  // Helper for converting strings to buffers.
+  function buffer(data) {
+    if (data.constructor != Buffer) {
+      data = new Buffer(data, 'utf8');
+    }
+    return data;
+  }
 
   // Simple grep.
   pipes = mockPipes();
@@ -402,8 +419,8 @@ function testGrep(assert) {
   content = "foo\nbar\nbaz\nbingo\nccbacc\n\n\nfffuuu\n";
   headers.set('Content-Type', 'text/plain');
   headers.set('Content-Length', content.length);
-  pipes.dataIn.emit('data', headers.generate());
-  pipes.dataIn.emit('data', content);
+  pipes.dataIn.emit('data', buffer(headers.generate()));
+  pipes.dataIn.emit('data', buffer(content));
   pipes.dataIn.emit('end');
 
   // Simple grep (negative).
@@ -422,8 +439,8 @@ function testGrep(assert) {
   content = "foo\nbar\nbaz\nbingo\nccbacc\n\n\nfffuuu\n";
   headers.set('Content-Type', 'text/plain');
   headers.set('Content-Length', content.length);
-  pipes.dataIn.emit('data', headers.generate());
-  pipes.dataIn.emit('data', content);
+  pipes.dataIn.emit('data', buffer(headers.generate()));
+  pipes.dataIn.emit('data', buffer(content));
   pipes.dataIn.emit('end');
   
   // JSON grep.
@@ -441,8 +458,8 @@ function testGrep(assert) {
   content = '{"foo":"bar","baz":"bang","bingo":"fffuu"}';
   headers.set('Content-Type', 'application/json');
   headers.set('Content-Length', content.length);
-  pipes.dataIn.emit('data', headers.generate());
-  pipes.dataIn.emit('data', content);
+  pipes.dataIn.emit('data', buffer(headers.generate()));
+  pipes.dataIn.emit('data', buffer(content));
   pipes.dataIn.emit('end');
 
   // JSON grep (negative).
@@ -460,8 +477,8 @@ function testGrep(assert) {
   content = '{"foo":"bar","baz":"bang","bingo":"fffuu"}';
   headers.set('Content-Type', 'application/json');
   headers.set('Content-Length', content.length);
-  pipes.dataIn.emit('data', headers.generate());
-  pipes.dataIn.emit('data', content);
+  pipes.dataIn.emit('data', buffer(headers.generate()));
+  pipes.dataIn.emit('data', buffer(content));
   pipes.dataIn.emit('end');
 
   // Complex JSON grep.
@@ -479,8 +496,8 @@ function testGrep(assert) {
   content = '[ "---", "xXx", { "foo": "XX", "bar": "YY", "baz": "X" }, { "meh": "no" }, [ 1, "XX", 3, "XXX" ]]';
   headers.set('Content-Type', 'application/json');
   headers.set('Content-Length', content.length);
-  pipes.dataIn.emit('data', headers.generate());
-  pipes.dataIn.emit('data', content);
+  pipes.dataIn.emit('data', buffer(headers.generate()));
+  pipes.dataIn.emit('data', buffer(content));
   pipes.dataIn.emit('end');
 
   // Complex JSON key grep.
@@ -498,8 +515,8 @@ function testGrep(assert) {
   content = '[ "---", "xXx", { "foo": "XX", "bar": "YY", "baz": "X" }, { "mah": "no" }, [ {"foo":"bar"}, "XX", 3, "XXX" ]]';
   headers.set('Content-Type', 'application/json');
   headers.set('Content-Length', content.length);
-  pipes.dataIn.emit('data', headers.generate());
-  pipes.dataIn.emit('data', content);
+  pipes.dataIn.emit('data', buffer(headers.generate()));
+  pipes.dataIn.emit('data', buffer(content));
   pipes.dataIn.emit('end');
 
   // Tricky object grep
@@ -509,7 +526,6 @@ function testGrep(assert) {
   pipes.dataOut.on('data', function (data) {
     data = data.toString('utf-8');
     if (data.indexOf('\r\n\r\n') >= 0) return;
-    console.log('tricky', data);
     assert(data == '{"list":[{"lol":"lulz"}]}',
            "Tricky object grep");
   });
@@ -518,8 +534,8 @@ function testGrep(assert) {
   content = '{"foo": "bar", "meh": "teh", "lol": "wai", "list": [ { "lol": "lulz", "fail": "json" } , "wtf" ] }';
   headers.set('Content-Type', 'application/json');
   headers.set('Content-Length', content.length);
-  pipes.dataIn.emit('data', headers.generate());
-  pipes.dataIn.emit('data', content);
+  pipes.dataIn.emit('data', buffer(headers.generate()));
+  pipes.dataIn.emit('data', buffer(content));
   pipes.dataIn.emit('end');
 }
 
@@ -531,10 +547,12 @@ function testPipe(assert) {
   mockShell([
     { query: 8, method: 'shell.run', args: { tokens: [ [ 'ls' ], [ 'grep', '.js' ] ], ref: 7 } },
   ], function (messages, success) {
+    /*
     for (i in messages) { 
       console.log(messages[i]);
       messages[i].args && messages[i].args.objects && console.log('Objects', messages[i].args.objects);
     }
+    */
     var last = messages[messages.length - 1];
     assert(last.success && last.answer == 8, "Run pipelined command");
   });
@@ -549,6 +567,60 @@ function testBinary(assert) {
   assert(test == "\\u0000\\u0001\\u0002\\u0003 xxx \r\n \u1fff \ufffd", "Binary escaping");
 }
 
+/**
+ * Test filereader.
+ */
+function testFilereader(assert) {
+
+  var pipe;
+
+  // Test type coercion.
+  
+  pipe = new reader.filesReader([ '../termkit.txt' ], function () {
+    return { begin: function (headers) {
+      assert(headers.get('Content-Type') == 'text/plain', 'Type for txt');
+    } };
+  });
+
+  pipe = new reader.filesReader([ '../Mockups/Shot-0.2.png' ], function () {
+    return { begin: function (headers) {
+      assert(headers.get('Content-Type') == 'image/png', 'Type for img');
+    } };
+  });
+
+  pipe = new reader.filesReader([ 'router.js' ], function () {
+    return { begin: function (headers) {
+      assert(headers.get('Content-Type') == 'application/javascript', 'Type for js');
+    } };
+  });
+
+  pipe = new reader.filesReader([ 'test.js', 'router.js' ], function () {
+    return { begin: function (headers) {
+      assert(headers.get('Content-Type') == 'application/javascript', 'Type for (js+js)');
+    } };
+  });
+
+  pipe = new reader.filesReader([ 'misc.js', 'router.js', 'config.js' ], function () {
+    return { begin: function (headers) {
+      assert(headers.get('Content-Type') == 'application/javascript', 'Type for (js+js+js)');
+    } };
+  });
+
+  pipe = new reader.filesReader([ 'misc.js', '../termkit.txt' ], function () {
+    return { begin: function (headers) {
+      assert(headers.get('Content-Type') == 'text/plain', 'Type for (js+txt)');
+    } };
+  });
+
+  pipe = new reader.filesReader([ 'misc.js', '../termkit.txt', '../Mockups/Shot-0.2.png' ], function () {
+    return { begin: function (headers) {
+      assert(headers.get('Content-Type') == 'application/octet-stream', 'Type for (js+txt+img)');
+    } };
+  });
+
+}
+
+
 // Run tests.
 var tests = {
   handshake: testHandshake,
@@ -561,6 +633,7 @@ var tests = {
   pipe: testPipe,
   grep: testGrep,
   binary: testBinary,
+  filereader: testFilereader,
 };
 for (i in tests) (function (i, test) {
   test(function (c, msg) {

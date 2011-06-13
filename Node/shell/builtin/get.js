@@ -47,7 +47,7 @@ exports.main = function (tokens, pipes, exit, environment) {
       if (length !== null) {
         progress = length > 16 * 1024; // yes, this is arbitrary
         if (progress) {
-          out.add(null, view.progress('progress', 0, 0, length));
+          out.print(view.progress('progress', 0, 0, length));
         }
       }
       

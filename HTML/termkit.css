@@ -57,6 +57,115 @@ body {
   word-wrap: break-word;
 }
 
+.termkitOutputView .widgetCode pre {
+  
+}
+
+.termkitAnsi30 {
+  color: #000;
+}
+.termkitAnsi31 {
+  color: #ba3615;
+}
+.termkitAnsi32 {
+  color: #65970b;
+}
+.termkitAnsi33 {
+  color: #ba7215;
+}
+.termkitAnsi34 {
+  color: #4362d1;
+}
+.termkitAnsi35 {
+  color: #a64e80;
+}
+.termkitAnsi36 {
+  color: #419197;
+}
+.termkitAnsi37 {
+  color: #8c805f;
+}
+.termkitAnsi30b {
+  color: #524b37;
+  font-weight: bolder;
+}
+.termkitAnsi31b {
+  color: #ff623b;
+  font-weight: bolder;
+}
+.termkitAnsi32b {
+  color: #c8f82d;
+  font-weight: bolder;
+}
+.termkitAnsi33b {
+  color: #fddc35;
+  font-weight: bolder;
+}
+.termkitAnsi34b {
+  color: #97c4ff;
+  font-weight: bolder;
+}
+.termkitAnsi35b {
+  color: #fa8fc6;
+  font-weight: bolder;
+}
+.termkitAnsi36b {
+  color: #adffe9;
+  font-weight: bolder;
+}
+.termkitAnsi37b {
+  color: #f3ebe2;
+  font-weight: bolder;
+}
+.termkitAnsi40 {
+  background-color: #000;
+}
+.termkitAnsi41 {
+  background-color: #ba3615;
+}
+.termkitAnsi42 {
+  background-color: #65970b;
+}
+.termkitAnsi43 {
+  background-color: #ba7215;
+}
+.termkitAnsi44 {
+  background-color: #4362d1;
+}
+.termkitAnsi45 {
+  background-color: #a64e80;
+}
+.termkitAnsi46 {
+  background-color: #419197;
+}
+.termkitAnsi47 {
+  background-color: #8c805f;
+}
+.termkitAnsi40b {
+  background-color: #524b37;
+}
+.termkitAnsi41b {
+  background-color: #ff623b;
+}
+.termkitAnsi42b {
+  background-color: #c8f82d;
+}
+.termkitAnsi43b {
+  background-color: #fddc35;
+}
+.termkitAnsi44b {
+  background-color: #97c4ff;
+}
+.termkitAnsi45b {
+  background-color: #fa8fc6;
+}
+.termkitAnsi46b {
+  background-color: #adffe9;
+}
+.termkitAnsi47b {
+  background-color: #f3ebe2;
+}
+
 .termkitOutputView .widgetCode div.syntaxhighlighter > div.toolbar {
   display: none;
 }

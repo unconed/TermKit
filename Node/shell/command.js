@@ -287,7 +287,7 @@ exports.commandUnit.unixCommand.prototype.go = function () {
 
   // Add MIME headers to raw output from process.
   var headers = new meta.headers();
-  headers.set('Content-Type', 'application/octet-stream');
+  headers.set('Content-Type', [ 'application/octet-stream', { schema: 'termkit.unix' } ]);
   this.process.stdout.emit('data', headers.generate());
 
 };

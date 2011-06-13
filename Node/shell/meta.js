@@ -1,13 +1,16 @@
 var mime = require('mime');
 
+// Is x an object?
 function isObject(x) {
   return typeof x == 'object';
 }
 
+// Is x a string?
 function isString(x) {
   return (isObject(x) || typeof x == 'string') && x.constructor == ''.constructor;
 }
 
+// Is x an array?
 function isArray(x) {
   return isObject(x) && x.constructor == [].constructor;
 }
@@ -17,7 +20,7 @@ function join(string) {
   return (''+string).replace(/[\r\n] ?/g, ' ');
 }
 
-// Quoted string
+// Quote a string
 function quote(string) {
   if (/[\u0080-\uFFFF]/(string)) {
     // TODO: RFC2047 mime encoded tokens.
@@ -28,7 +31,11 @@ function quote(string) {
   return string;
 }
 
-
+/**
+ * Container for header key/values + parameters.
+ *
+ * Can parse from and generate to MIME format.
+ */
 exports.headers = function () {
   this.fields = {};
   this.params = {};
@@ -46,14 +53,23 @@ exports.headers = function () {
 
 exports.headers.prototype = {
   
+  /**
+   * Set header parsing hint.
+   */
   hint: function (key, args) {
     this.hints[key] = args;
   },
   
+  /**
+   * Return all values + parameters for a key.
+   */
   all: function (key) {
     return [ this.fields[key], this.params[key] ];
   },
   
+  /**
+   * Get one value or parameter.
+   */
   get: function (key, param) {
     if (typeof this.fields[key] != 'undefined') {
       if (param) {
@@ -63,28 +79,30 @@ exports.headers.prototype = {
     }
   },
 
+  /**
+   * Set one or more values and/or parameters.
+   *
+   * -- Single setters
+   * set(key, value)
+   * set(key, param, value)
+   * 
+   * -- Combined value/param setter.
+   * set(key, [ value, { param: value, param: value } ])
+   * 
+   * -- Multi-value setter.
+   * set(key, [ value, value, value ])
+   * set(key, [ [ value, { param: value, param: value } ], [ value, { param: value, param: value } ] ])
+   * 
+   * -- Generic hash syntax.
+   * set({
+   *   key: value,
+   *   key: [ value, { param: value }],
+   *   key: [ value, value, value ],
+   *   key: [ [ value, { param: value, param: value } ], [ value, { param: value, param: value } ] ],
+   * })
+   */
   set: function (keyObject, paramValue, value, raw) {
     var i, j;
-    /*
-    // Single setters
-    set(key, value)
-    set(key, param, value)
-
-    // Combined value/param setter.
-    set(key, [ value, { param: value, param: value } ])
-
-    // Multi-value setter.
-    set(key, [ value, value, value ])
-    set(key, [ [ value, { param: value, param: value } ], [ value, { param: value, param: value } ] ])
-
-    // Generic hash syntax.
-    set({
-      key: value,
-      key: [ value, { param: value }],
-      key: [ value, value, value ],
-      key: [ [ value, { param: value, param: value } ], [ value, { param: value, param: value } ] ],
-    })
-    */
     
     // Raw set to parse individual value from other source.
     if (raw) {
@@ -428,6 +446,67 @@ exports.sniff = function (file, data) {
   return 'text/plain';
 };
 
+/**
+ * Default type for type classes.
+ */
+exports.base = function (type) {
+  var map = {
+    'application/javascript': 'text',
+    'application/x-perl': 'text',
+    'application/x-php': 'text',
+  };
+  
+  if (map[type]) {
+    type = map[type];
+  }
+  
+  return exports.default(type) || 'application/octet-stream';
+}
+
+/**
+ * Default type for type classes.
+ */
+exports.default = function (type) {
+  type = type.split('/')[0];
+  return {
+    'text': 'text/plain',
+  }[type];
+};
+
+/**
+ * List of mime types with composable content.
+ */
+exports.composable = function () {
+  return {
+    'application/javascript': true,
+    'application/x-perl': true,
+    'application/x-php': true,
+    'text/css': true,
+    'text/csv': true,
+    'text/javascript': true,
+    'text/html': true,
+    'text/plain': true,
+    'text/x-actionscript': true,
+    'text/x-applescript': true,
+    'text/x-c': true,
+    'text/x-c++': true,
+    'text/x-csharpsrc': true,
+    'text/x-diff': true,
+    'text/x-erlang': true,
+    'text/x-groovy': true,
+    'text/x-java-source': true,
+    'text/x-python': true,
+    'text/x-ruby': true,
+    'text/x-sass': true,
+    'text/x-scala': true,
+    'text/x-shellscript': true,
+    'text/x-sql': true,
+  };
+};
+
+/**
+ * Additional mime types for node-mime.
+ */
 mime.define({
   'text/x-applescript': ['applescript'],
   'text/x-actionscript': ['actionscript'],

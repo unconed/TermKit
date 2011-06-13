@@ -2,85 +2,83 @@ var fs = require('fs'),
     view = require('view/view'),
     whenDone = require('misc').whenDone,
     meta = require('shell/meta'),
-    expandPath = require('misc').expandPath;
-
+    reader = require('shell/reader');
+    
 exports.main = function (tokens, pipes, exit, environment) {
   var out = new view.bridge(pipes.viewOut);
-  var chunkSize = 16384;
 
   // "cat <file> [file ...]" syntax.
-  if (tokens.length < 2) {
+  tokens.shift();
+  if (tokens.length < 1) {
     out.print('Usage: cat <file> [file] ...');
     return exit(false);
   }
-  if (tokens.length > 2) {
-    out.print('Multiple input files not supported yet.');
-    return exit(false);
-  }
+
+  var files = tokens;
   
+  // Reader handler
+  var progress, position;
+  var handler = {
+    /**
+     * Files have been opened, unified headers available.
+     */
+    begin: function (headers) {
+      
+      // See if we need a progress bar.
+      var size = headers.get('Content-Length');
+      progress = size > 1024 * 1024; // yes, this is arbitrary
+      if (progress) {
+        position = 0;
+        out.print(view.progress('progress', 0, 0, size));
+      }
+      
+      // Forward headers.
+      pipes.dataOut.write(headers.generate());
+      process.stderr.write(headers.generate());
+      // Unbuffered operation.
+      return false;
+    },
+
+    /**
+     * Data coming in.
+     */
+    data: function (data) {
+      // Pipe through.
+      pipes.dataOut.write(data);
+
+      // Progress bar.
+      if (progress) {
+        position += data.length;
+        out.update('progress', { value: position });
+      }
+    },
+    
+    /**
+     * Done reading.
+     */
+    end: function (exit) {
+      exit();
+    },
+  };
+
+  // Reader callbacks
+  var errors = 0;
+  // Open
+  function readerOpen() {
+    return handler;
+  };
+  // Close
+  function readerClose() {
+    exit(errors == 0);
+  };
+  // Error
+  function readerError(error) {
+    errors++;
+    out.print(error);
+  };
+
+  // Spawn multiple files reader.
+  // Handles type coercion, file naming, etc.
   var errors = 0,
-      track = whenDone(function () {
-        exit(errors == 0);
-      });
-  
-  for (i in tokens) if (i > 0) (function (file) {
-    expandPath(file, track(function (file) {
-      fs.stat(file, track(function (err, stats) {
-        if (err) {
-          errors++;
-          out.print("No such file (" + file + ")");
-          return;
-        }
-        fs.open(file, 'r', track(function (err, fd) {
-          if (err) {
-            errors++;
-            out.print("Unable to open file (" + file + ")");
-            return;
-          }
-          
-          // See if we need a progress bar.
-          var progress = stats.size > 1024 * 1024; // yes, this is arbitrary
-          var position = 0;
-          
-          if (progress) {
-            out.add(null, view.progress('progress', 0, 0, stats.size));
-          }
-
-          (function read() {
-            var buffer = new Buffer(chunkSize);
-            fs.read(fd, buffer, 0, chunkSize, position, track(function (err, bytesRead) {
-              if (err) {
-                errors++;
-                out.print("Error reading file (" + file + ")");
-                return;
-              }
-
-              var slice = buffer.slice(0, bytesRead);
-
-              if (position == 0) {
-                var headers = new meta.headers(),
-                    keys = file.split('/');
-                headers.set({
-                  'Content-Type': meta.sniff(file, slice),
-                  'Content-Length': stats.size,
-                  'Content-Disposition': [ 'attachment', { 'filename': keys.pop() } ],
-                });
-
-                pipes.dataOut.write(headers.generate());
-              }
-
-              pipes.dataOut.write(slice);
-              position += bytesRead;
-
-              if (position < stats.size) {
-                read();
-              }
-
-              progress && out.update('progress', { value: position });
-            })); // fs.read
-          })(); // read
-        })); // fs.open
-      })); // fs.stat
-    })); // expandPath
-  })(tokens[i]); // for i in tokens
+      pipe = new reader.filesReader(files, readerOpen, readerClose, readerError);
 };

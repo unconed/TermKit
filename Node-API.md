@@ -102,7 +102,7 @@ To handle headers on dataIn, you can use the built-in `reader.js`. To use it, cr
 var handler = { ... };
 
 // Attach reader to dataIn pipe.
-var pipe = new reader.reader(pipes.dataIn,
+var pipe = new reader.dataReader(pipes.dataIn,
   function (headers) {
     // Inspect headers, return appropriate handler
     return handler;

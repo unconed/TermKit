@@ -18,4 +18,4 @@ mv socket.io-node Node
 mv external HTML
 mv jquery.js HTML
 
-echo Lines of code: $loc
+echo "Lines of code: $loc (not including libraries / externals)"

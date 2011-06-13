@@ -5,6 +5,7 @@ exports.commands = {
   echo: true,
   get: true,
   grep: true,
+  hex: true,
   ls: true,
   pwd: true,
 };

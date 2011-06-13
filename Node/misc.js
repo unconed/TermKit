@@ -219,27 +219,10 @@ exports.objectKeys = function (object) {
  * Escape binary data for display as HTML.
  */
 exports.escapeBinary = function (data) {
-  var binary = data.toString('utf-8'), n = binary.length, i = 0;
-
-  // Escape HTML characters.
-  binary = binary.replace(/[<&]/g, function (x) {
-    return { '<': '&lt;', '&': '&amp;' };
-  });
-
-  // Handle antique italic escapes used by grotty -c.
-  binary = binary.replace(/_\u0008(.)\u0008\1/g, function (x, char) {
-    return '<b><i>' + char + '</i></b>';
-  });
-
-  // Handle antique bold escapes used by grotty -c.
-  binary = binary.replace(/(.)\u0008\1/g, function (x, char) {
-    return '<b>' + char + '</b>';
-  });
-
-  // Handle antique italic escapes used by grotty -c.
-  binary = binary.replace(/_\u0008(.)/g, function (x, char) {
-    return '<i>' + char + '</i>';
-  });
+  if (typeof data != 'string') {
+    data = data.toString('utf-8');
+  }
+  var binary = data, n = binary.length, i = 0;
 
   // Escape non-printables
   binary = binary.replace(/([\u0000-\u001F\u0080-\u009F])/g, function (x, char) {
@@ -252,4 +235,48 @@ exports.escapeBinary = function (data) {
   });
 
   return binary;
+}
+
+/**
+ * Escape textual Unix data for display as HTML.
+ */
+exports.escapeUnixText = function (data) {
+  if (typeof data != 'string') {
+    data = data.toString('utf-8');
+  }
+  var binary = data, n = binary.length, i = 0;
+
+  // Escape HTML characters.
+  binary = binary.replace(/[<&]/g, function (x) {
+    return { '<': '&lt;', '&': '&amp;' }[x];
+  });
+
+  // Handle ANSI color escapes.
+  var bold = false,
+      italic = false,
+      underline = false,
+      blink = false,
+      strike = false,
+  binary = binary.replace(/\u001b([0-9]+(;[0-9]+)*)?m/g, function (x, codes) {
+    codes = codes.split(';');
+    for (i in codes) {
+      switch (codes[i]) {
+        
+      }
+    }
+  });
+
+  // Handle antique bold/italic escapes used by grotty -c.
+  binary = binary
+    .replace(/_\u0008(.)\u0008\1/g, function (x, char) {
+      return '<b><i>' + char + '</i></b>';
+    })
+    .replace(/(.)\u0008\1/g, function (x, char) {
+      return '<b>' + char + '</b>';
+    })
+    .replace(/_\u0008(.)/g, function (x, char) {
+      return '<i>' + char + '</i>';
+    });
+
+  return exports.escapeBinary(binary);
 }

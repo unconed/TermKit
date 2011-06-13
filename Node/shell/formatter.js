@@ -8,7 +8,8 @@ var fs = require('fs'),
     composePath = require('misc').composePath,
     objectKeys = require('misc').objectKeys,
     reader = require('reader'),
-    escapeBinary = require('misc').escapeBinary;
+    escapeBinary = require('misc').escapeBinary,
+    escapeUnixText = require('misc').escapeUnixText;
 
 /**
  * Error logger.
@@ -20,7 +21,7 @@ exports.logger = function (unit, viewOut) {
   // Link up to stderr of process.
   unit.process.stderr.on('data', function (data) {
     var binary = escapeBinary(data);
-    this.out.add(null, view.code(null, binary, 'text/plain'));
+    this.out.print(view.code(null, binary, 'text/plain'));
   });
 
 };
@@ -35,7 +36,7 @@ exports.formatter = function (tail, viewOut, exit) {
   this.out = new view.bridge(viewOut);
 
   // Start reading the output.
-  this.reader = new reader.reader(tail.process.stdout, function (headers) {
+  this.reader = new reader.dataReader(tail.process.stdout, function (headers) {
     // Construct appropriate plugin for this type.
     return that.plugin = exports.factory(headers, that.out);
   }, function () {
@@ -106,7 +107,7 @@ exports.plugins.fallback.supports = function (headers) {
 
 exports.plugins.fallback.prototype = extend(new exports.plugin(), {
   begin: function (headers) {
-    this.out.add(null, view.code('output', headers.generate(), 'text/plain'));
+    this.out.print(view.code('output', headers.generate(), 'text/plain'));
   },
 });
 
@@ -121,8 +122,8 @@ exports.plugins.text = function (headers, out) {
 exports.plugins.text.prototype = extend(new exports.plugin(), {
 
   begin: function () {
-//    this.out.add(null, view.code('output', this.headers.generate(), 'text/plain'));
-    this.out.add(null, view.text('output'));
+//    this.out.print(view.code('output', this.headers.generate(), 'text/plain'));
+    this.out.print(view.code('output', '', 'text/plain'));
   },
 
   data: function (data) {
@@ -147,8 +148,8 @@ exports.plugins.pdf = function (headers, out) {
 exports.plugins.pdf.prototype = extend(new exports.plugin(), {
 
   begin: function () {
-//    this.out.add(null, view.code('output', this.headers.generate(), 'text/plain'));
-    this.out.add(null, view.html('output'));
+//    this.out.print(view.code('output', this.headers.generate(), 'text/plain'));
+    this.out.print(view.html('output'));
     
     // Buffered.
     return true;
@@ -181,8 +182,8 @@ exports.plugins.html = function (headers, out) {
 exports.plugins.html.prototype = extend(new exports.plugin(), {
 
   begin: function () {
-//    this.out.add(null, view.code('output', this.headers.generate(), 'text/plain'));
-    this.out.add(null, view.html('output'));
+//    this.out.print(view.code('output', this.headers.generate(), 'text/plain'));
+    this.out.print(view.html('output'));
     
     // Buffered.
     return true;
@@ -215,8 +216,8 @@ exports.plugins.code = function (headers, out) {
 exports.plugins.code.prototype = extend(new exports.plugins.text(), {
 
   begin: function () {
-//    this.out.add(null, view.code('output', this.headers.generate(), 'text/plain'));
-    this.out.add(null, view.code('output', '', this.headers.get('Content-Type')));
+//    this.out.print(view.code('output', this.headers.generate(), 'text/plain'));
+    this.out.print(view.code('output', '', this.headers.get('Content-Type')));
 
     // Buffered output.
     return true;
@@ -278,7 +279,7 @@ exports.plugins.image.prototype = extend(new exports.plugin(), {
 
   data: function (data) {
     var url = 'data:' + this.headers.get('Content-Type') + ';base64,' + data.toString('base64');
-    this.out.add(null, view.image('image', url));
+    this.out.print(view.image('image', url));
   },
 
 });
@@ -376,6 +377,34 @@ exports.plugins.files.supports = function (headers) {
 };
 
 /**
+ * Unix text formatter.
+ */
+exports.plugins.unix = function (headers, out) {
+  // Inherit.
+  exports.plugin.apply(this, arguments);
+};
+
+exports.plugins.unix.prototype = extend(new exports.plugin(), {
+
+  begin: function () {
+//    this.out.print(view.code('output', this.headers.generate(), 'text/plain'));
+    this.out.print(view.html('output', ''));
+  },
+
+  data: function (data) {
+    var binary = '<pre>'+ escapeUnixText(data) +'</pre>';
+    this.out.update('output', { contents: binary }, true);
+  },
+
+});
+
+exports.plugins.unix.supports = function (headers) {
+  var type = headers.get('Content-Type'),
+      schema = headers.get('Content-Type', 'schema');
+  return !!(/^application\/octet-stream$/(type) && (schema == 'termkit.unix')) * 3;
+}
+
+/**
  * Binary formatter.
  */
 exports.plugins.binary = function (headers, out) {
@@ -386,12 +415,12 @@ exports.plugins.binary = function (headers, out) {
 exports.plugins.binary.prototype = extend(new exports.plugin(), {
 
   begin: function () {
-//    this.out.add(null, view.code('output', this.headers.generate(), 'text/plain'));
-    this.out.add(null, view.html('output', ''));
+//    this.out.print(view.code('output', this.headers.generate(), 'text/plain'));
+    this.out.print(view.code('output', '', 'text/plain'));
   },
 
   data: function (data) {
-    var binary = '<pre>'+ escapeBinary(data) + '</pre>';
+    var binary = escapeBinary(data);
     this.out.update('output', { contents: binary }, true);
   },
 
@@ -400,5 +429,32 @@ exports.plugins.binary.prototype = extend(new exports.plugin(), {
 exports.plugins.binary.supports = function (headers) {
   var type = headers.get('Content-Type');
   return !!(/^application\/octet-stream/(type)) * 1;
+}
+
+/**
+ * Hex formatter.
+ */
+exports.plugins.hex = function (headers, out) {
+  // Inherit.
+  exports.plugin.apply(this, arguments);
+};
+
+exports.plugins.hex.prototype = extend(new exports.plugin(), {
+
+  begin: function () {
+//    this.out.print(view.code('output', this.headers.generate(), 'text/plain'));
+    this.out.print(view.hex('output', ''));
+  },
+
+  data: function (data) {
+    this.out.update('output', { contents: data.toString('base64') }, true);
+  },
+
+});
+
+exports.plugins.hex.supports = function (headers) {
+  var type = headers.get('Content-Type'),
+      schema = headers.get('Content-Type', 'schema');
+  return !!(/^application\/octet-stream$/(type) && (schema == 'termkit.hex')) * 3;
 }
 

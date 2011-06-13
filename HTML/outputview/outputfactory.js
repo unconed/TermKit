@@ -358,7 +358,6 @@ widgets.code = function (properties) {
     'text/x-sql': 'sql',
     'text/xml': 'xml',
     'text/html': 'text',
-    'text/plain': 'text',
   };
   this.brush = brushes[properties.language];
   
@@ -378,11 +377,44 @@ widgets.code.prototype = $.extend(new widgets.text(), {
   updateElement: function () {
     this.$contents.html('<pre></pre>');
     this.$pre = this.$contents.find('pre');
-    
     this.$pre.text(this.properties.contents);
-    this.$pre.attr('class', 'brush: ' + this.brush);
 
-  	SyntaxHighlighter.highlight({}, this.$pre[0]);
+    if (this.brush) {
+      this.$pre.attr('class', 'brush: ' + this.brush);
+
+    	SyntaxHighlighter.highlight({}, this.$pre[0]);
+    }
+
+    this.$element.data('controller', this);
+  },
+  
+});
+
+/**
+ * Widget: Hex output
+ */
+widgets.hex = function (properties) {
+  
+  // Initialize node.
+  ov.outputNode.call(this, properties);
+  
+  this.$contents = this.$element.find('.contents');
+  this.$pre = this.$contents.find('pre');
+  
+  this.updateElement();
+};
+
+widgets.hex.prototype = $.extend(new widgets.text(), {
+  
+  // Return active markup for this widget.
+  $markup: function () {
+    var $outputNode = $('<div class="termkitOutputNode widgetHex"></div>').data('controller', this);
+    var that = this;
+    return $outputNode;
+  },
+
+  // Update markup to match.
+  updateElement: function () {
 
     this.$element.data('controller', this);
   },

@@ -146,6 +146,17 @@ exports.code = function (id, contents, language) {
 }
 
 /**
+ * Widget: hex output
+ */
+exports.hex = function (id, contents) {
+  return {
+    type: 'hex',
+    id: id || null,
+    contents: contents || '',
+  };
+}
+
+/**
  * Widget: file reference.
  */
 exports.file = function (id, name, path, stats) {

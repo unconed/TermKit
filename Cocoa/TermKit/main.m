@@ -10,5 +10,8 @@
 
 int main(int argc, char *argv[])
 {
-    return NSApplicationMain(argc,  (const char **) argv);
+    [NSApplication sharedApplication];
+    [NSBundle loadNibNamed:@"MainMenu" owner:NSApp];
+    [NSApp run];
+    return -1;
 }

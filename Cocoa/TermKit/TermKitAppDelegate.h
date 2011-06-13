@@ -8,10 +8,11 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface TermKitAppDelegate : NSObject <NSApplicationDelegate> {
+@interface TermKitAppDelegate : NSObject {
 }
 
-- (IBAction) openPreferences: sender;
-- (IBAction) newWindow: sender;
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification;
+- (IBAction) openPreferences: (id)sender;
+- (IBAction) newWindow: (id)sender;
 
 @end

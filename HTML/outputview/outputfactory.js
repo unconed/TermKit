@@ -429,12 +429,12 @@ widgets.hex.prototype = $.extend(new widgets.text(), {
         bytesLength = 0;
     
     // Determine layout.
-    var offsetWidth = offsetLength + 9,
+    var offsetWidth = offsetLength + 19,
         bytesColumn,
         tryBytes = 0;
     while (offsetWidth + tryBytes < columns) {
       bytesColumn = tryBytes;
-      bytesLength += 2;
+      bytesLength += 4;
       tryBytes = 3 + (bytesLength * 2) + (bytesLength - 1) + Math.floor(bytesLength / 4) + 3 + bytesLength;
     }
 
@@ -466,28 +466,33 @@ widgets.hex.prototype = $.extend(new widgets.text(), {
             b = format(c, 2);
 
         if ((j % 4) == 0) {
-          bytes += '<td class="bytes '+ ((j % 8 >= 4) ? 'even' : 'odd') + '">';
+          bytes += '<td class="bytes ' + ((j % 8 >= 4) ? 'even' : 'odd') + '">';
+          view += '<td class="view ' + ((j % 8 >= 4) ? 'even' : 'odd') + '">';
         }    
 
-        bytes += b + ' ' + (((j % 4) == 3) ? ' ' : '');
+        bytes += b + ' ';
         view += (c >= 32 && c <= 128) ? data.charAt(o + j) : '.';
 
         if ((j % 4) == 3) {
-          bytes += '</td>';
+          bytes = bytes.substring(0, bytes.length - 1) + '</td>';
+          view += '</td>';
         }
       }
 
       if ((j % 4) != 3) {
-        bytes += '</td>';
-        while (j < bytesLength) {
-          bytes += '<td></td>';
+        bytes = bytes.substring(0, bytes.length - 1) + '</td>';
+        view += '</td>';
+        j += (4 - (j % 4));
+        while (j <= bytesLength) {
+          bytes += '<td class="bytes '+ ((j % 8 >= 4) ? 'even' : 'odd') + '"></td>';
+          view += '<td class="view '+ ((j % 8 >= 4) ? 'even' : 'odd') + '"></td>';
           j += 4;
         }
       }
 
       o += bytesLength;
       
-      var $row = $('<tr><th>'+ offset + '</th>'+ bytes + '<td class="view">'+ view + '</td></tr>');
+      var $row = $('<tr><th>'+ offset + '</th>'+ bytes + '<td class="spacer"></td>' + view + '</td></tr>');
       this.$table.append($row);
     }
     

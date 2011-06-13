@@ -239,24 +239,40 @@ body {
   margin: 0 1em;
 }
 .termkitOutputView .widgetHex table th {
-  padding: 2px 1em 2px 2px;
+  padding: 2px 2em 2px 2px;
   color: #999;
+}
+.termkitOutputView .widgetHex table td.spacer {
+  width: 2em;
 }
 .termkitOutputView .widgetHex table td.view {
   color: #bbb;
-  padding: 2px 2px 2px 3px;
+  padding: 2px 0px;
+}
+.termkitOutputView .widgetHex table td.view.odd {
+  color: #f7f7f7;
+  background: #2a2a2a;
+}
+.termkitOutputView .widgetHex table td.view.even {
+  color: #ccc;
 }
 .termkitOutputView .widgetHex table td.bytes {
-  padding: 2px 1em 2px 3px;
+  padding: 2px 5px;
 }
 .termkitOutputView .widgetHex table td.bytes.odd {
-  color: #fff;
+  color: #eee;
+  background: #2a2a2a;
 }
 .termkitOutputView .widgetHex table td.bytes.even {
   color: #ccc;
 }
-.termkitOutputView .widgetHex table tr:hover {
+.termkitOutputView .widgetHex table tr:hover th,
+.termkitOutputView .widgetHex table tr:hover td {
   background: #444;
+  color: #fff !important;
+}
+.termkitOutputView .widgetHex table tr:hover td.odd {
+  background: #666;
 }
 .termkitOutputView .widgetHex table tr:hover th {
   color: #bbb;

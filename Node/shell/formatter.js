@@ -437,6 +437,9 @@ exports.plugins.binary.supports = function (headers) {
 exports.plugins.hex = function (headers, out) {
   // Inherit.
   exports.plugin.apply(this, arguments);
+  
+  this.sent = 0;
+  this.size = 0;
 };
 
 exports.plugins.hex.prototype = extend(new exports.plugin(), {
@@ -447,7 +450,30 @@ exports.plugins.hex.prototype = extend(new exports.plugin(), {
   },
 
   data: function (data) {
-    this.out.update('output', { contents: data.toString('base64') }, true);
+    var limit = 4096;
+    this.size += data.length;
+    
+    // Don't send more than limit.
+    if (this.sent >= limit) {
+      return;
+    }
+    
+    // Clip buffer if needed.
+    if (this.sent + data.length > limit) {
+      data = data.slice(0, limit - this.sent);
+    }
+    this.sent += data.length;
+
+    // Append to hex view.
+    this.out.update('output', { contents: data.toString('binary') }, true);
+  },
+  
+  end: function (exit) {
+    if (this.size > this.sent) {
+      this.out.print(this.size + " bytes total, " + this.sent + " shown.");
+    }
+    
+    exit();
   },
 
 });

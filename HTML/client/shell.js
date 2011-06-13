@@ -49,7 +49,7 @@ tc.shell.prototype = {
     
     switch (method) {
       
-      case 'view.clear':
+      case 'shell.clear':
         this.commandView && this.commandView.clear();
         break;
       
@@ -121,7 +121,7 @@ tc.shell.prototype = {
             [
               'v' + window.preferences.get('version'),
               this.anonymize(tokens),
-              Math.floor(Math.random() * 1000)
+              Math.floor(Math.random() * 100000)
             ].join('--@--'));
     }
     else {

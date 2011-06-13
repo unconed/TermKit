@@ -11,9 +11,30 @@
 
    Note: anonymous usage logging. Can be turned off in the preferences.
    
-   Is served from https://usage.termkit.org/ to trigger SSL on the Google Analytics data, ensuring privacy.
+   Uses Google Analytics over SSL.
+   
+   Ga.js doesn't work without being primed in a real browser first, so we make manual utm.gif requests.
 
   -->
+  
+  <!--
+  
+  <script type="text/javascript">
+
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-288349-5']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+  </script>
+
+  -->
+
   <script type="text/javascript">
 
       // Track each session as a pageview.
@@ -22,9 +43,93 @@
 
       (function() {
         // Inject Analytics (SSL).
+        /*
         var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
         ga.src = 'https://ssl.google-analytics.com/ga.js';
         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        */
+        
+        function getRandom() {
+          return Math.floor(Math.random() * 1000000000);
+        }
+        
+        var cookie = '',
+            uniqueId = getRandom(),
+            accountId = 'UA-288349-5';
+            
+        makeCookie();
+        
+        /**
+         * Generate ga.js 'cookie'.
+         */
+        function makeCookie() {
+          var id = getRandom();
+              random = getRandom() & 0xFFFFFFFF,
+              today = Math.floor(+new Date() * .001);
+          cookie = '__utma=1.'+ id + '.' + random  + '.' + today + '.' + today + '.15;+__utmz=1.' + today + '.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none);';
+        }
+        
+        /**
+         * Shared GA parameters.
+         */
+        function gaParameters() {
+          return {
+  			    utmwv: '4.3',
+  			    utmn: (getRandom() * 17) & 0xFFFFFFFF,
+  			    utmhn: 'usage.termkit.org',
+            utmcs: 'utf-8',
+            utmul: navigator.language,
+            utmhid: uniqueId,
+            utmac: accountId,
+            utmcc: cookie,
+          };
+        }
+        
+        /**
+         * Trigger GA page view.
+         */
+        function gaPageView(path) {
+          var parameters = gaParameters();
+
+          parameters.utmdt = 'TermKit';
+          parameters.utmp = path;
+          parameters.utmsr = window.screen.width + 'x' + window.screen.height;
+          parameters.utmsc = (window.screen.colorDepth >= 24 ? 32 : window.screen.colorDepth) + '-bit';
+          
+          gaRequest(parameters);
+  			);
+
+        /**
+         * Trigger GA event.
+         */
+        function gaEvent(category, action) {
+          
+          var parameters = gaParameters();
+        
+  			  parameters.utmt = 'event';
+  			  parameters.utme = '5('+ encodeURIComponent(category) + '*' + encodeURIComponent(action) + ')';
+          
+          gaRequest(parameters);
+  			);
+
+        /**
+         * ga.js doesn't work within WebView unless primed by browser first.
+         *
+         * Hack together our own __utm.gif requests.
+         */
+        function gaRequest(parameters) {
+
+          // Prepare parameters.
+          var query = [];;
+          for (var i in parameters) {
+            query.push(encodeURIComponent(i) +'='+ encodeURIComponent(parameters[i]));
+          }
+          
+          // Load __utm.gif.
+          var url = 'https://ssl.google-analytics.com/__utm.gif?' + query.join('&'),
+              img = new Image();
+          img.src = url;
+        }
 
         /**
          * Log an event.
@@ -37,13 +142,18 @@
           // Log versioned pageview.
           if (first) {
             first = false;
+            /*
             _gaq.push(['_setAccount', 'UA-288349-5']);
+            _gaq.push(['_setDomainName', 'usage.termkit.org']);
             _gaq.push(['_trackPageview', '/' + version]);
+            */
+            gaPageView('/' + version);
           }
           
           // Include random delay of up to 10 seconds for increased privacy.
           setTimeout(function () {
-            _gaq.push(['_trackEvent', 'shell', tokens]);
+            //_gaq.push(['_trackEvent', 'shell', tokens]);
+            gaEvent('shell', tokens);
           }, Math.random() * 10000);
         }
 

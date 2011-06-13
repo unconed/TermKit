@@ -10,6 +10,7 @@ Tasks:
 [ ] command aliases
 [ ] autocomplete history
 [ ] async popup / completion keystroke buffering
+[ ] multiple http get
 [ ] command decoration
 [ ] interactive execution
 [ ] inline man-pages tips

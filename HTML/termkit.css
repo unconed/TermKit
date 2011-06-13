@@ -228,6 +228,46 @@ body {
   overflow: hidden;
 }
 
+.termkitOutputView .widgetHex table,
+.termkitOutputView .widgetHex table td,
+.termkitOutputView .widgetHex table th {
+  border-spacing: 0;
+  border: 0;
+  margin: 0;
+}
+.termkitOutputView .widgetHex table {
+  margin: 0 1em;
+}
+.termkitOutputView .widgetHex table th {
+  padding: 2px 1em 2px 2px;
+  color: #999;
+}
+.termkitOutputView .widgetHex table td.view {
+  color: #bbb;
+  padding: 2px 2px 2px 3px;
+}
+.termkitOutputView .widgetHex table td.bytes {
+  padding: 2px 1em 2px 3px;
+}
+.termkitOutputView .widgetHex table td.bytes.odd {
+  color: #fff;
+}
+.termkitOutputView .widgetHex table td.bytes.even {
+  color: #ccc;
+}
+.termkitOutputView .widgetHex table tr:hover {
+  background: #444;
+}
+.termkitOutputView .widgetHex table tr:hover th {
+  color: #bbb;
+}
+.termkitOutputView .widgetHex table tr:hover td.view {
+  color: #fff;
+}
+.termkitOutputView .widgetHex .measure {
+  visibility: hidden;
+}
+
 /************/
 
 .termkitCommandView {

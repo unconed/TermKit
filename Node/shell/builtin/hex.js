@@ -6,7 +6,8 @@ exports.main = function (tokens, pipes, exit, environment) {
   var out = new view.bridge(pipes.viewOut);
 
   var args = parseArgs(tokens),
-      options = args.options;
+      options = args.options,
+      files = args.values;
 
   // Buffered mime reader handler.
   var handler = {

@@ -399,7 +399,8 @@ widgets.hex = function (properties) {
   ov.outputNode.call(this, properties);
   
   this.$contents = this.$element.find('.contents');
-  this.$pre = this.$contents.find('pre');
+  this.$measure = this.$element.find('.measure');
+  this.$table = this.$element.find('table');
   
   this.updateElement();
 };
@@ -408,14 +409,88 @@ widgets.hex.prototype = $.extend(new widgets.text(), {
   
   // Return active markup for this widget.
   $markup: function () {
-    var $outputNode = $('<div class="termkitOutputNode widgetHex"></div>').data('controller', this);
+    var $outputNode = $('<div class="termkitOutputNode widgetHex"><span class="measure"></span><table class="termkitHexTable"></table></div>').data('controller', this);
     var that = this;
     return $outputNode;
   },
 
   // Update markup to match.
   updateElement: function () {
+    
+    // Measure character and window.
+    this.$measure.text('X');
+    var charWidth = this.$measure.width(),
+        width = this.$element.width(),
+        columns = Math.floor(width / charWidth);
 
+    // Determine size of offsets.
+    var length = this.properties.contents.length,
+        offsetLength = Math.ceil(length.toString(16).length / 2) * 2,
+        bytesLength = 0;
+    
+    // Determine layout.
+    var offsetWidth = offsetLength + 9,
+        bytesColumn,
+        tryBytes = 0;
+    while (offsetWidth + tryBytes < columns) {
+      bytesColumn = tryBytes;
+      bytesLength += 2;
+      tryBytes = 3 + (bytesLength * 2) + (bytesLength - 1) + Math.floor(bytesLength / 4) + 3 + bytesLength;
+    }
+
+    // Prepare table.
+    this.$table.empty();
+
+    // Format a number to hex and pad with zeroes.
+    function format(x, l) {
+      x = x.toString(16);
+      while (x.length < l) {
+        x = 0 + x;
+      }
+      return x;
+    }
+    
+    // Insert data in runs of bytesLength.
+    var data = this.properties.contents;
+    var length = data.length, n = Math.ceil(length / bytesLength), o = 0;
+    
+    for (var i = 0; i < n; ++i) {
+      
+      // Prepare cells.
+      var offset = format(o, offsetLength), bytes = '', view = '';
+      
+      // Format bytes as hex / display.
+      for (var j = 0; j < bytesLength; ++j) {
+        if (o + j >= length) break;
+        var c = data.charCodeAt(o + j),
+            b = format(c, 2);
+
+        if ((j % 4) == 0) {
+          bytes += '<td class="bytes '+ ((j % 8 >= 4) ? 'even' : 'odd') + '">';
+        }    
+
+        bytes += b + ' ' + (((j % 4) == 3) ? ' ' : '');
+        view += (c >= 32 && c <= 128) ? data.charAt(o + j) : '.';
+
+        if ((j % 4) == 3) {
+          bytes += '</td>';
+        }
+      }
+
+      if ((j % 4) != 3) {
+        bytes += '</td>';
+        while (j < bytesLength) {
+          bytes += '<td></td>';
+          j += 4;
+        }
+      }
+
+      o += bytesLength;
+      
+      var $row = $('<tr><th>'+ offset + '</th>'+ bytes + '<td class="view">'+ view + '</td></tr>');
+      this.$table.append($row);
+    }
+    
     this.$element.data('controller', this);
   },
   

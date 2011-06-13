@@ -434,7 +434,8 @@ exports.headers.prototype = {
 exports.sniff = function (file, data) {
   var type = mime.lookup(file),
       utf8 = true,
-      binary = false;
+      binary = false,
+      ansi = false;
 
   // Detect valid UTF-8.
   // Ignore trailing error due to possible truncation.
@@ -446,6 +447,15 @@ exports.sniff = function (file, data) {
   // Detect binary data.
   if (/[\u0000]/(attempt)) {
     binary = true;
+  }
+
+  // Detect ansi color codes.
+  if (/[\u001b\[[0-9]+m/(attempt)) {
+    ansi = true;
+    process.stderr.write('file ' + file + ' is ansi');
+    if (type == 'application/octet-stream' || type == 'text/plain') {
+      type = [ 'application/octet-stream', { schema: 'termkit.unix' }];
+    }
   }
 
   // Plain text.
@@ -460,7 +470,7 @@ exports.sniff = function (file, data) {
 
   // If data contains random binary data, then a significant part will be invalid / non-printable.
   // Use hex-view.
-  if (attempt.replace(/[^\n\r\t\u0020-\uFFFC]/g, '').length < .8 * data.length) {
+  if (!ansi && attempt.replace(/[^\n\r\t\u0020-\uFFFC]/g, '').length < .8 * data.length) {
     return [ type, { schema: 'termkit.hex' } ];
   }
   

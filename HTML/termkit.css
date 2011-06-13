@@ -61,108 +61,108 @@ body {
   
 }
 
-.termkitAnsi30 {
+.termkitAnsiFg0 {
   color: #000;
 }
-.termkitAnsi31 {
+.termkitAnsiFg1 {
   color: #ba3615;
 }
-.termkitAnsi32 {
+.termkitAnsiFg2 {
   color: #65970b;
 }
-.termkitAnsi33 {
+.termkitAnsiFg3 {
   color: #ba7215;
 }
-.termkitAnsi34 {
+.termkitAnsiFg4 {
   color: #4362d1;
 }
-.termkitAnsi35 {
+.termkitAnsiFg5 {
   color: #a64e80;
 }
-.termkitAnsi36 {
+.termkitAnsiFg6 {
   color: #419197;
 }
-.termkitAnsi37 {
+.termkitAnsiFg7 {
   color: #8c805f;
 }
-.termkitAnsi30b {
+.termkitAnsiFg0b {
   color: #524b37;
   font-weight: bolder;
 }
-.termkitAnsi31b {
+.termkitAnsiFg1b {
   color: #ff623b;
   font-weight: bolder;
 }
-.termkitAnsi32b {
+.termkitAnsiFg2b {
   color: #c8f82d;
   font-weight: bolder;
 }
-.termkitAnsi33b {
+.termkitAnsiFg3b {
   color: #fddc35;
   font-weight: bolder;
 }
-.termkitAnsi34b {
+.termkitAnsiFg4b {
   color: #97c4ff;
   font-weight: bolder;
 }
-.termkitAnsi35b {
+.termkitAnsiFg5b {
   color: #fa8fc6;
   font-weight: bolder;
 }
-.termkitAnsi36b {
+.termkitAnsiFg6b {
   color: #adffe9;
   font-weight: bolder;
 }
-.termkitAnsi37b {
+.termkitAnsiFg7b {
   color: #f3ebe2;
   font-weight: bolder;
 }
-.termkitAnsi40 {
+.termkitAnsiBg0 {
   background-color: #000;
 }
-.termkitAnsi41 {
+.termkitAnsiBg1 {
   background-color: #ba3615;
 }
-.termkitAnsi42 {
+.termkitAnsiBg2 {
   background-color: #65970b;
 }
-.termkitAnsi43 {
+.termkitAnsiBg3 {
   background-color: #ba7215;
 }
-.termkitAnsi44 {
+.termkitAnsiBg4 {
   background-color: #4362d1;
 }
-.termkitAnsi45 {
+.termkitAnsiBg5 {
   background-color: #a64e80;
 }
-.termkitAnsi46 {
+.termkitAnsiBg6 {
   background-color: #419197;
 }
-.termkitAnsi47 {
+.termkitAnsiBg7 {
   background-color: #8c805f;
 }
-.termkitAnsi40b {
+.termkitAnsiBg0b {
   background-color: #524b37;
 }
-.termkitAnsi41b {
+.termkitAnsiBg1b {
   background-color: #ff623b;
 }
-.termkitAnsi42b {
+.termkitAnsiBg2b {
   background-color: #c8f82d;
 }
-.termkitAnsi43b {
+.termkitAnsiBg3b {
   background-color: #fddc35;
 }
-.termkitAnsi44b {
+.termkitAnsiBg4b {
   background-color: #97c4ff;
 }
-.termkitAnsi45b {
+.termkitAnsiBg5b {
   background-color: #fa8fc6;
 }
-.termkitAnsi46b {
+.termkitAnsiBg6b {
   background-color: #adffe9;
 }
-.termkitAnsi47b {
+.termkitAnsiBg7b {
   background-color: #f3ebe2;
 }
 
@@ -248,6 +248,7 @@ body {
 .termkitOutputView .widgetHex table td.view {
   color: #bbb;
   padding: 2px 0px;
+  white-space: pre;
 }
 .termkitOutputView .widgetHex table td.view.odd {
   color: #f7f7f7;

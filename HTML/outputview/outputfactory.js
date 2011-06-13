@@ -414,6 +414,9 @@ widgets.hex = function (properties) {
       }, 300);
     }
   });
+  
+  this.lastLength = 0;
+  this.lastWidth = 0;
 };
 
 widgets.hex.prototype = $.extend(new widgets.text(), {
@@ -448,6 +451,12 @@ widgets.hex.prototype = $.extend(new widgets.text(), {
       bytesLength += 4;
       tryBytes = 3 + (bytesLength * 2) + (bytesLength - 1) + Math.floor(bytesLength / 4) + 3 + bytesLength;
     }
+
+    if (this.lastLength == length && this.lastWidth == bytesLength) {
+      return;
+    }
+    this.lastLength = length;
+    this.lastWidth = bytesLength;
 
     // Prepare table.
     this.$table.empty();

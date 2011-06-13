@@ -182,7 +182,7 @@ tc.shell.prototype = {
       keys = keys.concat(commands[j]);
     }
     // Join tokens into path.
-    return keys.join('/');
+    return keys.join('__');
   },
 };
 

@@ -5,11 +5,11 @@ Tasks:
 [X] cat multiple files -> octet-stream w/ type coercion
 [X] hex widget
 [X] hex utility
-[ ] hex detection
+[X] hex detection
+[ ] autocomplete history
 [ ] backgrounding / new command trigger
 [ ] move escapeUnixText into front-end, unixLegacy widget
 [ ] command aliases
-[ ] autocomplete history
 [ ] async popup / completion keystroke buffering
 [ ] multiple http get
 [ ] command decoration

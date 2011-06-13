@@ -3,8 +3,9 @@ Tasks:
 [X] redefine ansi colors
 [X] make fileReader with same pattern as reader.js
 [X] cat multiple files -> octet-stream w/ type coercion
-[ ] hex widget
-[ ] hex utility
+[X] hex widget
+[X] hex utility
+[ ] hex detection
 [ ] backgrounding / new command trigger
 [ ] move escapeUnixText into front-end, unixLegacy widget
 [ ] command aliases

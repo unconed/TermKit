@@ -432,18 +432,40 @@ exports.headers.prototype = {
  * Mime type detection.
  */
 exports.sniff = function (file, data) {
-  var parts = file.split('.'),
-      extension = parts.pop();
+  var type = mime.lookup(file),
+      utf8 = true,
+      binary = false;
 
-  if ((type = mime.lookup(file)) && (type != 'application/octet-stream')){
+  // Detect valid UTF-8.
+  // Ignore trailing error due to possible truncation.
+  var attempt = data.toString('utf-8').replace(/�$/, ''), error = attempt.indexOf('�');
+  if (error != -1) {
+    utf8 = false;
+  }
+
+  // Detect binary data.
+  if (/[\u0000]/(attempt)) {
+    binary = true;
+  }
+
+  // Plain text.
+  if (utf8 || !binary) {
+    return [ type, { charset: 'utf-8' } ];
+  }
+
+  // Specific binary type.
+  if (type != 'application/octet-stream') {
     return type;
   }
 
-  if (/[^\u0001-\uFFFF]/('' + data)) {
-    return 'application/octet-stream';
+  // If data contains random binary data, then a significant part will be invalid / non-printable.
+  // Use hex-view.
+  if (attempt.replace(/[^\n\r\t\u0020-\uFFFC]/g, '').length < .8 * data.length) {
+    return [ type, { schema: 'termkit.hex' } ];
   }
-
-  return 'text/plain';
+  
+  // Fallback, escaped binary text output.
+  return type;
 };
 
 /**

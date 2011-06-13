@@ -8,6 +8,16 @@ var fs = require('fs'),
     composePath = require('misc').composePath,
     expandPath = require('misc').expandPath;
 
+// Is x an object?
+function isObject(x) {
+  return typeof x == 'object';
+}
+
+// Is x an array?
+function isArray(x) {
+  return isObject(x) && x.constructor == [].constructor;
+}
+
 /**
  * Data reader for termkit-style dataIn.
  *
@@ -379,6 +389,32 @@ exports.filesReader.prototype = {
       return types[0];
     }
     
+    // Merge multiple types.
+    var merged = {}, hasParams = false;
+    for (var i in types) {
+      // Process params.
+      if (isArray(types[i])) {
+        var params = types[i][1];
+        
+        // Only merge identical params.
+        for (var j in params) {
+          if (merged[j] === null) continue;
+          if (merged[j] != params[j]) {
+            merged[j] = null;
+          }
+          merged[j] = params[j];
+        }
+
+        // Strip params for merge.
+        types[i] = types[i][0];
+      }
+    }
+    // Check if there are params.
+    for (var j in merged) {
+      hasParams = true;
+      break;
+    }
+    
     function commonPrefix(types) {
       // Sort types, inspect first/last strings.
       types.sort();
@@ -399,6 +435,8 @@ exports.filesReader.prototype = {
       return match;
     }
     
+    var type = 'application/octed-stream';
+    
     prefix = commonPrefix(types);
     if (!(/^[^\/]+\/[^\/]+$/(prefix))) {
       // If we only matched a type category (e.g. text/),
@@ -410,22 +448,27 @@ exports.filesReader.prototype = {
       
       if (!(/^[^\/]+\/[^\/]+$/(prefix))) {
         // Replace with generic type.
-        return meta.default(prefix) || 'application/octet-stream';
+        type = meta.default(prefix) || 'application/octet-stream';
       }
-      
-      return prefix;
+      else {
+        type = prefix;
+      }
     }
     else {
       // Only return a unified type for content types which can be composed safely.
       var composable = meta.composable();
       if (composable[prefix]) {
         if (typeof composable[prefix] == 'string') {
-          return composable[prefix];
+          type = composable[prefix];
         }
-        return prefix;
+        else {
+          type = prefix;
+        }
       }
-      return 'application/octet-stream';
     }
+    
+    // Return with or without merged params.
+    return hasParams ? [ type, merged ] : type;
   },
   
   /**

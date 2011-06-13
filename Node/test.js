@@ -43,7 +43,7 @@ function mockClient(flow, callback) {
   var messages = [], success = true, i;
 
   client.send = function (message) {
-    messages.push(JSON.parse(message));
+    messages.push(message);
   };
 
   client.disconnect = function (message) {
@@ -53,7 +53,7 @@ function mockClient(flow, callback) {
   var r = new router.router(client);
   for (i in flow) (function (message) {
     setTimeout(function () {
-      client.emit('message', JSON.stringify(message));
+      client.emit('message', message);
     }, i * 100);
   })(flow[i]);
   

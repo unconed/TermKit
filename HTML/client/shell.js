@@ -135,7 +135,7 @@ tc.shell.prototype = {
    * Anonymize one or more shell commands.
    */
   anonymize: function (commands) {
-    var i, j, wildcard = '()';
+    var i, j, wildcard = '...';
     
     // Lazy clone.
     commands = JSON.parse(JSON.stringify(commands));

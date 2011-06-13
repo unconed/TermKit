@@ -403,6 +403,17 @@ widgets.hex = function (properties) {
   this.$table = this.$element.find('table');
   
   this.updateElement();
+  
+  // Reflow on resize, throttled @ 300ms.
+  var that = this, timer = 0;
+  $(window).resize(function () {
+    if (!timer) {
+      timer = setTimeout(function () {
+        timer = null;
+        that.updateElement();
+      }, 300);
+    }
+  });
 };
 
 widgets.hex.prototype = $.extend(new widgets.text(), {

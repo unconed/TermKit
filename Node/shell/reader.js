@@ -418,7 +418,13 @@ exports.filesReader.prototype = {
     else {
       // Only return a unified type for content types which can be composed safely.
       var composable = meta.composable();
-      return composable[prefix] && prefix || 'application/octet-stream';
+      if (composable[prefix]) {
+        if (typeof composable[prefix] == 'string') {
+          return composable[prefix];
+        }
+        return prefix;
+      }
+      return 'application/octet-stream';
     }
   },
   

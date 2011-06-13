@@ -478,6 +478,7 @@ exports.default = function (type) {
  */
 exports.composable = function () {
   return {
+    'application/json': 'text/plain',
     'application/javascript': true,
     'application/x-perl': true,
     'application/x-php': true,

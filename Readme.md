@@ -40,7 +40,7 @@ Detailed instructions are available from these sources:
 
 * [Mac OS X (OS X Daily)](http://osxdaily.com/2011/05/19/termkit-terminal-reimagined-how-to-install/)
 * [Windows (Redpoint blog)](http://blog.redpointsoftware.com.au/termkit/)
-* [Linux, Python GTK]()
+* [Linux, Python GTK](https://github.com/unconed/TermKit/tree/master/Linux)
 * [Linux, Chrome only (Easytech blog)](http://blog.easytech.com.ar/2011/05/21/playing-with-termkit-with-chrome/) 
 
 Unfortunately, TermKit currently requires some assembly.

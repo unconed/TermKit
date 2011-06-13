@@ -6,7 +6,7 @@
 
 Built out of WebKit and Node.js.
 
-Runs as a desktop app on Mac and Windows, and can be hacked into any WebKit browser (Chrome, Safari).
+Runs as a desktop app on Mac, Windows and Linux, and can be hacked into any WebKit browser (Chrome, Safari).
 
 [Follow TermKit on Twitter](https://twitter.com/TermKit) for the latest news and updates.
 
@@ -40,6 +40,7 @@ Detailed instructions are available from these sources:
 
 * [Mac OS X (OS X Daily)](http://osxdaily.com/2011/05/19/termkit-terminal-reimagined-how-to-install/)
 * [Windows (Redpoint blog)](http://blog.redpointsoftware.com.au/termkit/)
+* [Linux, Python GTK]()
 * [Linux, Chrome only (Easytech blog)](http://blog.easytech.com.ar/2011/05/21/playing-with-termkit-with-chrome/) 
 
 Unfortunately, TermKit currently requires some assembly.
@@ -51,7 +52,12 @@ Unfortunately, TermKit currently requires some assembly.
 5. Clone the TermKit repository: `git clone https://github.com/unconed/TermKit.git --recursive`
 6. Users of older git versions will need to type: `git submodule update --init`
 7. Run the NodeKit daemon: `cd TermKit/Node; node nodekit.js`
-8. Unzip and run the Mac app in Build/TermKit.zip
+
+Mac:
+* Unzip and run the Mac app in Build/TermKit.zip
+
+Linux:
+* See Linux/Readme.txt
 
 *Tip:* Press ⌥⌘C to access the WebKit console.
 
@@ -65,6 +71,8 @@ https://github.com/unconed/TermKit/blob/master/Node-API.md
 TermKit by [Steven Wittens](http://acko.net) ([@unconed](https://twitter.com/unconed)).
 
 Windows port by James Rhodes ([@hachque](https://twitter.com/hachque)).
+
+Linux Python/GTK wrapper by [Lucas S. Magalhães](https://github.com/lucassmagal).
 
 Includes:
 

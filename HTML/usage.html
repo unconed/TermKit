@@ -94,10 +94,10 @@
           parameters.utmdt = 'TermKit';
           parameters.utmp = path;
           parameters.utmsr = window.screen.width + 'x' + window.screen.height;
-          parameters.utmsc = (window.screen.colorDepth >= 24 ? 32 : window.screen.colorDepth) + '-bit';
+          parameters.utmsc = ((window.screen.colorDepth >= 24) ? 32 : window.screen.colorDepth) + '-bit';
           
           gaRequest(parameters);
-  			);
+  			};
 
         /**
          * Trigger GA event.
@@ -110,7 +110,7 @@
   			  parameters.utme = '5('+ encodeURIComponent(category) + '*' + encodeURIComponent(action) + ')';
           
           gaRequest(parameters);
-  			);
+  			};
 
         /**
          * ga.js doesn't work within WebView unless primed by browser first.

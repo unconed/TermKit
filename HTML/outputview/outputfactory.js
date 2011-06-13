@@ -504,9 +504,9 @@ widgets.hex.prototype = $.extend(new widgets.text(), {
         view += '</td>';
         j += (4 - (j % 4));
         while (j <= bytesLength) {
+          j += 4;
           bytes += '<td class="bytes '+ ((j % 8 >= 4) ? 'even' : 'odd') + '"></td>';
           view += '<td class="view '+ ((j % 8 >= 4) ? 'even' : 'odd') + '"></td>';
-          j += 4;
         }
       }
 

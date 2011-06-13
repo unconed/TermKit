@@ -452,7 +452,6 @@ exports.sniff = function (file, data) {
   // Detect ansi color codes.
   if (/[\u001b\[[0-9]+m/(attempt)) {
     ansi = true;
-    process.stderr.write('file ' + file + ' is ansi');
     if (type == 'application/octet-stream' || type == 'text/plain') {
       type = [ 'application/octet-stream', { schema: 'termkit.unix' }];
     }

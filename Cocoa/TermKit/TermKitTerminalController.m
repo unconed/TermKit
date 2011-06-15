@@ -55,6 +55,9 @@
 
     NSLog(@"loadView loading URL: %@", url);
     NSLog(@"info plist: %@", [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]);
+    
+    [urlRequest autorelease];
+    [basePath autorelease];
 };
 
 @end

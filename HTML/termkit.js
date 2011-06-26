@@ -15,6 +15,9 @@ $(document).ready(function () {
     });    
   };
   
+  $(document).mousedown(function () {
+    alert('wtf');
+  });
 });
 
 })(jQuery);

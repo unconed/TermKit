@@ -43,7 +43,8 @@ exports.composePath = function (name, path) {
 /**
  * Generator for decorator to track asynchronous tasks.
  *
- * Allows you to execute a complicated dynamic callback hierarchy and call a handler when all marked callbacks have finished.
+ * Allows you to execute a complicated dynamic callback hierarchy and
+ * call a handler when all marked callbacks have finished.
  *
  * @param done
  *   Callback to call when all callbacks are done.

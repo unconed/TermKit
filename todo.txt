@@ -1,13 +1,7 @@
 Tasks:
-[X] return process meta-data in environment
-[X] redefine ansi colors
-[X] make fileReader with same pattern as reader.js
-[X] cat multiple files -> octet-stream w/ type coercion
-[X] hex widget
-[X] hex utility
-[X] hex detection
 [ ] autocomplete history
 [ ] backgrounding / new command trigger
+
 [ ] move escapeUnixText into front-end, unixLegacy widget
 [ ] command aliases
 [ ] async popup / completion keystroke buffering

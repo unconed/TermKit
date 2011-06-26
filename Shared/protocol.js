@@ -104,7 +104,7 @@ exports.protocol.prototype = {
         out.push(message);
         console.log.apply(console, out);
       }
-      this.connection.send(message);
+      this.connection.json.send(message);
     }
   },
   
